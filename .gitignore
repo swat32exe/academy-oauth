@@ -1,0 +1,6 @@
+.sconsign.dblite
+*.pdb
+bin/*
+*.lib
+*.exe
+*.obj
