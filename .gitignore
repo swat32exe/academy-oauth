@@ -4,3 +4,5 @@ bin/*
 *.lib
 *.exe
 *.obj
+build/*.o
+build/*.a
