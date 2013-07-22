@@ -1,0 +1,5 @@
+.sconsign.dblite
+*.pdb
+*.pyc
+bin/*
+build/*

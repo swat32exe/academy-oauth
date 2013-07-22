@@ -1,0 +1,39 @@
+from SConfig import *
+
+def compileDebug():
+    if environment['CC'] == 'cl':
+        environment.Append( CCFLAGS = [ '/Zi', '/Od'])
+    else:
+        environment.Append( CCFLAGS = [ '-g', '-O0'] )
+    commonBuild()
+
+def compileRelease():
+    if environment['CC'] == 'cl':
+        environment.Append( CCFLAGS = ['/Ox'] )
+    else:
+        environment.Append( CCFLAGS = ['-O2'] )
+    commonBuild()
+
+def compileTest():
+    if environment['CC'] == 'cl':
+        environment.Append( CCFLAGS = [] )
+    else:
+        environment.Append( CCFLAGS = [] )
+    commonBuild()
+    
+
+def commonBuild():
+    sample = environment.Program('sample', 'main.cpp', LIBS = ['OAuth'], LIBPATH = '#build/' + configuration)
+    oauth = environment.StaticLibrary('OAuth','OAuthService.cpp')
+    environment.Install('#' + OUTPUT_DIR + '/' + configuration, sample)
+    environment.Install('#' + OUTPUT_DIR + '/' + configuration, oauth)
+
+Import('configuration')
+Import('environment')
+
+if configuration == DEBUG_CONFIG:
+    compileDebug()
+elif configuration == RELEASE_CONFIG:
+    compileRelease()
+else:
+    print 'Unknown configuration'
