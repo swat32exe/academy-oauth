@@ -2,6 +2,7 @@
 
 #include "OAuthService.h"
 
-int main() {
+int main() 
+{
 	AcademyOAuth::OAuthService service;
 }

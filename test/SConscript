@@ -2,12 +2,12 @@ from SConfig import *
 
 Import('environment')
 testSources = ['main.cpp']
-testMain = environment.Program(testSources, LIBS = [], LIBPATH = '#' + BUILD_DIR + '/' + RELEASE_CONFIG)
-environment.Install('#' + OUTPUT_DIR + '/' + TEST_CONFIG, testMain)
+test = environment.Program(target = TEST_TARGET, source = testSources, LIBS = [], LIBPATH = '#' + BUILD_DIR + '/' + RELEASE_CONFIG)
+environment.Install('#' + OUTPUT_DIR + '/' + TEST_CONFIG, test)
 
 if environment['PLATFORM'] == 'posix':
-	test = Command(target = 'test', source = testSources, action = OUTPUT_DIR + '/' + TEST_CONFIG +'/' + 'testMain')
+	testRun = Command(target = 'testRun', source = testSources, action = OUTPUT_DIR + '/' + TEST_CONFIG +'/' + TEST_TARGET)
 else:
-	test = Command(target = 'test', source = testSources, action = OUTPUT_DIR + '\\' + TEST_CONFIG +'\\' + 'testMain.exe')
+	testRun = Command(target = 'testRun', source = testSources, action = OUTPUT_DIR + '\\' + TEST_CONFIG +'\\' + TEST_TARGET + '.exe')
 
-AlwaysBuild(test)
+AlwaysBuild(testRun)

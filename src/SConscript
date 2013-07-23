@@ -1,5 +1,8 @@
 from SConfig import *
 
+libSources = ['OAuthService.cpp']
+sampleSources = ['main.cpp']
+
 def compileDebug():
     environment.Append( CCFLAGS = [ '-g', '-O0'] )
     commonBuild()
@@ -13,8 +16,8 @@ def compileTest():
     
 
 def commonBuild():
-    sample = environment.Program('sample', 'main.cpp', LIBS = ['OAuth'], LIBPATH = '#build/' + configuration)
-    oauth = environment.StaticLibrary('OAuth','OAuthService.cpp')
+    sample = environment.Program(SAMPLE_TARGET, sampleSources, LIBS = ['OAuth'], LIBPATH = '#build/' + configuration)
+    oauth = environment.StaticLibrary(LIB_TARGET, libSources)
     environment.Install('#' + OUTPUT_DIR + '/' + configuration, sample)
     environment.Install('#' + OUTPUT_DIR + '/' + configuration, oauth)
 
