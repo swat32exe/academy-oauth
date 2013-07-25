@@ -21,6 +21,8 @@ else:
 
 variantDirPath = os.path.join(BUILD_DIR, configuration)
 if configuration == TEST_CONFIG:
+    SConscript('src/SConscript', variant_dir = os.path.join(BUILD_DIR, DEBUG_CONFIG), duplicate = 0,
+    exports = {'configuration' : DEBUG_CONFIG, 'environment' : environment})
     SConscript('test/SConscript', variant_dir = variantDirPath, duplicate = 0,
     exports = {'environment' : environment})
 else:

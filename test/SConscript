@@ -4,7 +4,7 @@ Import('environment')
 
 testSources = ['main.cpp','gtest/gtest-all.cc']
 
-libPath = '#' + os.path.join(BUILD_DIR, RELEASE_CONFIG)
+libPath = '#' + os.path.join(BUILD_DIR, DEBUG_CONFIG)
 test = environment.Program(target = TEST_TARGET, source = testSources, LIBS = ['pthread'], LIBPATH = libPath, CPPPATH = '.')
 testInstallPath = '#' + os.path.join(OUTPUT_DIR, TEST_CONFIG)
 environment.Install(testInstallPath, test)
