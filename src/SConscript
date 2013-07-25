@@ -1,7 +1,10 @@
 import os.path
 from SConfig import *
 
-libSources = ['Service.cpp']
+libSources = [
+    'Service.cpp',
+    'HttpRequest.cpp'
+]
 
 def compileDebug():
     environment.Append( CCFLAGS = [ '-g', '-O0'] )
