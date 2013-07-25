@@ -4,8 +4,9 @@ Import('environment')
 
 testSources = ['main.cpp','gtest/gtest-all.cc']
 
+environment.Append(CCFLAGS = [ '-g', '-O0'])
 libPath = '#' + os.path.join(BUILD_DIR, DEBUG_CONFIG)
-test = environment.Program(target = TEST_TARGET, source = testSources, LIBS = ['pthread'], LIBPATH = libPath, CPPPATH = '.')
+test = environment.Program(target = TEST_TARGET, source = testSources, LIBS = ['pthread', LIB_TARGET], LIBPATH = libPath, CPPPATH = ['#include', '.'])
 testInstallPath = '#' + os.path.join(OUTPUT_DIR, TEST_CONFIG)
 environment.Install(testInstallPath, test)
 
@@ -14,4 +15,5 @@ if environment['PLATFORM'] != 'posix':
 	testRunPath += '.exe'
 	
 testRun = environment.Command(target = 'testRun', source = testSources, action = testRunPath)
+Depends( testRun, test )
 AlwaysBuild(testRun)
