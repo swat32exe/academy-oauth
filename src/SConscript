@@ -1,3 +1,4 @@
+import os.path
 from SConfig import *
 
 libSources = ['Service.cpp']
@@ -16,7 +17,8 @@ def compileTest():
 
 def commonBuild():
     oauthLib = environment.StaticLibrary(LIB_TARGET, libSources)
-    environment.Install('#' + OUTPUT_DIR + '/' + configuration, oauthLib)
+    installDirPath = '#' + os.path.join(OUTPUT_DIR, configuration)
+    environment.Install(installDirPath, oauthLib)
 
 Import('configuration')
 Import('environment')

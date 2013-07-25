@@ -1,3 +1,4 @@
+import os.path
 from SConfig import *
 
 configuration = ARGUMENTS.get('config', RELEASE_CONFIG);
@@ -18,9 +19,10 @@ if environment['CC'] == 'gcc':
 else:
     print 'Unsupported Compiler: ' + environment['CC']
 
+variantDirPath = os.path.join(BUILD_DIR, configuration)
 if configuration == TEST_CONFIG:
-    SConscript('test/SConscript', variant_dir = 'build/' + configuration, duplicate = 0,
+    SConscript('test/SConscript', variant_dir = variantDirPath, duplicate = 0,
     exports = {'environment' : environment})
 else:
-    SConscript('src/SConscript', variant_dir = 'build/' + configuration, duplicate = 0,
+    SConscript('src/SConscript', variant_dir = variantDirPath, duplicate = 0,
     exports = {'configuration' : configuration, 'environment' : environment})
