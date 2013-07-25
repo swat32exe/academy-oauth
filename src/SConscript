@@ -1,0 +1,31 @@
+import os.path
+from SConfig import *
+
+libSources = ['Service.cpp']
+
+def compileDebug():
+    environment.Append( CCFLAGS = [ '-g', '-O0'] )
+    commonBuild()
+
+def compileRelease():
+    environment.Append( CCFLAGS = ['-O2'] )
+    commonBuild()
+
+def compileTest():
+    commonBuild()
+    
+
+def commonBuild():
+    oauthLib = environment.StaticLibrary(LIB_TARGET, libSources)
+    installDirPath = '#' + os.path.join(OUTPUT_DIR, configuration)
+    environment.Install(installDirPath, oauthLib)
+
+Import('configuration')
+Import('environment')
+
+if configuration == DEBUG_CONFIG:
+    compileDebug()
+elif configuration == RELEASE_CONFIG:
+    compileRelease()
+else:
+    print 'Unknown configuration'
