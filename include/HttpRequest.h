@@ -41,11 +41,8 @@ namespace OAuth
         std::string toString();
 
         HttpRequestType getHttpRequestType() const;
-        void setHttpRequestType(HttpRequestType httpRequestType);
         const std::string &getResource() const;
-        void setResource(const std::string &resource);
         const std::string &getBody() const;
-        void setBody(const std::string &body);
         const header_t &getHeaders() const;
         /**
          *  Returns non-constant reference to headers structure, so headers can be edited.
@@ -57,11 +54,6 @@ namespace OAuth
          *  @param name header name
          *  @param header new header value
          */
-        void setHeader(const std::string &name, const std::string &header);
-        /**
-         *  Removes header with specified name.
-         */
-        void eraseHeader(const std::string &name);
     };
 }
 

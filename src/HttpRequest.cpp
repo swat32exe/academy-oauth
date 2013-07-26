@@ -11,11 +11,6 @@ namespace OAuth
         return body;
     }
 
-    void HttpRequest::setBody(const std::string &body)
-    {
-        this->body = body;
-    }
-
     const header_t &HttpRequest::getHeaders() const
     {
         return headers;
@@ -31,19 +26,9 @@ namespace OAuth
         return httpRequestType;
     }
 
-    void HttpRequest::setHttpRequestType(HttpRequestType httpRequestType)
-    {
-        this->httpRequestType = httpRequestType;
-    }
-
     const std::string &HttpRequest::getResource() const
     {
         return resource;
-    }
-
-    void HttpRequest::setResource(const std::string &resource)
-    {
-        this->resource = resource;
     }
 
     std::string HttpRequest::requestTypeAsString()
@@ -56,18 +41,6 @@ namespace OAuth
         default:
             assert("Unknown method" && false);
         }
-    }
-
-    void HttpRequest::setHeader(const std::string &name, const std::string &header)
-    {
-        this->headers[name] = header;
-    }
-
-    void HttpRequest::eraseHeader(const std::string &name)
-    {
-        auto header = headers.find(name);
-        if (header != headers.end())
-            headers.erase(header);
     }
 
     HttpRequest::HttpRequest(HttpRequestType httpRequestType
