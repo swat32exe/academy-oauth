@@ -48,12 +48,6 @@ namespace OAuth
          *  Returns non-constant reference to headers structure, so headers can be edited.
          */
         header_t &getHeadersNonConst();
-        /**
-         *  Sets value for specified header.
-         *  If header already exists value is changed, otherwise new one is created.
-         *  @param name header name
-         *  @param header new header value
-         */
     };
 }
 
