@@ -10,21 +10,34 @@ namespace OAuth
     typedef std::map<std::string, std::string> header_t;
     enum HttpRequestType { GET, POST };
 
+    /**
+     *  Class for working with HTTP requests.
+     */
     class HttpRequest
     {
         const static std::string httpVersionString;
 
         HttpRequestType httpRequestType;
+        /**
+         *  Url path after host and port, e.g /index.php?p1=1
+         */
         std::string resource;
         header_t headers;
         std::string body;
 
+        /**
+         *  Creates string representation of request type.
+         *  e.g. "POST" for HttpRequestType::POST.
+         */
         std::string requestTypeAsString();
     public:
         HttpRequest(HttpRequestType httpRequestType
             ,const std::string &resource
             ,const header_t &headers
             ,const std::string &body);
+        /**
+         * Creates string, that is ready to be sent.
+         */
         std::string toString();
 
         HttpRequestType getHttpRequestType() const;
@@ -34,8 +47,20 @@ namespace OAuth
         const std::string &getBody() const;
         void setBody(const std::string &body);
         const header_t &getHeaders() const;
+        /**
+         *  Returns non-constant reference to headers structure, so headers can be edited.
+         */
         header_t &getHeadersNonConst();
+        /**
+         *  Sets value for specified header.
+         *  If header already exists value is changed, otherwise new one is created.
+         *  @param name header name
+         *  @param header new header value
+         */
         void setHeader(const std::string &name, const std::string &header);
+        /**
+         *  Removes header with specified name.
+         */
         void eraseHeader(const std::string &name);
     };
 }
