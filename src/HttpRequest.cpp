@@ -21,6 +21,11 @@ namespace OAuth
         return headers;
     }
 
+    header_t &HttpRequest::getHeadersNonConst()
+    {
+        return headers;
+    }
+
     HttpRequestType HttpRequest::getHttpRequestType() const
     {
         return httpRequestType;

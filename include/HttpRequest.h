@@ -34,6 +34,7 @@ namespace OAuth
         const std::string &getBody() const;
         void setBody(const std::string &body);
         const header_t &getHeaders() const;
+        header_t &getHeadersNonConst();
         void setHeader(const std::string &name, const std::string &header);
         void eraseHeader(const std::string &name);
     };
