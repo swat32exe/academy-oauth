@@ -1,10 +1,11 @@
 #include <HttpRequest.h>
 
-#include <iostream>
-#include <regex>
+#include <cassert>
 
 namespace OAuth
 {
+    const std::string HttpRequest::httpVersionString = "HTTP/1.1";
+
     const std::string &HttpRequest::getBody() const
     {
         return body;
@@ -15,54 +16,69 @@ namespace OAuth
         this->body = body;
     }
 
-    std::string HttpRequest::getHeader(const std::string &name) const
+    const header_t &HttpRequest::getHeaders() const
     {
-        auto header = headers.find(name);
-        if (header == headers.end())
-            return "";
-        return header->second;
+        return headers;
     }
 
-    void HttpRequest::setHeader(std::string &name, const std::string &header)
+    HttpRequestType HttpRequest::getHttpRequestType() const
+    {
+        return httpRequestType;
+    }
+
+    void HttpRequest::setHttpRequestType(HttpRequestType httpRequestType)
+    {
+        this->httpRequestType = httpRequestType;
+    }
+
+    const std::string &HttpRequest::getResource() const
+    {
+        return resource;
+    }
+
+    void HttpRequest::setResource(const std::string &resource)
+    {
+        this->resource = resource;
+    }
+
+    std::string HttpRequest::requestTypeAsString()
+    {
+        switch (httpRequestType) {
+        case HttpRequestType::GET:
+            return "GET";
+        case HttpRequestType::POST:
+            return "POST";
+        default:
+            assert("Unknown method" && false);
+        }
+    }
+
+    void HttpRequest::setHeader(const std::string &name, const std::string &header)
     {
         this->headers[name] = header;
     }
 
-    const std::string& HttpRequest::getInitialLine() const
+    void HttpRequest::eraseHeader(const std::string &name)
     {
-        return initialLine;
+        auto header = headers.find(name);
+        if (header != headers.end())
+            headers.erase(header);
     }
 
-    void HttpRequest::addHeadersFrom(std::string headersString)
+    HttpRequest::HttpRequest(HttpRequestType httpRequestType
+            ,const std::string &resource
+            ,const header_t &headers
+            ,const std::string &body) :
+        httpRequestType(httpRequestType)
+        ,resource(resource)
+        ,headers(headers)
+        ,body(body)
     {
-        headersString = "";
-        // TODO:Implement
     }
 
-    void HttpRequest::setInitialLine(const std::string &initialLine)
+    std::string HttpRequest::toString()
     {
-        this->initialLine = initialLine;
-    }
-
-    HttpRequest::HttpRequest(const std::string &httpRequest)
-    {
-        int initialLineEndPosition = httpRequest.find("\r\n");
-        initialLine = httpRequest.substr(0, initialLineEndPosition);
-
-        int headersStartPosition = initialLineEndPosition + 2;
-        int headersEndPosition = httpRequest.find("\r\n\r\n");
-        int headersLength = headersStartPosition - headersEndPosition + 1;
-        std::string headers = httpRequest.substr(headersStartPosition, headersLength);
-
-        addHeadersFrom(headers);
-
-        // There are 4 characters after headers before body
-        body = httpRequest.substr(headersEndPosition + 4);
-    }
-
-    std::string HttpRequest::ToString()
-    {
-        std::string asString = initialLine + "\r\n";
+        std::string asString = requestTypeAsString() + " " + resource + " " + httpVersionString + "\r\n";
 
         for (auto header : headers) {
             asString += header.first + ": " + header.second + "\r\n";

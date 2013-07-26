@@ -7,23 +7,35 @@
 
 namespace OAuth
 {
+    typedef std::map<std::string, std::string> header_t;
+    enum HttpRequestType { GET, POST };
+
     class HttpRequest
     {
-        std::string initialLine;
-        std::map<std::string, std::string> headers;
+        const static std::string httpVersionString;
+
+        HttpRequestType httpRequestType;
+        std::string resource;
+        header_t headers;
         std::string body;
 
-        void addHeadersFrom(std::string headersString);
+        std::string requestTypeAsString();
     public:
-        HttpRequest(const std::string &httpRequest);
-        std::string ToString();
+        HttpRequest(HttpRequestType httpRequestType
+            ,const std::string &resource
+            ,const header_t &headers
+            ,const std::string &body);
+        std::string toString();
 
+        HttpRequestType getHttpRequestType() const;
+        void setHttpRequestType(HttpRequestType httpRequestType);
+        const std::string &getResource() const;
+        void setResource(const std::string &resource);
         const std::string &getBody() const;
         void setBody(const std::string &body);
-        std::string getHeader(const std::string &header) const;
-        void setHeader(std::string &name, const std::string &header);
-        const std::string &getInitialLine() const;
-        void setInitialLine(const std::string &initialLine);
+        const header_t &getHeaders() const;
+        void setHeader(const std::string &name, const std::string &header);
+        void eraseHeader(const std::string &name);
     };
 }
 
