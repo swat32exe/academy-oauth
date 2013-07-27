@@ -1,6 +1,7 @@
 #include <Utility.h>
 
-#include <stdio.h>
+#include <sstream>
+#include <iomanip>
 
 namespace OAuth
 {
@@ -14,40 +15,32 @@ namespace OAuth
 
         std::string urlEncode(std::string data)
         {
-            std::string encoded = "";
-
-            // Encoded string will be at least same length.
-            encoded.reserve(data.length());
+            std::ostringstream encodedStream;
 
             for (size_t i = 0; i < data.length(); ++i) {
                 if (isUnreservedUrlCharacter(data[i]))
-                    encoded += data[i];
-                else {
-                    char buffer[3];
-                    sprintf(buffer, "%X", (unsigned int)data[i]);
-                    encoded += "%" + std::string(buffer);
-                }
+                    encodedStream << data[i];
+                else
+                    encodedStream << "%" << std::uppercase << std::setfill('0') << std::setw(2)
+                        << std::hex << static_cast<unsigned int>(data[i]);
             }
-
-            return encoded;
+            return encodedStream.str();
         }
 
         std::string urlDecode(std::string data)
         {
-            std::string decoded = "";
-
-            // In most cases new string will not be much shorter.
-            decoded.reserve(data.length());
+            std::ostringstream decodedStream;
 
             for (size_t i = 0; i < data.length(); ++i) {
                 unsigned int currentCharacter = data[i];
                 if (currentCharacter == '%') {
-                    sscanf(data.substr(i+1, 2).c_str(), "%X", &currentCharacter);
+                    std::istringstream encodedChar(data.substr(i + 1, 2));
+                    encodedChar >> std::hex >> currentCharacter;
                     i += 2;
                 }
-                decoded += static_cast<char> (currentCharacter);
+                decodedStream << static_cast<char>(currentCharacter);
             }
-            return decoded;
+            return decodedStream.str();
         }
     }
 }
