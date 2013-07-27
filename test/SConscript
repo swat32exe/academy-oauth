@@ -2,7 +2,7 @@ import os.path
 from SConfig import *
 Import('environment')
 
-testSources = ['main.cpp','gtest/gtest-all.cc']
+testSources = ['main.cpp','gmock-gtest-all.cc']
 
 environment.Append(CCFLAGS = [ '-g', '-O0'])
 libPath = '#' + os.path.join(BUILD_DIR, DEBUG_CONFIG)

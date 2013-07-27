@@ -4,3 +4,5 @@
 bin/*
 build/*
 test/gtest/
+test/gmock/
+test/gmock-gtest-all.cc
