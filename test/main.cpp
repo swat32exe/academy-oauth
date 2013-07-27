@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "HttpRequestTests.h"
+#include "Utility/UrlEncodeDecode.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {
