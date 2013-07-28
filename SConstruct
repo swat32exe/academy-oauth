@@ -13,7 +13,7 @@ else:
 
 if environment['CC'] == 'gcc':
     if configuration == TEST_CONFIG:
-        environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-Werror', '-std=gnu++0x'])
+        environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-std=gnu++0x'])
     else:
         environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-Werror', '-pedantic', '-std=c++0x'])
 else:
