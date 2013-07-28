@@ -9,8 +9,9 @@ def extractWithoutPath(archive, archivePath, extractPath):
     newFile.close();
 
 files = [
-    ['gtest-1.6.0/fused-src/gtest/gtest-all.cc', 'test/gtest/gtest-all.cc'],
-    ['gtest-1.6.0/fused-src/gtest/gtest.h', 'test/gtest/gtest.h']
+    ['gmock-1.6.0/fused-src/gmock-gtest-all.cc', 'test/gmock-gtest-all.cc'],
+    ['gmock-1.6.0/fused-src/gmock/gmock.h', 'test/gmock/gmock.h'],
+    ['gmock-1.6.0/fused-src/gtest/gtest.h', 'test/gtest/gtest.h']
 ]
 
 filesMissing = False
@@ -24,8 +25,10 @@ if filesMissing:
 
     if not os.path.exists('test/gtest'):
         os.makedirs('test/gtest')
+    if not os.path.exists('test/gmock'):
+        os.makedirs('test/gmock')
 
-    response = urllib2.urlopen('https://googletest.googlecode.com/files/gtest-1.6.0.zip')
+    response = urllib2.urlopen('https://googlemock.googlecode.com/files/gmock-1.6.0.zip')
     gtestRawZip = response.read()
     gtestZip = zipfile.ZipFile(StringIO(gtestRawZip))
     for (archivePath, extractPath) in files:
