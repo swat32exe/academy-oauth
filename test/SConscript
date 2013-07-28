@@ -6,7 +6,8 @@ testSources = ['main.cpp','gmock-gtest-all.cc']
 
 environment.Append(CCFLAGS = [ '-g', '-O0'])
 libPath = '#' + os.path.join(BUILD_DIR, DEBUG_CONFIG)
-test = environment.Program(target = TEST_TARGET, source = testSources, LIBS = ['pthread', LIB_TARGET], LIBPATH = libPath, CPPPATH = ['#include', '.'])
+test = environment.Program(target = TEST_TARGET, source = testSources, LIBS = ['pthread', LIB_TARGET], 
+LIBPATH = libPath, CPPPATH = ['#src', '#include', '.'])
 testInstallPath = '#' + os.path.join(OUTPUT_DIR, TEST_CONFIG)
 environment.Install(testInstallPath, test)
 

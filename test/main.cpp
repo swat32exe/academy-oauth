@@ -3,6 +3,7 @@
 
 #include "HttpRequestTests.h"
 #include "Utility/UrlEncodeDecode.h"
+#include "ParameterListTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {
