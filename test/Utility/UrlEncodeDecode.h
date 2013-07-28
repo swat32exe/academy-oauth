@@ -30,5 +30,9 @@ namespace OAuth
     {
         std::string data = "http%3A%2F%2Fwww.cplusplus.com%2Fforum%2Fgeneral%2F84221%2F";
         ASSERT_EQ("http://www.cplusplus.com/forum/general/84221/", Utility::urlDecode(data));
+
+        // "+" character must be decoded as whitespace
+        std::string withPlus = "2+q";
+        ASSERT_STREQ("2 q", Utility::urlDecode(withPlus).c_str());
     }
 }

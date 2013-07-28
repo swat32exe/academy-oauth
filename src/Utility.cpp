@@ -38,6 +38,9 @@ namespace OAuth
                     encodedChar >> std::hex >> currentCharacter;
                     i += 2;
                 }
+                if (currentCharacter == '+') {
+                    currentCharacter = ' ';
+                }
                 decodedStream << static_cast<char>(currentCharacter);
             }
             return decodedStream.str();
