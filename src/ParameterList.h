@@ -11,7 +11,6 @@ namespace OAuth
     /**
      *  Class for working with POST/GET parameters
      */
-
     class ParameterList
     {
     public:

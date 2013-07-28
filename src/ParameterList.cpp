@@ -25,11 +25,11 @@ namespace OAuth
 
     void ParameterList::addQueryString(const std::string &queryString)
     {
-        std::string query = queryString;
-        if(queryString.find(QUERY_SEPARATOR) == 0) {
-            query = queryString.substr(1);
+        if(queryString.empty()) {
+            return;
         }
-
+        std::string query = (queryString[0] == QUERY_SEPARATOR)
+                ? queryString.substr(1) : queryString;
         std::stringstream queryStream(query);
         std::string pairString;
         while (std::getline(queryStream, pairString, PARAMETER_SEPARATOR)) {
@@ -45,6 +45,10 @@ namespace OAuth
     const std::string ParameterList::asQueryString() const
     {
         std::string queryString(1, QUERY_SEPARATOR);
+        if(parameters.empty()) {
+            return queryString;
+        }
+
         for(parameters_t::const_iterator pair = parameters.begin();
                 pair != parameters.end(); ++pair) {
             queryString += pair->first + PAIR_SEPARATOR + pair->second;

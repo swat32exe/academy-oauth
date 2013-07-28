@@ -19,6 +19,8 @@ namespace OAuthTesting
     TEST(ParameterListTests, testAddQueryString)
     {
         OAuth::ParameterList parameterList;
+        ASSERT_STREQ("?", parameterList.asQueryString().c_str());
+
         std::string queryString = "?oauth_consumer_key=key&oauth_secret=secret";
         parameterList.addQueryString(queryString);
         ASSERT_STREQ(queryString.c_str(), parameterList.asQueryString().c_str());
@@ -32,6 +34,8 @@ namespace OAuthTesting
     TEST(ParameterListTests, testBaseString)
     {
         OAuth::ParameterList parameterList;
+        ASSERT_STREQ("", parameterList.asBaseString().c_str());
+
         // Test sorting
         parameterList.addQueryString("c1=a3&a2=a3&a2=a1");
         ASSERT_STREQ("a2=a1&a2=a3&c1=a3", parameterList.asBaseString().c_str());
