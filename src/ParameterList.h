@@ -6,7 +6,8 @@
 
 namespace OAuth
 {
-    typedef std::vector<std::pair<std::string, std::string> > parameters_t;
+    typedef std::pair<std::string, std::string> StringPair;
+    typedef std::vector<StringPair> parameters_t;
 
     /**
      *  Class for working with POST/GET parameters
@@ -50,6 +51,9 @@ namespace OAuth
          * @returns OAuth Base string
          */
         const std::string asBaseString() const;
+
+    private:
+        StringPair getUrlEncodedPair(std::string name, std::string value) const;
 
     private:
         parameters_t parameters;

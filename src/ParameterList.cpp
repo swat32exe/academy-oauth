@@ -2,6 +2,7 @@
 #include <set>
 
 #include "ParameterList.h"
+#include "Utility.h"
 
 namespace OAuth
 {
@@ -20,7 +21,9 @@ namespace OAuth
 
     void ParameterList::add(std::string name, std::string value)
     {
-        parameters.push_back(std::make_pair(name, value));
+        std::string decodedName = Utility::urlDecode(name);
+        std::string decodedValue = Utility::urlDecode(value);
+        parameters.push_back(std::make_pair(decodedName, decodedValue));
     }
 
     void ParameterList::addQueryString(const std::string &queryString)
@@ -51,7 +54,8 @@ namespace OAuth
 
         for(parameters_t::const_iterator pair = parameters.begin();
                 pair != parameters.end(); ++pair) {
-            queryString += pair->first + PAIR_SEPARATOR + pair->second;
+            StringPair encodedPair = this->getUrlEncodedPair(pair->first,pair->second);
+            queryString += encodedPair.first + PAIR_SEPARATOR + encodedPair.second;
             queryString += PARAMETER_SEPARATOR;
         }
         return queryString.substr(0, queryString.length() - 1);
@@ -59,21 +63,24 @@ namespace OAuth
 
     const std::string ParameterList::asBaseString() const
     {
-        typedef std::set<std::pair <std::string, std::string> > StringPairSet;
-        StringPairSet parametersSet;
+        std::set<StringPair> parametersSet;
         for(parameters_t::const_iterator pair = parameters.begin();
                 pair != parameters.end(); ++pair) {
-            // TODO: urlencode parameters here
-            std::string name = pair->first;
-            std::string value = pair->second;
-            parametersSet.insert(std::make_pair(name, value));
+            parametersSet.insert(this->getUrlEncodedPair(pair->first, pair->second));
         }
 
         ParameterList sortedParameters;
-        for(StringPairSet::const_iterator pair = parametersSet.begin();
+        for(std::set<StringPair>::const_iterator pair = parametersSet.begin();
                 pair != parametersSet.end(); ++pair) {
             sortedParameters.add(pair->first, pair->second);
         }
         return sortedParameters.asQueryString().substr(1);
+    }
+
+    StringPair ParameterList::getUrlEncodedPair(std::string name, std::string value) const
+    {
+        std::string encodedName = Utility::urlEncode(name);
+        std::string encodedValue = Utility::urlEncode(value);
+        return std::make_pair(encodedName, encodedValue);
     }
 }
