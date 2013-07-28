@@ -5,6 +5,8 @@
 
 namespace OAuth
 {
+    enum SignatureMethod { HMAC_SHA1, RSA_SHA1, PLAINTEXT };
+
     /**
      *  Contains data, required for initial service configuration
      */
@@ -22,16 +24,34 @@ namespace OAuth
          *  URL used to exchange temporary token for permanent
          */
         std::string tokenExchangeUrl;
+        /**
+         * OAuth consumer key
+         */
+        std::string consumerKey;
+        /**
+         * OAuth consumer secret
+         */
+        std::string consumerSecret;
+        /**
+         * Method used to sign request
+         */
+        SignatureMethod signatureMethod;
     public:
         /**
          * Sets field values according to provided data.
          * @param tokenRequestUrl URL used to request temporary token
          * @param authorizeUrl URL to which user will be redirected to authorize access
          * @param tokenExchangeUrl URL used to exchange temporary token for permanent
+         * @param consumerKey OAuth consumer key
+         * @param consumerSecret OAuth consumer secret
+         * @param signatureMethod method used to sign request
          */
         ServiceConfiguration(const std::string &tokenRequestUrl
             ,const std::string &authorizeUrl
-            ,const std::string &tokenExchangeUrl);
+            ,const std::string &tokenExchangeUrl
+            ,const std::string &consumerKey
+            ,const std::string &consumerSecret
+            ,SignatureMethod signatureMethod);
 
         /**
          *  Returns URL used to request temporary token.
@@ -45,6 +65,22 @@ namespace OAuth
          *  Returns URL used to exchange temporary token for permanent.
          */
         const std::string &getTokenExchangeUrl() const;
+        /**
+         * Returns OAuth consumer key
+         */
+        const std::string &getConsumerKey() const;
+        /**
+         * Returns OAuth consumer secret
+         */
+        const std::string &getConsumerSecret() const;
+        /**
+         * Returns method used to sign request
+         */
+        SignatureMethod getSignatureMethod() const;
+        /**
+         * Returns method used to sign request represented as string
+         */
+        const std::string getSignatureMethodAsString() const;
     };
 }
 
