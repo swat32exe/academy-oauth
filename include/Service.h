@@ -2,16 +2,15 @@
 #define __SERVICE_H
 
 #include <memory>
+#include <string>
 
 #include <ServiceConfiguration.h>
-#include <NetworkWorker.h>
-#include <listeners/TokenDoneListener.h>
 
 namespace OAuth
 {
-    class ServiceConfiguration;
     class NetworkWorker;
     class TokenDoneListener;
+    class HttpRequest;
 
     class Service
     {
@@ -25,6 +24,7 @@ namespace OAuth
         std::string generateNonce();
     public:
         /**
+         *  Creates service with specified configuration and networkWorker
          *  @param configuration initial service configuration
          *  @param networkWorker used to make requests over network
          */

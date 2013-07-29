@@ -5,6 +5,10 @@
 
 namespace OAuth
 {
+    /**
+     *  Represents token credentials
+     *  Stores parameters named as oauth_token and oauth_token_secret in RFC 5849
+     */
     class Token
     {
         std::string token;

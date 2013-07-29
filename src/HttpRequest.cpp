@@ -34,9 +34,9 @@ namespace OAuth
     std::string HttpRequest::requestTypeAsString()
     {
         switch (httpRequestType) {
-        case HttpRequestType::GET:
+        case GET:
             return "GET";
-        case HttpRequestType::POST:
+        case POST:
             return "POST";
         default:
             assert("Unknown method" && false);

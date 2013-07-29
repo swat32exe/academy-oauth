@@ -3,11 +3,10 @@
 
 #include <memory>
 
-#include <listeners/NetworkDoneListener.h>
-#include <HttpRequest.h>
-
 namespace OAuth
 {
+    class HttpRequest;
+    class NetworkDoneListener;
     /**
      * Class used to provide acces to network
      */

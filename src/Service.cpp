@@ -5,6 +5,8 @@
 #include <cstdlib>
 
 #include <Utility.h>
+#include <NetworkWorker.h>
+#include <HttpRequest.h>
 #include <listeners/NetworkDoneRequestToken.h>
 
 namespace OAuth

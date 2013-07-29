@@ -37,11 +37,11 @@ namespace OAuth
     const std::string OAuth::ServiceConfiguration::getSignatureMethodAsString() const
     {
         switch (signatureMethod) {
-        case SignatureMethod::HMAC_SHA1:
+        case HMAC_SHA1:
             return "HMAC-SHA1";
-        case SignatureMethod::RSA_SHA1:
+        case RSA_SHA1:
             return "RSA-SHA1";
-        case SignatureMethod::PLAINTEXT:
+        case PLAINTEXT:
             return "PLAINTEXT";
         default:
             assert("Unknown method" && false);
