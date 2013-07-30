@@ -40,6 +40,8 @@ namespace OAuth
             return "POST";
         default:
             assert("Unknown method" && false);
+            // Just to avoid warning.
+            return "";
         }
     }
 

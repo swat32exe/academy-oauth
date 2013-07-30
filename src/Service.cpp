@@ -5,19 +5,18 @@
 #include <cstdlib>
 
 #include <Utility.h>
-#include <NetworkWorker.h>
 #include <HttpRequest.h>
-#include <listeners/NetworkDoneRequestToken.h>
+#include <Token.h>
 
 namespace OAuth
 {
-    Service::Service(const ServiceConfiguration &configuration, std::shared_ptr<NetworkWorker> &networkWorker) :
+    Service::Service(const ServiceConfiguration &configuration, sendRequest_t &sendRequest) :
         configuration(configuration)
-        ,networkWorker(networkWorker)
+        ,sendRequest(sendRequest)
     {
     }
 
-    void Service::requestToken(const std::string &realm, const std::string &callbackUrl, std::shared_ptr<TokenDoneListener> requestDone)
+    std::future<Token> Service::requestToken(const std::string &realm, const std::string &callbackUrl)
     {
         std::string timeStamp = Utility::toString(std::time(NULL));
         std::string callback = Utility::urlEncode(callbackUrl);
@@ -37,9 +36,10 @@ namespace OAuth
 
         // TODO: Sign request.
 
-        std::shared_ptr<NetworkDoneRequestToken> networkDoneRequestToken (
-            new NetworkDoneRequestToken(networkWorker, requestDone));
-        networkWorker->sendRequest(request, networkDoneRequestToken);
+        return std::async([=] () {
+            std::string response = sendRequest(request);
+            return Token(response);
+        });
     }
 
     std::string Service::generateNonce()
