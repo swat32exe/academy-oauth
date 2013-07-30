@@ -45,5 +45,19 @@ namespace OAuth
             }
             return decodedStream.str();
         }
+
+        std::string hostFromUrl(std::string url)
+        {
+            //TODO:implement hostFromUrl
+            (void)url;
+            return "www.example.com";
+        }
+
+        std::string resourceFromUrl(std::string url)
+        {
+            //TODO:implement resourceFromUrl
+            (void)url;
+            return "/resource";
+        }
     }
 }
