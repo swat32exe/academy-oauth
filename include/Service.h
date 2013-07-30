@@ -31,7 +31,7 @@ namespace OAuth
          *  @param sendRequest used to make requests over network.
          *  Must send provided request and return response. May throw exceptions.
          */
-        Service(const ServiceConfiguration &configuration, sendRequest_t &sendRequest);
+        Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest);
         /**
          *  Request temporary credentials asynchronously
          *  @param realm string identifying protected resource

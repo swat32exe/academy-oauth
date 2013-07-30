@@ -10,7 +10,7 @@
 
 namespace OAuth
 {
-    Service::Service(const ServiceConfiguration &configuration, sendRequest_t &sendRequest) :
+    Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
         configuration(configuration)
         ,sendRequest(sendRequest)
     {
