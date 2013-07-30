@@ -12,10 +12,7 @@ else:
     environment = Environment(CPPPATH='#include')
 
 if environment['CC'] == 'gcc':
-    if configuration == TEST_CONFIG:
-        environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-std=gnu++0x', '-pthread'])
-    else:
-        environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-Werror', '-pedantic', '-std=c++0x'])
+    environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-Werror', '-pedantic', '-std=c++0x'])
 else:
     print 'Unsupported Compiler: ' + environment['CC']
 
