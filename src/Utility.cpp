@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <regex>
+#include <cassert>
 
 namespace OAuth
 {
@@ -50,8 +51,11 @@ namespace OAuth
         std::pair<int, int> getHostPosition(const std::string &url)
         {
             std::string protocolEnd = "://";
-            int hostBeginPosition = url.find(protocolEnd) + protocolEnd.length();
+            int protocolBeginPosition = url.find(protocolEnd);
+            assert("no '://' found in url" && protocolBeginPosition >= 0);
+            int hostBeginPosition = protocolBeginPosition + protocolEnd.length();
             int hostEndPositon = url.find("/", hostBeginPosition);
+            assert("no '/' after host found" && hostEndPositon >= 0);
             return std::make_pair(hostBeginPosition, hostEndPositon);
         }
 
