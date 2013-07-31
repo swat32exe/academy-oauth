@@ -13,26 +13,26 @@ namespace OAuth
          *  @param data string to encode
          *  @returns encoded string
          */
-        std::string urlEncode(std::string data);
+        std::string urlEncode(const std::string &data);
         /**
          *  Decodes percent encoded string
          *  @param data string to decode
          *  @returns decoded string
          */
-        std::string urlDecode(std::string data);
+        std::string urlDecode(const std::string &data);
 
         /**
          * Extracts host from url
          * @param url url, e.g. http://www.example.com/test
          * @returns host, e.g. www.example.com
          */
-        std::string hostFromUrl(std::string url);
+        std::string hostFromUrl(const std::string &url);
         /**
          * Extracts resource from url
          * @param url url, e.g. http://www.example.com/test
          * @returns resource, e.g. /test
          */
-        std::string resourceFromUrl(std::string url);
+        std::string resourceFromUrl(const std::string &url);
         /**
          * Normalizes url
          * e.g http://www.example.com, www.example.com/, www.example.com

@@ -14,7 +14,7 @@ namespace OAuth
             return isalnum(character) || otherUnreserved.find(character) != std::string::npos;
         }
 
-        std::string urlEncode(std::string data)
+        std::string urlEncode(const std::string &data)
         {
             std::ostringstream encodedStream;
 
@@ -28,7 +28,7 @@ namespace OAuth
             return encodedStream.str();
         }
 
-        std::string urlDecode(std::string data)
+        std::string urlDecode(const std::string &data)
         {
             std::ostringstream decodedStream;
 
@@ -47,7 +47,7 @@ namespace OAuth
             return decodedStream.str();
         }
 
-        std::pair<int, int> getHostPosition(std::string url)
+        std::pair<int, int> getHostPosition(const std::string &url)
         {
             std::string protocolEnd = "://";
             int hostBeginPosition = url.find(protocolEnd) + protocolEnd.length();
@@ -55,14 +55,14 @@ namespace OAuth
             return std::make_pair(hostBeginPosition, hostEndPositon);
         }
 
-        std::string hostFromUrl(std::string url)
+        std::string hostFromUrl(const std::string &url)
         {
             std::pair<int, int> hostPosition = getHostPosition(url);
             int hostNameLength =  hostPosition.second - hostPosition.first;
             return url.substr(hostPosition.first, hostNameLength);
         }
 
-        std::string resourceFromUrl(std::string url)
+        std::string resourceFromUrl(const std::string &url)
         {
             std::pair<int, int> hostPosition = getHostPosition(url);
             return url.substr(hostPosition.second);
