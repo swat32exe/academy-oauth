@@ -8,6 +8,8 @@
 #include <HttpRequest.h>
 #include <Token.h>
 
+#include "ParameterList.h"
+
 namespace OAuth
 {
     Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
@@ -32,7 +34,7 @@ namespace OAuth
         headers["Host"] = Utility::hostFromUrl(configuration.getTokenRequestUrl());
         std::string resource = Utility::resourceFromUrl(configuration.getTokenRequestUrl());
 
-        HttpRequest request(HttpRequestType::POST, resource, headers, "");
+        HttpRequest request(HttpRequestType::POST, configuration.getTokenRequestUrl());
 
         // TODO: Sign request.
 
