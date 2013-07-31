@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <Utility.h>
+
 namespace OAuth
 {
     const std::string &ServiceConfiguration::getAuthorizeUrl() const
@@ -56,9 +58,9 @@ namespace OAuth
             ,const std::string &consumerKey
             ,const std::string &consumerSecret
             ,SignatureMethod signatureMethod) :
-        tokenRequestUrl(tokenRequestUrl)
-        ,authorizeUrl(authorizeUrl)
-        ,tokenExchangeUrl(tokenExchangeUrl)
+        tokenRequestUrl(Utility::normalizeUrl(tokenRequestUrl))
+        ,authorizeUrl(Utility::normalizeUrl(authorizeUrl))
+        ,tokenExchangeUrl(Utility::normalizeUrl(tokenExchangeUrl))
         ,consumerKey(consumerKey)
         ,consumerSecret(consumerSecret)
         ,signatureMethod(signatureMethod)
