@@ -23,16 +23,24 @@ namespace OAuth
 
         /**
          * Extracts host from url
-         * @param url url, something like www.example.com/test
-         * @returns host, something like www.example.com
+         * @param url url, e.g. http://www.example.com/test
+         * @returns host, e.g. www.example.com
          */
         std::string hostFromUrl(std::string url);
         /**
-         * Extracts host from url
-         * @param url url, something like www.example.com/test
-         * @returns host, something like /test
+         * Extracts resource from url
+         * @param url url, e.g. http://www.example.com/test
+         * @returns resource, e.g. /test
          */
         std::string resourceFromUrl(std::string url);
+        /**
+         * Normalizes url
+         * e.g http://www.example.com, www.example.com/, www.example.com
+         * will result in http://www.example.com/
+         * @param url url to normalize
+         * @returns normalized url
+         */
+        std::string normalizeUrl(std::string url);
         /**
          * Converts long long to string. Needed because of gcc bug:
          * Bug 52015 - std::to_string does not work under MinGW

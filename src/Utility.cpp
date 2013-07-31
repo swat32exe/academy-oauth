@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <regex>
 
 namespace OAuth
 {
@@ -46,18 +47,36 @@ namespace OAuth
             return decodedStream.str();
         }
 
+        std::pair<int, int> getHostPosition(std::string url)
+        {
+            std::string protocolEnd = "://";
+            int hostBeginPosition = url.find(protocolEnd) + protocolEnd.length();
+            int hostEndPositon = url.find("/", hostBeginPosition);
+            return std::make_pair(hostBeginPosition, hostEndPositon);
+        }
+
         std::string hostFromUrl(std::string url)
         {
-            //TODO:implement hostFromUrl
-            (void)url;
-            return "www.example.com";
+            std::pair<int, int> hostPosition = getHostPosition(url);
+            int hostNameLength =  hostPosition.second - hostPosition.first;
+            return url.substr(hostPosition.first, hostNameLength);
         }
 
         std::string resourceFromUrl(std::string url)
         {
-            //TODO:implement resourceFromUrl
-            (void)url;
-            return "/resource";
+            std::pair<int, int> hostPosition = getHostPosition(url);
+            return url.substr(hostPosition.second);
+        }
+
+        std::string normalizeUrl(std::string url)
+        {
+            std::regex hasProtocol(".*://.*");
+            if (!std::regex_match(url, hasProtocol))
+                url = "http://" + url;
+            std::regex hasSlashAfterHost(".*://.*/.*");
+            if (!std::regex_match(url, hasSlashAfterHost))
+                url += "/";
+            return url;
         }
     }
 }
