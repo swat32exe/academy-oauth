@@ -51,24 +51,24 @@ namespace OAuth
         std::pair<int, int> getHostPosition(const std::string &url)
         {
             std::string protocolEnd = "://";
-            int protocolBeginPosition = url.find(protocolEnd);
+            const int protocolBeginPosition = url.find(protocolEnd);
             assert("no '://' found in url" && protocolBeginPosition >= 0);
-            int hostBeginPosition = protocolBeginPosition + protocolEnd.length();
-            int hostEndPositon = url.find("/", hostBeginPosition);
+            const int hostBeginPosition = protocolBeginPosition + protocolEnd.length();
+            const int hostEndPositon = url.find("/", hostBeginPosition);
             assert("no '/' after host found" && hostEndPositon >= 0);
             return std::make_pair(hostBeginPosition, hostEndPositon);
         }
 
         std::string hostFromUrl(const std::string &url)
         {
-            std::pair<int, int> hostPosition = getHostPosition(url);
-            int hostNameLength =  hostPosition.second - hostPosition.first;
+            const std::pair<int, int> hostPosition = getHostPosition(url);
+            const int hostNameLength =  hostPosition.second - hostPosition.first;
             return url.substr(hostPosition.first, hostNameLength);
         }
 
         std::string resourceFromUrl(const std::string &url)
         {
-            std::pair<int, int> hostPosition = getHostPosition(url);
+            const std::pair<int, int> hostPosition = getHostPosition(url);
             return url.substr(hostPosition.second);
         }
 
