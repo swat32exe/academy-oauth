@@ -2,19 +2,32 @@ import os.path
 from SConfig import *
 Import('environment')
 
-testSources = ['main.cpp','gmock-gtest-all.cc']
+testSources = ['gmock-gtest-all.cc'] +\
+    Glob('*.cpp') +\
+    Glob('cURLpp/src/*/*.c*') + \
+    Glob('cURLpp/src/*/*/*.c*')
 
-testEnvironment = environment.Clone(CCFLAGS = ['-std=c++0x', '-Werror', '-g', '-O0'])
+testEnvironment = environment.Clone(CCFLAGS = ['-std=c++0x', '-g', '-O0'])
+
+if testEnvironment['PLATFORM'] == 'posix':
+    testEnvironment.Append(LIBS = 'curl')
+else:
+    testEnvironment.Append(LIBS = ['curldll', 'wsock32'])
+    
 libPath = '#' + os.path.join(BUILD_DIR, DEBUG_CONFIG)
-test = testEnvironment.Program(target = TEST_TARGET, source = testSources, LIBS = ['pthread', LIB_TARGET],
-LIBPATH = libPath, CPPPATH = ['#src', '#include', '.'])
+
+testEnvironment.Append(LIBS = ['pthread', LIB_TARGET], LIBPATH = libPath, 
+    CPPPATH = ['cURLpp/include/', '#src', '#include', '.'],
+    CPPDEFINES = ['CURLPP_STATICLIB'])
+
+test = testEnvironment.Program(target = TEST_TARGET, source = testSources)
 testInstallPath = '#' + os.path.join(OUTPUT_DIR, TEST_CONFIG)
 testEnvironment.Install(testInstallPath, test)
 
 testRunPath = os.path.join(OUTPUT_DIR, TEST_CONFIG, TEST_TARGET)
 if testEnvironment['PLATFORM'] != 'posix':
-	testRunPath += '.exe'
-	
+    testRunPath += '.exe'
+
 testRun = testEnvironment.Command(target = 'testRun', source = testSources, action = testRunPath)
 Depends( testRun, test )
 AlwaysBuild(testRun)
