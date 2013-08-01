@@ -7,9 +7,9 @@ if configuration == TEST_CONFIG:
     execfile('LoadGTest.py')
 
 if Environment()['CC'] == 'cl':
-    environment = Environment(CPPPATH='#include', tools = ['mingw']);
+    environment = Environment(CPPPATH = ['#include', '#src'], tools = ['mingw']);
 else:
-    environment = Environment(CPPPATH='#include')
+    environment = Environment(CPPPATH = ['#include', '#src'])
 
 if environment['CC'] == 'gcc':
     if configuration == TEST_CONFIG:

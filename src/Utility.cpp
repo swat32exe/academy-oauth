@@ -2,6 +2,8 @@
 
 #include <sstream>
 #include <iomanip>
+#include <regex>
+#include <cassert>
 
 namespace OAuth
 {
@@ -13,7 +15,7 @@ namespace OAuth
             return isalnum(character) || otherUnreserved.find(character) != std::string::npos;
         }
 
-        std::string urlEncode(std::string data)
+        std::string urlEncode(const std::string &data)
         {
             std::ostringstream encodedStream;
 
@@ -27,7 +29,7 @@ namespace OAuth
             return encodedStream.str();
         }
 
-        std::string urlDecode(std::string data)
+        std::string urlDecode(const std::string &data)
         {
             std::ostringstream decodedStream;
 
@@ -46,18 +48,39 @@ namespace OAuth
             return decodedStream.str();
         }
 
-        std::string hostFromUrl(std::string url)
+        std::pair<int, int> getHostPosition(const std::string &url)
         {
-            //TODO:implement hostFromUrl
-            (void)url;
-            return "www.example.com";
+            std::regex isValid(".+://.+/.*");
+            assert("incorrect url" && std::regex_match(url, isValid));
+            std::string protocolEnd = "://";
+            const int protocolBeginPosition = url.find(protocolEnd);
+            const int hostBeginPosition = protocolBeginPosition + protocolEnd.length();
+            const int hostEndPositon = url.find("/", hostBeginPosition);
+            return std::make_pair(hostBeginPosition, hostEndPositon);
         }
 
-        std::string resourceFromUrl(std::string url)
+        std::string hostFromUrl(const std::string &url)
         {
-            //TODO:implement resourceFromUrl
-            (void)url;
-            return "/resource";
+            const std::pair<int, int> hostPosition = getHostPosition(url);
+            const int hostNameLength =  hostPosition.second - hostPosition.first;
+            return url.substr(hostPosition.first, hostNameLength);
+        }
+
+        std::string resourceFromUrl(const std::string &url)
+        {
+            const std::pair<int, int> hostPosition = getHostPosition(url);
+            return url.substr(hostPosition.second);
+        }
+
+        std::string normalizeUrl(std::string url)
+        {
+            std::regex hasProtocol(".*://.*");
+            if (!std::regex_match(url, hasProtocol))
+                url = "http://" + url;
+            std::regex hasSlashAfterHost(".+://.+/.*");
+            if (!std::regex_match(url, hasSlashAfterHost))
+                url += "/";
+            return url;
         }
     }
 }

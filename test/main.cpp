@@ -2,7 +2,9 @@
 #include <gmock/gmock.h>
 
 #include "HttpRequestTests.h"
-#include "Utility/UrlEncodeDecode.h"
+#include "UrlEncodeDecode.h"
+#include "NormalizeUrl.h"
+#include "HostResourceFromUrl.h"
 #include "ParameterListTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
