@@ -50,12 +50,12 @@ namespace OAuth
 
         std::pair<int, int> getHostPosition(const std::string &url)
         {
+            std::regex isValid(".+://.+/.*");
+            assert("incorrect url" && std::regex_match(url, isValid));
             std::string protocolEnd = "://";
             const int protocolBeginPosition = url.find(protocolEnd);
-            assert("no '://' found in url" && protocolBeginPosition >= 0);
             const int hostBeginPosition = protocolBeginPosition + protocolEnd.length();
             const int hostEndPositon = url.find("/", hostBeginPosition);
-            assert("no '/' after host found" && hostEndPositon >= 0);
             return std::make_pair(hostBeginPosition, hostEndPositon);
         }
 
@@ -77,7 +77,7 @@ namespace OAuth
             std::regex hasProtocol(".*://.*");
             if (!std::regex_match(url, hasProtocol))
                 url = "http://" + url;
-            std::regex hasSlashAfterHost(".*://.*/.*");
+            std::regex hasSlashAfterHost(".+://.+/.*");
             if (!std::regex_match(url, hasSlashAfterHost))
                 url += "/";
             return url;
