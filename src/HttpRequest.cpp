@@ -5,14 +5,10 @@
 
 namespace OAuth
 {
-    const std::string HttpRequest::OAUTH_PREFIX = "oauth_";
-    const std::string HttpRequest::DEFAULT_CONTENT_TYPE = "x-www-form-urlencoded";
-
     HttpRequest::HttpRequest(HttpRequestType httpRequestType, const std::string &url)
     {
         requestType = httpRequestType;
         this->setUrl(url);
-        this->addHeader("Content-Type", DEFAULT_CONTENT_TYPE);
     }
 
     std::string HttpRequest::getRequestTypeAsString() const
@@ -88,19 +84,5 @@ namespace OAuth
     const ParameterList &HttpRequest::getQueryParameters() const
     {
         return queryParameters;
-    }
-
-    void HttpRequest::addOAuthParameter(const std::string &name, const std::string &value)
-    {
-        if (name.find(OAUTH_PREFIX) != 0) {
-            throw std::invalid_argument("Name must start with \"" + OAUTH_PREFIX);
-        }
-
-        oauthParameters.add(name, value);
-    }
-
-    const ParameterList &HttpRequest::getOAuthParameters() const
-    {
-        return oauthParameters;
     }
 }

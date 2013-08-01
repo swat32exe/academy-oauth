@@ -95,29 +95,12 @@ namespace OAuth
          */
         const ParameterList &getQueryParameters() const;
 
-        /**
-         * Add OAuth parameter to request
-         * @param name Name of parameter. It must start with "oauth_" prefix
-         * @param value Value of parameter
-         */
-        void addOAuthParameter(const std::string &name, const std::string &value);
-
-        /**
-         * Get all OAuth parameters
-         * @returns ParameterList with OAuth authorization parameters
-         */
-        const ParameterList &getOAuthParameters() const;
-
     private:
-        static const std::string OAUTH_PREFIX;
-        static const std::string DEFAULT_CONTENT_TYPE;
-
         HttpRequestType requestType;
         std::string url;
         header_t headers;
         ParameterList bodyParameters;
         ParameterList queryParameters;
-        ParameterList oauthParameters;
     };
 
 }
