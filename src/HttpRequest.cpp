@@ -2,7 +2,6 @@
 #include <stdexcept>
 
 #include "HttpRequest.h"
-#include "ParameterList.h"
 
 namespace OAuth
 {
@@ -11,23 +10,6 @@ namespace OAuth
 
     HttpRequest::HttpRequest(HttpRequestType httpRequestType, const std::string &url)
     {
-        this->init(httpRequestType, url);
-    }
-
-    HttpRequest::HttpRequest(const HttpRequest &request)
-    {
-        this->init(request.requestType, request.getUrl());
-        bodyParameters->add(request.getBodyParameters());
-        queryParameters->add(request.getQueryParameters());
-        oauthParameters->add(request.getOAuthParameters());
-    }
-
-    void HttpRequest::init(HttpRequestType httpRequestType, const std::string &url)
-    {
-        bodyParameters = std::unique_ptr<ParameterList>(new ParameterList());
-        queryParameters = std::unique_ptr<ParameterList>(new ParameterList());
-        oauthParameters = std::unique_ptr<ParameterList>(new ParameterList());
-
         requestType = httpRequestType;
         this->setUrl(url);
         this->addHeader("Content-Type", DEFAULT_CONTENT_TYPE);
@@ -57,7 +39,7 @@ namespace OAuth
         size_t queryPosition = url.find(ParameterList::QUERY_SEPARATOR);
         if (queryPosition != std::string::npos) {
             this->url = url.substr(0, queryPosition);
-            queryParameters->addQueryString(url.substr(queryPosition));
+            queryParameters.addQueryString(url.substr(queryPosition));
         } else {
             this->url = url;
         }
@@ -65,7 +47,7 @@ namespace OAuth
 
     const std::string HttpRequest::getUrl() const
     {
-        return url + queryParameters->asQueryString();
+        return url + queryParameters.asQueryString();
     }
 
     const std::string HttpRequest::getBaseStringUri() const
@@ -85,27 +67,27 @@ namespace OAuth
 
     void HttpRequest::addBodyParameter(const std::string &name, const std::string &value)
     {
-        bodyParameters->add(name, value);
+        bodyParameters.add(name, value);
     }
 
     const ParameterList &HttpRequest::getBodyParameters() const
     {
-        return *bodyParameters.get();
+        return bodyParameters;
     }
 
     const std::string HttpRequest::getBody() const
     {
-        return bodyParameters->asQueryString().substr(1);
+        return bodyParameters.asQueryString().substr(1);
     }
 
     void HttpRequest::addQueryParameter(const std::string &name, const std::string &value)
     {
-        queryParameters->add(name, value);
+        queryParameters.add(name, value);
     }
 
     const ParameterList &HttpRequest::getQueryParameters() const
     {
-        return *queryParameters.get();
+        return queryParameters;
     }
 
     void HttpRequest::addOAuthParameter(const std::string &name, const std::string &value)
@@ -114,11 +96,11 @@ namespace OAuth
             throw std::invalid_argument("Name must start with \"" + OAUTH_PREFIX);
         }
 
-        oauthParameters->add(name, value);
+        oauthParameters.add(name, value);
     }
 
     const ParameterList &HttpRequest::getOAuthParameters() const
     {
-        return *oauthParameters.get();
+        return oauthParameters;
     }
 }

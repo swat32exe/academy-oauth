@@ -6,10 +6,11 @@ configuration = ARGUMENTS.get('config', RELEASE_CONFIG);
 if configuration == TEST_CONFIG:
     execfile('LoadGTest.py')
 
+cppPath = ['#include', '#src']
 if Environment()['CC'] == 'cl':
-    environment = Environment(CPPPATH = ['#include', '#src'], tools = ['mingw']);
+    environment = Environment(CPPPATH = cppPath, tools = ['mingw']);
 else:
-    environment = Environment(CPPPATH = ['#include', '#src'])
+    environment = Environment(CPPPATH = cppPath)
 
 if environment['CC'] == 'gcc':
     environment.Append(CCFLAGS = ['-Wall', '-Wextra', '-Werror', '-pedantic', '-std=c++0x'])

@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <memory>
+
+#include "ParameterList.h"
 
 namespace OAuth
 {
@@ -20,7 +21,6 @@ namespace OAuth
     {
     public:
         HttpRequest(HttpRequestType httpRequestType, const std::string &url);
-        HttpRequest(const HttpRequest &request);
 
         /**
          *  Creates string representation of request type.
@@ -109,18 +109,15 @@ namespace OAuth
         const ParameterList &getOAuthParameters() const;
 
     private:
-        void init(HttpRequestType httpRequestType, const std::string &url);
-
-    private:
         static const std::string OAUTH_PREFIX;
         static const std::string DEFAULT_CONTENT_TYPE;
 
         HttpRequestType requestType;
         std::string url;
         header_t headers;
-        std::unique_ptr<ParameterList> bodyParameters;
-        std::unique_ptr<ParameterList> queryParameters;
-        std::unique_ptr<ParameterList> oauthParameters;
+        ParameterList bodyParameters;
+        ParameterList queryParameters;
+        ParameterList oauthParameters;
     };
 
 }
