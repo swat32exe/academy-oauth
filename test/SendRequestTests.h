@@ -11,14 +11,13 @@ namespace OAuth
 
     TEST_F(SendRequestTests, send_request_test_post_1)
     {
-        header_t headers;
-        headers["host"] = "httpbin.org";
-        headers["Some-Wierd-Header"] = "some_data";
-        HttpRequest request(POST, "/post", headers, "Hello, world!");
+        HttpRequest request(POST, "http://httpbin.org/post");
+        request.addHeader("Some-Wierd-Header", "some_data");
+        request.addBodyParameter("testParameter","value");
         std::string response = sendRequest(request);
 
         std::regex hasTestHeader(".*\"Some-Wierd-Header\": \"some_data\".*");
-        std::regex correctData(".*\"data\": \"Hello, world!\".*");
+        std::regex correctData(".*\"testParameter\": \"value\".*");
 
         ASSERT_TRUE(std::regex_match(response, hasTestHeader));
         ASSERT_TRUE(std::regex_match(response, correctData));
@@ -26,10 +25,8 @@ namespace OAuth
 
     TEST_F(SendRequestTests, send_request_test_get_1)
     {
-        header_t headers;
-        headers["host"] = "httpbin.org";
-        headers["Some-Wierd-Header"] = "some_data";
-        HttpRequest request(GET, "/get?parameter=value", headers, "Hello, world!");
+        HttpRequest request(GET, "http://httpbin.org/get?parameter=value");
+        request.addHeader("Some-Wierd-Header", "some_data");
         std::string response = sendRequest(request);
 
         std::regex hasTestHeader(".*\"Some-Wierd-Header\": \"some_data\".*");

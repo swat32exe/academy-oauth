@@ -24,18 +24,14 @@ std::string sendRequest(const OAuth::HttpRequest &httpRequest) {
     curlpp::Cleanup cleaner;
     curlpp::Easy request;
 
-    const auto host = httpRequest.getHeaders().find("host");
-    if (host == httpRequest.getHeaders().end())
-        throw std::invalid_argument("host not specified");
-    const std::string url = "http://" + host->second + httpRequest.getResource();
-    request.setOpt(new curlpp::options::Url(url));
+    request.setOpt(new curlpp::options::Url(httpRequest.getUrl()));
 
     const std::list<std::string> headersList = makeHeadersList(httpRequest.getHeaders());
     request.setOpt(new curlpp::options::HttpHeader(headersList));
 
     request.setOpt(new curlpp::options::WriteStream(&response));
 
-    switch(httpRequest.getHttpRequestType()) {
+    switch(httpRequest.getRequestType()) {
     case OAuth::GET:
         break;
     case OAuth::POST:
