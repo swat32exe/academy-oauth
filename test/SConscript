@@ -25,7 +25,7 @@ testInstallPath = '#' + os.path.join(OUTPUT_DIR, TEST_CONFIG)
 testEnvironment.Install(testInstallPath, test)
 
 testRunPath = os.path.join(OUTPUT_DIR, TEST_CONFIG, TEST_TARGET)
-if testEnvironment['PLATFORM'] != 'posix':
+if testEnvironment['PLATFORM'] == 'win32':
     testRunPath += '.exe'
 
 testRun = testEnvironment.Command(target = 'testRun', source = testSources, action = testRunPath)
