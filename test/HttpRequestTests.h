@@ -1,41 +1,43 @@
-#include <HttpRequest.h>
+#include <string>
 
-namespace OAuth
+#include <HttpRequest.h>
+#include <ParameterList.h>
+
+namespace OAuthTesting
 {
     class HttpRequestTests: public testing::Test
     {
     };
 
-    TEST_F(HttpRequestTests, http_request_test1)
+    TEST(HttpRequestTests, testRequestType)
     {
-        std::string plaintextRequest =
-            "GET /js/jquery.js HTTP/1.1\r\n"
-            "Accept: */*\r\n"
-            "Accept-Encoding: gzip,deflate,sdch\r\n"
-            "Accept-Language: en-US,en;q=0.8,ru;q=0.6,uk;q=0.4\r\n"
-            "Connection: keep-alive\r\n"
-            "Host: www.requestmaker.com\r\n"
-            "Referer: http://www.requestmaker.com/\r\n"
-            "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36\r\n"
-            "\r\n"
-            "body";
+        OAuth::HttpRequest request(OAuth::POST,
+                "http://example.com/request?b5=%3D%253D&a3=a&c%40=&a2=r%20b");
+        ASSERT_EQ(OAuth::POST, request.getRequestType());
+        ASSERT_STREQ("POST", request.getRequestTypeAsString().c_str());
+    }
 
-        header_t headers;
-        headers["Accept"] = "*/*";
-        headers["Accept-Encoding"] = "gzip,deflate,sdch";
-        headers["Accept-Language"] = "en-US,en;q=0.8,ru;q=0.6,uk;q=0.4";
-        headers["Connection"] = "keep-alive";
-        headers["Host"] = "www.requestmaker.com";
-        headers["Referer"] = "http://www.requestmaker.com/";
-        headers["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36";
+    TEST(HttpRequestTests, testUrl)
+    {
+        std::string url = "http://example.com/request?b5=%3D%253D&a3=a&c%40=&a2=r%20b";
+        OAuth::HttpRequest request(OAuth::POST, url);
+        ASSERT_STREQ(url.c_str(), request.getUrl().c_str());
+        ASSERT_STREQ("http://example.com/request", request.getBaseStringUri().c_str());
 
-        HttpRequest httpRequest(HttpRequestType::GET, "/js/jquery.js",headers ,"body");
+        request.addQueryParameter("q", "1");
+        ASSERT_STREQ((url + "&q=1").c_str(), request.getUrl().c_str());
+    }
 
-        ASSERT_EQ(HttpRequestType::GET, httpRequest.getHttpRequestType());
-        ASSERT_EQ("/js/jquery.js", httpRequest.getResource());
-        ASSERT_EQ(headers, httpRequest.getHeaders());
-        ASSERT_EQ("body", httpRequest.getBody());
+    TEST(HttpRequestTests, testParameters)
+    {
+        std::string url = "http://example.com/request?b5=%3D%253D&a3=a&c%40=&a2=r%20b";
+        OAuth::HttpRequest request(OAuth::POST, url);
 
-        ASSERT_EQ(plaintextRequest, httpRequest.toString());
+        OAuth::ParameterList queryList = request.getQueryParameters();
+        ASSERT_STREQ("?b5=%3D%253D&a3=a&c%40=&a2=r%20b", queryList.asQueryString().c_str());
+
+        request.addBodyParameter("a2", "q1");
+        request.addBodyParameter("b5", "%3D%253D");
+        ASSERT_STREQ("a2=q1&b5=%3D%253D", request.getBody().c_str());
     }
 }

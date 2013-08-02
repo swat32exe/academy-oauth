@@ -35,6 +35,12 @@ namespace OAuth
         void add(std::string name, std::string value);
 
         /**
+         * Add all parameters from another ParameterList
+         * @param other Another ParameterList
+         */
+        void add(const ParameterList &other);
+
+        /**
          * Adds parameters to list from query string
          * @param queryString Query string
          */

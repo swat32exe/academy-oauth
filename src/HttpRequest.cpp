@@ -1,39 +1,19 @@
-#include <HttpRequest.h>
-
 #include <cassert>
+#include <stdexcept>
+
+#include "HttpRequest.h"
 
 namespace OAuth
 {
-    const std::string HttpRequest::httpVersionString = "HTTP/1.1";
-
-    const std::string &HttpRequest::getBody() const
+    HttpRequest::HttpRequest(HttpRequestType httpRequestType, const std::string &url)
     {
-        return body;
+        requestType = httpRequestType;
+        this->setUrl(url);
     }
 
-    const header_t &HttpRequest::getHeaders() const
+    std::string HttpRequest::getRequestTypeAsString() const
     {
-        return headers;
-    }
-
-    header_t &HttpRequest::getHeadersNonConst()
-    {
-        return headers;
-    }
-
-    HttpRequestType HttpRequest::getHttpRequestType() const
-    {
-        return httpRequestType;
-    }
-
-    const std::string &HttpRequest::getResource() const
-    {
-        return resource;
-    }
-
-    std::string HttpRequest::requestTypeAsString()
-    {
-        switch (httpRequestType) {
+        switch (requestType) {
         case GET:
             return "GET";
         case POST:
@@ -45,28 +25,64 @@ namespace OAuth
         }
     }
 
-    HttpRequest::HttpRequest(HttpRequestType httpRequestType
-            ,const std::string &resource
-            ,const header_t &headers
-            ,const std::string &body) :
-        httpRequestType(httpRequestType)
-        ,resource(resource)
-        ,headers(headers)
-        ,body(body)
+    HttpRequestType HttpRequest::getRequestType() const
     {
+        return requestType;
     }
 
-    std::string HttpRequest::toString()
+    void HttpRequest::setUrl(const std::string &url)
     {
-        std::string asString = requestTypeAsString() + " " + resource + " " + httpVersionString + "\r\n";
-
-        for (auto header : headers) {
-            asString += header.first + ": " + header.second + "\r\n";
+        size_t queryPosition = url.find(ParameterList::QUERY_SEPARATOR);
+        if (queryPosition != std::string::npos) {
+            this->url = url.substr(0, queryPosition);
+            queryParameters.addQueryString(url.substr(queryPosition));
+        } else {
+            this->url = url;
         }
-
-        asString += "\r\n" + body;
-
-        return asString;
     }
 
+    const std::string HttpRequest::getUrl() const
+    {
+        return url + queryParameters.asQueryString();
+    }
+
+    const std::string HttpRequest::getBaseStringUri() const
+    {
+        return url;
+    }
+
+    void HttpRequest::addHeader(const std::string &name, const std::string &value)
+    {
+        headers[name] = value;
+    }
+
+    const header_t &HttpRequest::getHeaders() const
+    {
+        return headers;
+    }
+
+    void HttpRequest::addBodyParameter(const std::string &name, const std::string &value)
+    {
+        bodyParameters.add(name, value);
+    }
+
+    const ParameterList &HttpRequest::getBodyParameters() const
+    {
+        return bodyParameters;
+    }
+
+    const std::string HttpRequest::getBody() const
+    {
+        return bodyParameters.asQueryString().substr(1);
+    }
+
+    void HttpRequest::addQueryParameter(const std::string &name, const std::string &value)
+    {
+        queryParameters.add(name, value);
+    }
+
+    const ParameterList &HttpRequest::getQueryParameters() const
+    {
+        return queryParameters;
+    }
 }

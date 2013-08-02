@@ -1,7 +1,7 @@
 import os.path
 from SConfig import *
 
-libSources = Glob('*.cpp') + Glob('listeners/*.cpp');
+libSources = Glob('*.cpp');
 
 def compileDebug():
     environment.Append( CCFLAGS = [ '-g', '-O0'] )
