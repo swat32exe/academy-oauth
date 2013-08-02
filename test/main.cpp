@@ -6,6 +6,7 @@
 #include "NormalizeUrl.h"
 #include "HostResourceFromUrl.h"
 #include "ParameterListTests.h"
+#include "SendRequestTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {
