@@ -20,6 +20,7 @@ namespace OAuth
     const std::string Service::OAUTH_NONCE = "oauth_nonce";
     const std::string Service::OAUTH_VERSION = "oauth_version";
     const std::string Service::OAUTH_TOKEN = "oauth_token";
+    const std::string Service::OAUTH_DEFAULT_VERSION = "1.0";
 
     Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
         configuration(configuration)
@@ -63,13 +64,11 @@ namespace OAuth
         allParameters.add(request.getBodyParameters());
         baseString += Utility::urlEncode(allParameters.asBaseString());
 
-        Signature signature(PLAINTEXT);
+        Signature signature(configuration.getSignatureMethod());
         const std::string signatureString = signature.get(baseString,
                 configuration.getConsumerSecret(), token.getSecret());
         oauthParameters.add(OAUTH_SIGNATURE, signatureString);
     }
-
-    const std::string Service::HEADER_SEPARATOR = ",\r\n";
 
     ParameterList Service::generateOAuthParameters()
     {
@@ -79,21 +78,7 @@ namespace OAuth
         oauthParameters.add(OAUTH_CALLBACK, configuration.getCallbackUrl());
         oauthParameters.add(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));
         oauthParameters.add(OAUTH_NONCE, this->generateNonce());
-        oauthParameters.add(OAUTH_VERSION, "1.0");
+        oauthParameters.add(OAUTH_VERSION, OAUTH_DEFAULT_VERSION);
         return oauthParameters;
-    }
-
-    void Service::appendOAuthParameters(HttpRequest &request, const ParameterList &oauthParameters)
-    {
-        std::string authorizationHeader = "OAuth ";
-        ParameterMap parameterMap = oauthParameters.asMap();
-        for(ParameterMap::iterator pair = parameterMap.begin();
-                pair != parameterMap.end(); ++pair) {
-            authorizationHeader += pair->first + "=\""
-                    + pair->second + '"' + HEADER_SEPARATOR;
-        }
-        authorizationHeader = authorizationHeader.substr(0,
-                authorizationHeader.find_last_of(HEADER_SEPARATOR));
-        request.addHeader("Authorization", authorizationHeader);
     }
 }

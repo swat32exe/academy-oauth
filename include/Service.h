@@ -26,6 +26,7 @@ namespace OAuth
         static const std::string OAUTH_NONCE;
         static const std::string OAUTH_VERSION;
         static const std::string OAUTH_TOKEN;
+        static const std::string OAUTH_DEFAULT_VERSION;
 
     private:
         ServiceConfiguration configuration;
@@ -56,11 +57,7 @@ namespace OAuth
         void signRequest(HttpRequest &request, const Token &token);
 
     private:
-        static const std::string HEADER_SEPARATOR;
-
         ParameterList generateOAuthParameters();
-        void appendOAuthParameters(HttpRequest &request, const ParameterList &oauthParameters);
-
     };
 }
 #endif
