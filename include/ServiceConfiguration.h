@@ -3,10 +3,10 @@
 
 #include <string>
 
+#include "Signature.h"
+
 namespace OAuth
 {
-    enum SignatureMethod { HMAC_SHA1, RSA_SHA1, PLAINTEXT };
-
     /**
      *  Contains data, required for initial service configuration
      */
@@ -35,8 +35,12 @@ namespace OAuth
         /**
          * Method used to sign request
          */
+        std::string callbackUrl;
         SignatureMethod signatureMethod;
+
     public:
+        static const std::string OUT_OF_BAND;
+
         /**
          * Sets field values according to provided data.
          * @param tokenRequestUrl URL used to request temporary token
@@ -44,6 +48,7 @@ namespace OAuth
          * @param tokenExchangeUrl URL used to exchange temporary token for permanent
          * @param consumerKey OAuth consumer key
          * @param consumerSecret OAuth consumer secret
+         * @param callbackUrl user will be redirected to this url after authorizing access
          * @param signatureMethod method used to sign request
          */
         ServiceConfiguration(const std::string &tokenRequestUrl
@@ -51,7 +56,9 @@ namespace OAuth
             ,const std::string &tokenExchangeUrl
             ,const std::string &consumerKey
             ,const std::string &consumerSecret
-            ,SignatureMethod signatureMethod);
+            ,const std::string &callbackUrl = OUT_OF_BAND
+            ,SignatureMethod signatureMethod = HMAC_SHA1
+            );
 
         /**
          *  Returns URL used to request temporary token.
@@ -73,6 +80,11 @@ namespace OAuth
          * Returns OAuth consumer secret
          */
         const std::string &getConsumerSecret() const;
+
+        /**
+         * Returns url to which a user will be redirected
+         */
+        const std::string &getCallbackUrl();
         /**
          * Returns method used to sign request
          */

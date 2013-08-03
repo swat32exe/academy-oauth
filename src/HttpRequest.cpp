@@ -2,6 +2,7 @@
 #include <stdexcept>
 
 #include "HttpRequest.h"
+#include "Utility.h"
 
 namespace OAuth
 {
@@ -48,7 +49,7 @@ namespace OAuth
 
     const std::string HttpRequest::getBaseStringUri() const
     {
-        return url;
+        return Utility::urlEncode(url);
     }
 
     void HttpRequest::addHeader(const std::string &name, const std::string &value)
