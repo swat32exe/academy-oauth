@@ -19,7 +19,7 @@ namespace OAuth
         this->addQueryString(queryString);
     }
 
-    void ParameterList::add(std::string name, std::string value)
+    void ParameterList::add(const std::string &name, const std::string &value)
     {
         std::string decodedName = Utility::urlDecode(name);
         std::string decodedValue = Utility::urlDecode(value);
@@ -69,20 +69,31 @@ namespace OAuth
     const std::string ParameterList::asBaseString() const
     {
         std::set<StringPair> parametersSet;
-        for(parameters_t::const_iterator pair = parameters.begin();
+        for (parameters_t::const_iterator pair = parameters.begin();
                 pair != parameters.end(); ++pair) {
             parametersSet.insert(this->getUrlEncodedPair(pair->first, pair->second));
         }
 
         ParameterList sortedParameters;
-        for(std::set<StringPair>::const_iterator pair = parametersSet.begin();
+        for (std::set<StringPair>::const_iterator pair = parametersSet.begin();
                 pair != parametersSet.end(); ++pair) {
             sortedParameters.add(pair->first, pair->second);
         }
         return sortedParameters.asQueryString().substr(1);
     }
 
-    StringPair ParameterList::getUrlEncodedPair(std::string name, std::string value) const
+    const ParameterMap ParameterList::asMap() const
+    {
+        ParameterMap parameterMap;
+        for (std::vector<StringPair>::const_iterator pair = parameters.begin();
+                pair != parameters.end(); ++pair) {
+            parameterMap[pair->first] = pair->second;
+        }
+        return parameterMap;
+    }
+
+    StringPair ParameterList::getUrlEncodedPair(const std::string &name,
+            const std::string &value) const
     {
         std::string encodedName = Utility::urlEncode(name);
         std::string encodedValue = Utility::urlEncode(value);

@@ -2,12 +2,14 @@
 #define PARAMETERLIST_H_
 
 #include <vector>
+#include <map>
 #include <string>
 
 namespace OAuth
 {
     typedef std::pair<std::string, std::string> StringPair;
     typedef std::vector<StringPair> parameters_t;
+    typedef std::map<std::string, std::string> ParameterMap;
 
     /**
      *  Class for working with POST/GET parameters
@@ -32,7 +34,7 @@ namespace OAuth
          *  @param name Name part of "name=value" pair
          *  @param value Value part of "name=value" pair
          */
-        void add(std::string name, std::string value);
+        void add(const std::string &name, const std::string &value);
 
         /**
          * Add all parameters from another ParameterList
@@ -58,8 +60,14 @@ namespace OAuth
          */
         const std::string asBaseString() const;
 
+        /**
+         * Return parameters in std::map
+         */
+        const ParameterMap asMap() const;
+
     private:
-        StringPair getUrlEncodedPair(std::string name, std::string value) const;
+        StringPair getUrlEncodedPair(const std::string &name,
+                const std::string &value) const;
 
     private:
         parameters_t parameters;
