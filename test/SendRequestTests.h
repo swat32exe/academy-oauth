@@ -25,7 +25,8 @@ namespace OAuth
 
     TEST_F(SendRequestTests, send_request_test_get_1)
     {
-        HttpRequest request(GET, "http://httpbin.org/get?parameter=value");
+        HttpRequest request(GET, "http://httpbin.org/get");
+        request.addQueryParameter("parameter", "value");
         request.addHeader("Some-Wierd-Header", "some_data");
         std::string response = sendRequest(request);
 
