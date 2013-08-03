@@ -5,7 +5,8 @@
 #include <functional>
 #include <future>
 
-#include <ServiceConfiguration.h>
+#include "ServiceConfiguration.h"
+#include "ParameterList.h"
 
 namespace OAuth
 {
@@ -16,6 +17,17 @@ namespace OAuth
 
     class Service
     {
+    public:
+        static const std::string OAUTH_CONSUMER_KEY;
+        static const std::string OAUTH_SIGNATURE_METHOD;
+        static const std::string OAUTH_CALLBACK;
+        static const std::string OAUTH_SIGNATURE;
+        static const std::string OAUTH_TIMESTAMP;
+        static const std::string OAUTH_NONCE;
+        static const std::string OAUTH_VERSION;
+        static const std::string OAUTH_TOKEN;
+
+    private:
         ServiceConfiguration configuration;
         sendRequest_t sendRequest;
 
@@ -24,7 +36,9 @@ namespace OAuth
          * @returns random string
          */
         std::string generateNonce();
+
     public:
+
         /**
          *  Creates service with specified configuration and networkWorker
          *  @param configuration initial service configuration
@@ -32,13 +46,21 @@ namespace OAuth
          *  Must send provided request and return response. May throw exceptions.
          */
         Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest);
+
         /**
          *  Request temporary credentials asynchronously
-         *  @param realm string identifying protected resource
-         *  @param callbackUrl user will be redirected to this url after authorizing access
          *  @returns std::future object, that will return token or throw exception
          */
-        std::future<Token> requestToken(const std::string &realm, const std::string &callbackUrl);
+        std::future<Token> getRequestToken();
+
+        void signRequest(HttpRequest &request, const Token &token);
+
+    private:
+        static const std::string HEADER_SEPARATOR;
+
+        ParameterList generateOAuthParameters();
+        void appendOAuthParameters(HttpRequest &request, const ParameterList &oauthParameters);
+
     };
 }
 #endif

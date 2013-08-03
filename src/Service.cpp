@@ -8,35 +8,29 @@
 #include <HttpRequest.h>
 #include <Token.h>
 
-#include "ParameterList.h"
+#include "Signature.h"
 
 namespace OAuth
 {
+    const std::string Service::OAUTH_CONSUMER_KEY = "oauth_consumer_key";
+    const std::string Service::OAUTH_SIGNATURE_METHOD = "oauth_signature_method";
+    const std::string Service::OAUTH_CALLBACK = "oauth_callback";
+    const std::string Service::OAUTH_SIGNATURE = "oauth_signature";
+    const std::string Service::OAUTH_TIMESTAMP = "oauth_timestamp";
+    const std::string Service::OAUTH_NONCE = "oauth_nonce";
+    const std::string Service::OAUTH_VERSION = "oauth_version";
+    const std::string Service::OAUTH_TOKEN = "oauth_token";
+
     Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
         configuration(configuration)
         ,sendRequest(sendRequest)
     {
     }
 
-    std::future<Token> Service::requestToken(const std::string &realm, const std::string &callbackUrl)
+    std::future<Token> Service::getRequestToken()
     {
-        std::string timeStamp = Utility::toString(std::time(NULL));
-        std::string callback = Utility::urlEncode(callbackUrl);
-
-        header_t headers;
-        headers["Authorization"] = "OAuth realm=\"" + realm + "\",\r\n"
-                " oauth_consumer_key=\"" + configuration.getConsumerKey() + "\",\r\n"
-                " oauth_signature_method=\"" + configuration.getSignatureMethodAsString() + "\",\r\n"
-                " oauth_timestamp=\"" + timeStamp + "\",\r\n"
-                " oauth_nonce=\"" + generateNonce() + "\",\r\n"
-                " oauth_callback=\"" + callback + "\"";
-
-        headers["Host"] = Utility::hostFromUrl(configuration.getTokenRequestUrl());
-        std::string resource = Utility::resourceFromUrl(configuration.getTokenRequestUrl());
-
         HttpRequest request(HttpRequestType::POST, configuration.getTokenRequestUrl());
-
-        // TODO: Sign request.
+        this->signRequest(request, Token(""));
 
         return std::async([=] () {
             std::string response = sendRequest(request);
@@ -55,5 +49,51 @@ namespace OAuth
         nonce += Utility::toString(rand());
 
         return nonce;
+    }
+
+    void Service::signRequest(HttpRequest &request, const Token &token)
+    {
+        ParameterList oauthParameters = this->generateOAuthParameters();
+        std::string baseString = request.getRequestTypeAsString() + '&'
+                + request.getBaseStringUri() + '&';
+
+        ParameterList allParameters;
+        allParameters.add(oauthParameters);
+        allParameters.add(request.getQueryParameters());
+        allParameters.add(request.getBodyParameters());
+        baseString += Utility::urlEncode(allParameters.asBaseString());
+
+        Signature signature(PLAINTEXT);
+        const std::string signatureString = signature.get(baseString,
+                configuration.getConsumerSecret(), token.getSecret());
+        oauthParameters.add(OAUTH_SIGNATURE, signatureString);
+    }
+
+    const std::string Service::HEADER_SEPARATOR = ",\r\n";
+
+    ParameterList Service::generateOAuthParameters()
+    {
+        ParameterList oauthParameters;
+        oauthParameters.add(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
+        oauthParameters.add(OAUTH_SIGNATURE_METHOD, configuration.getSignatureMethodAsString());
+        oauthParameters.add(OAUTH_CALLBACK, configuration.getCallbackUrl());
+        oauthParameters.add(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));
+        oauthParameters.add(OAUTH_NONCE, this->generateNonce());
+        oauthParameters.add(OAUTH_VERSION, "1.0");
+        return oauthParameters;
+    }
+
+    void Service::appendOAuthParameters(HttpRequest &request, const ParameterList &oauthParameters)
+    {
+        std::string authorizationHeader = "OAuth ";
+        ParameterMap parameterMap = oauthParameters.asMap();
+        for(ParameterMap::iterator pair = parameterMap.begin();
+                pair != parameterMap.end(); ++pair) {
+            authorizationHeader += pair->first + "=\""
+                    + pair->second + '"' + HEADER_SEPARATOR;
+        }
+        authorizationHeader = authorizationHeader.substr(0,
+                authorizationHeader.find_last_of(HEADER_SEPARATOR));
+        request.addHeader("Authorization", authorizationHeader);
     }
 }
