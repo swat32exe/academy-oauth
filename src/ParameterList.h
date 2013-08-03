@@ -9,7 +9,6 @@ namespace OAuth
 {
     typedef std::pair<std::string, std::string> StringPair;
     typedef std::vector<StringPair> parameters_t;
-    typedef std::map<std::string, std::string> ParameterMap;
 
     /**
      *  Class for working with POST/GET parameters
@@ -20,6 +19,7 @@ namespace OAuth
         static const char QUERY_SEPARATOR;
         static const char PARAMETER_SEPARATOR;
         static const char PAIR_SEPARATOR;
+        static const std::string HEADER_SEPARATOR;
 
     public:
         ParameterList();
@@ -63,7 +63,7 @@ namespace OAuth
         /**
          * Return parameters in std::map
          */
-        const ParameterMap asMap() const;
+        const std::string asAuthorizationHeader() const;
 
     private:
         StringPair getUrlEncodedPair(const std::string &name,

@@ -9,6 +9,7 @@ namespace OAuth
     const char ParameterList::QUERY_SEPARATOR = '?';
     const char ParameterList::PARAMETER_SEPARATOR = '&';
     const char ParameterList::PAIR_SEPARATOR = '=';
+    const std::string ParameterList::HEADER_SEPARATOR = ",\r\n";
 
     ParameterList::ParameterList()
     {
@@ -82,14 +83,17 @@ namespace OAuth
         return sortedParameters.asQueryString().substr(1);
     }
 
-    const ParameterMap ParameterList::asMap() const
+    const std::string ParameterList::asAuthorizationHeader() const
     {
-        ParameterMap parameterMap;
-        for (std::vector<StringPair>::const_iterator pair = parameters.begin();
+        std::string authorizationHeader = "OAuth ";
+        for(std::vector<StringPair>::const_iterator pair = parameters.begin();
                 pair != parameters.end(); ++pair) {
-            parameterMap[pair->first] = pair->second;
+            authorizationHeader += pair->first + "=\""
+                    + pair->second + '"' + HEADER_SEPARATOR;
         }
-        return parameterMap;
+        authorizationHeader = authorizationHeader.substr(0,
+                authorizationHeader.find_last_of(HEADER_SEPARATOR));
+        return authorizationHeader;
     }
 
     StringPair ParameterList::getUrlEncodedPair(const std::string &name,

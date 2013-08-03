@@ -68,6 +68,7 @@ namespace OAuth
         const std::string signatureString = signature.get(baseString,
                 configuration.getConsumerSecret(), token.getSecret());
         oauthParameters.add(OAUTH_SIGNATURE, signatureString);
+        request.addHeader("Authorization", oauthParameters.asAuthorizationHeader());
     }
 
     ParameterList Service::generateOAuthParameters()
