@@ -39,6 +39,12 @@ namespace OAuth
          *  @returns std::future object, that will return token or throw exception
          */
         std::future<Token> requestToken(const std::string &realm, const std::string &callbackUrl);
+        /**
+         *  Generates url to which user should be redirected
+         *  @param token temporary credentials
+         *  @returns url to which user should be redirected
+         */
+        std::string getAuthorizeUrl(Token token) const;
     };
 }
 #endif
