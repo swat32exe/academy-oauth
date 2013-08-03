@@ -7,6 +7,7 @@
 #include "HostResourceFromUrl.h"
 #include "ParameterListTests.h"
 #include "SendRequestTests.h"
+#include "GetAuthorizeUrlTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {
