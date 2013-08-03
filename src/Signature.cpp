@@ -16,22 +16,20 @@ namespace OAuth
     const std::string Signature::get(const std::string &baseString,
             const std::string &clientSecret, const std::string &tokenSecret)
     {
-        this->baseString = baseString;
-        this->clientSecret = clientSecret;
-        this->tokenSecret = tokenSecret;
 
         switch (method) {
         case RSA_SHA1:
-            return rsaSha1Signature();
+            return rsaSha1Signature(baseString);
         case PLAINTEXT:
-            return plainTextSignature();
+            return plainTextSignature(clientSecret, tokenSecret);
         case HMAC_SHA1:
         default:
-            return hmacSha1Signature();
+            return hmacSha1Signature(baseString, clientSecret, tokenSecret);
         }
     }
 
-    const std::string Signature::hmacSha1Signature()
+    const std::string Signature::hmacSha1Signature(const std::string &baseString,
+            const std::string &clientSecret, const std::string &tokenSecret)
     {
         const size_t DIGEST_SIZE = 20;
         const std::string key = clientSecret + '&' + tokenSecret;
@@ -48,13 +46,14 @@ namespace OAuth
         return Utility::urlEncode(stringDigest);
     }
 
-    const std::string Signature::rsaSha1Signature()
+    const std::string Signature::rsaSha1Signature(const std::string &baseString)
     {
         // TODO: add encryption
         return baseString;
     }
 
-    const std::string Signature::plainTextSignature()
+    const std::string Signature::plainTextSignature(const std::string &clientSecret,
+            const std::string &tokenSecret)
     {
         return clientSecret + '?' + tokenSecret;
     }

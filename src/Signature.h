@@ -26,14 +26,13 @@ namespace OAuth
                 const std::string &clientSecret, const std::string &tokenSecret = "");
 
     private:
-        const std::string hmacSha1Signature();
-        const std::string rsaSha1Signature();
-        const std::string plainTextSignature();
+        const std::string hmacSha1Signature(const std::string &baseString,
+                const std::string &clientSecret, const std::string &tokenSecret);
+        const std::string rsaSha1Signature(const std::string &baseString);
+        const std::string plainTextSignature(const std::string &clientSecret,
+                const std::string &tokenSecret);
 
     private:
-        std::string baseString;
-        std::string clientSecret;
-        std::string tokenSecret;
         SignatureMethod method;
     };
 }
