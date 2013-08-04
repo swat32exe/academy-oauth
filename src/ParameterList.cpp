@@ -58,9 +58,8 @@ namespace OAuth
             return queryString;
         }
 
-        for(parameters_t::const_iterator pair = parameters.begin();
-                pair != parameters.end(); ++pair) {
-            StringPair encodedPair = Utility::urlEncodedPair(pair->first,pair->second);
+        for (auto pair : parameters) {
+            StringPair encodedPair = Utility::urlEncodedPair(pair.first,pair.second);
             queryString += encodedPair.first + PAIR_SEPARATOR + encodedPair.second;
             queryString += PARAMETER_SEPARATOR;
         }
