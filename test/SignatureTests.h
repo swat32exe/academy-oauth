@@ -11,14 +11,14 @@ namespace OAuthTesting
 
     TEST(SignatureTests, testPlainText)
     {
-        OAuth::Signature signature(OAuth::PLAINTEXT);
-        std::string signatureString = signature.get("", "client");
+        OAuth::Signature signature = OAuth::Signature::create(OAuth::PLAINTEXT);
+        std::string signatureString = signature("", "client");
         ASSERT_STREQ("client?", signatureString.c_str());
 
-        signatureString = signature.get("", "client", "token");
+        signatureString = signature("", "client", "token");
         ASSERT_STREQ("client?token", signatureString.c_str());
 
-        signatureString = signature.get("POST&host&parameters", "client", "token");
+        signatureString = signature("POST&host&parameters", "client", "token");
         ASSERT_STREQ("client?token", signatureString.c_str());
     }
 
@@ -38,8 +38,8 @@ namespace OAuthTesting
                 + request.getBaseStringUri() + '&';
         baseString += OAuth::Utility::urlEncode(oauthParameters.asBaseString());
 
-        OAuth::Signature signature;
-        std::string signatureString = signature.get(baseString, "secret");
+        OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
+        std::string signatureString = signature(baseString, "secret");
         ASSERT_STREQ("ks36RJj7xqsKaRKSQXXofEJ4FYI%3D", signatureString.c_str());
     }
 
@@ -60,8 +60,21 @@ namespace OAuthTesting
                 + request.getBaseStringUri() + '&';
         baseString += OAuth::Utility::urlEncode(oauthParameters.asBaseString());
 
-        OAuth::Signature signature;
-        std::string signatureString = signature.get(baseString, "secret", "requestsecret");
+        OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
+        std::string signatureString = signature(baseString, "secret", "requestsecret");
         ASSERT_STREQ("YLz49ccRr9wbHKkguNEog5E2aec%3D", signatureString.c_str());
+    }
+
+    TEST(SignatureTests, testCustomSignature)
+    {
+        OAuth::Signature signature("Custom",
+            [] (const std::string &baseString,
+                const std::string &clientSecret, const std::string &tokenSecret)
+                -> std::string
+            {
+                return baseString + clientSecret + tokenSecret;
+            });
+
+        ASSERT_STREQ("custom", signature("cu", "s", "tom").c_str());
     }
 }

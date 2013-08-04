@@ -7,28 +7,39 @@
 
 namespace OAuth
 {
-    Signature::Signature(SignatureMethod method) :
-            method(method)
+    const std::string hmacSha1Signature(const std::string &baseString,
+            const std::string &clientSecret, const std::string &tokenSecret);
+    const std::string rsaSha1Signature(const std::string &baseString,
+            const std::string &clientSecret, const std::string &tokenSecret);
+    const std::string plainTextSignature(const std::string &baseString,
+            const std::string &clientSecret, const std::string &tokenSecret);
+
+    Signature::Signature(const std::string &name, SignatureFunction function) :
+            name(name),
+            function(function)
     {
 
     }
-
-    const std::string Signature::get(const std::string &baseString,
-            const std::string &clientSecret, const std::string &tokenSecret)
+    Signature Signature::create(SignatureMethod method)
     {
-
         switch (method) {
         case RSA_SHA1:
-            return rsaSha1Signature(baseString);
+            return Signature("RSA-SHA1", rsaSha1Signature);
         case PLAINTEXT:
-            return plainTextSignature(clientSecret, tokenSecret);
+            return Signature("PLAINTEXT", plainTextSignature);
         case HMAC_SHA1:
         default:
-            return hmacSha1Signature(baseString, clientSecret, tokenSecret);
+            return Signature("HMAC-SHA1", hmacSha1Signature);
         }
     }
 
-    const std::string Signature::hmacSha1Signature(const std::string &baseString,
+    std::string Signature::operator()(const std::string &baseString,
+            const std::string &clientSecret, const std::string &tokenSecret)
+    {
+        return function(baseString, clientSecret, tokenSecret);
+    }
+
+    const std::string hmacSha1Signature(const std::string &baseString,
             const std::string &clientSecret, const std::string &tokenSecret)
     {
         const size_t DIGEST_SIZE = 20;
@@ -46,14 +57,15 @@ namespace OAuth
         return Utility::urlEncode(stringDigest);
     }
 
-    const std::string Signature::rsaSha1Signature(const std::string &baseString)
+    const std::string rsaSha1Signature(const std::string &baseString,
+            const std::string&, const std::string&)
     {
         // TODO: add encryption
         return baseString;
     }
 
-    const std::string Signature::plainTextSignature(const std::string &clientSecret,
-            const std::string &tokenSecret)
+    const std::string plainTextSignature(const std::string&,
+            const std::string &clientSecret, const std::string &tokenSecret)
     {
         return clientSecret + '?' + tokenSecret;
     }

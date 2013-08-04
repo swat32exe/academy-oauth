@@ -64,8 +64,8 @@ namespace OAuth
         allParameters.add(request.getBodyParameters());
         baseString += Utility::urlEncode(allParameters.asBaseString());
 
-        Signature signature(configuration.getSignatureMethod());
-        const std::string signatureString = signature.get(baseString,
+        Signature signature = Signature::create(configuration.getSignatureMethod());
+        const std::string signatureString = signature(baseString,
                 configuration.getConsumerSecret(), token.getSecret());
         oauthParameters.add(OAUTH_SIGNATURE, signatureString);
         request.addHeader("Authorization", oauthParameters.asAuthorizationHeader());
