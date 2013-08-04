@@ -1,5 +1,5 @@
-#ifndef __UTILITY_H
-#define __UTILITY_H
+#ifndef __URL_H
+#define __URL_H
 
 #include <string>
 #include <sstream>

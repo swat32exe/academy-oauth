@@ -2,10 +2,12 @@
 
 #include <cassert>
 
-#include <Utility.h>
+#include <utility/Url.h>
 
 namespace OAuth
 {
+    const std::string ServiceConfiguration::OUT_OF_BAND = "oob";
+
     const std::string &ServiceConfiguration::getAuthorizeUrl() const
     {
         return authorizeUrl;
@@ -36,7 +38,12 @@ namespace OAuth
         return signatureMethod;
     }
 
-    const std::string OAuth::ServiceConfiguration::getSignatureMethodAsString() const
+    const std::string &ServiceConfiguration::getCallbackUrl()
+    {
+        return callbackUrl;
+    }
+
+    const std::string ServiceConfiguration::getSignatureMethodAsString() const
     {
         switch (signatureMethod) {
         case HMAC_SHA1:
@@ -57,12 +64,14 @@ namespace OAuth
             ,const std::string &tokenExchangeUrl
             ,const std::string &consumerKey
             ,const std::string &consumerSecret
+            ,const std::string &callbackUrl
             ,SignatureMethod signatureMethod) :
         tokenRequestUrl(Utility::normalizeUrl(tokenRequestUrl))
         ,authorizeUrl(Utility::normalizeUrl(authorizeUrl))
         ,tokenExchangeUrl(Utility::normalizeUrl(tokenExchangeUrl))
         ,consumerKey(consumerKey)
         ,consumerSecret(consumerSecret)
+        ,callbackUrl(callbackUrl)
         ,signatureMethod(signatureMethod)
     {
     }

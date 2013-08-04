@@ -1,7 +1,9 @@
 import os.path
 from SConfig import *
 
-libSources = Glob('*.cpp');
+libSources = Glob('*.cpp')
+libSources.extend(Glob('crypto/*.cpp'))
+libSources.extend(Glob('utility/*.cpp'))
 
 def compileDebug():
     environment.Append( CCFLAGS = [ '-g', '-O0'] )

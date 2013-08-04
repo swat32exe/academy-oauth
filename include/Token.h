@@ -20,13 +20,18 @@ namespace OAuth
          * @param data string to extract token from
          * @throws invalid_argument
          */
-        Token(std::string data);
+        Token(const std::string &data);
         /**
          * Creates token from specified data
          * @param token token identifier
          * @param secret token secret
          */
-        Token(std::string token, std::string secret);
+        Token(const std::string &token, const std::string &secret);
+
+        /**
+         * Return token secret
+         */
+        const std::string &getSecret() const;
     };
 }
 

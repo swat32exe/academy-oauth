@@ -2,6 +2,7 @@
 #define PARAMETERLIST_H_
 
 #include <vector>
+#include <map>
 #include <string>
 
 namespace OAuth
@@ -32,7 +33,7 @@ namespace OAuth
          *  @param name Name part of "name=value" pair
          *  @param value Value part of "name=value" pair
          */
-        void add(std::string name, std::string value);
+        void add(const std::string &name, const std::string &value);
 
         /**
          * Add all parameters from another ParameterList
@@ -53,13 +54,10 @@ namespace OAuth
         const std::string asQueryString() const;
 
         /**
-         * Constructs OAuth Base string
-         * @returns OAuth Base string
+         * Get parameters as a vector of string pairs
+         * @returns Vector with parameters
          */
-        const std::string asBaseString() const;
-
-    private:
-        StringPair getUrlEncodedPair(std::string name, std::string value) const;
+        const parameters_t &getParameters() const;
 
     private:
         parameters_t parameters;
