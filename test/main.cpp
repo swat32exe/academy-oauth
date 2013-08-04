@@ -8,6 +8,7 @@
 #include "ParameterListTests.h"
 #include "SendRequestTests.h"
 #include "SignatureTests.h"
+#include "ExtractorTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {

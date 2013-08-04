@@ -3,13 +3,13 @@
 
 #include "ParameterList.h"
 #include "utility/Url.h"
+#include "utility/Extractor.h"
 
 namespace OAuth
 {
     const char ParameterList::QUERY_SEPARATOR = '?';
     const char ParameterList::PARAMETER_SEPARATOR = '&';
     const char ParameterList::PAIR_SEPARATOR = '=';
-    const std::string ParameterList::HEADER_SEPARATOR = ",\r\n";
 
     ParameterList::ParameterList()
     {
@@ -60,47 +60,15 @@ namespace OAuth
 
         for(parameters_t::const_iterator pair = parameters.begin();
                 pair != parameters.end(); ++pair) {
-            StringPair encodedPair = this->getUrlEncodedPair(pair->first,pair->second);
+            StringPair encodedPair = Utility::urlEncodedPair(pair->first,pair->second);
             queryString += encodedPair.first + PAIR_SEPARATOR + encodedPair.second;
             queryString += PARAMETER_SEPARATOR;
         }
         return queryString.substr(0, queryString.length() - 1);
     }
 
-    const std::string ParameterList::asBaseString() const
+    const parameters_t &ParameterList::getParameters() const
     {
-        std::set<StringPair> parametersSet;
-        for (parameters_t::const_iterator pair = parameters.begin();
-                pair != parameters.end(); ++pair) {
-            parametersSet.insert(this->getUrlEncodedPair(pair->first, pair->second));
-        }
-
-        ParameterList sortedParameters;
-        for (std::set<StringPair>::const_iterator pair = parametersSet.begin();
-                pair != parametersSet.end(); ++pair) {
-            sortedParameters.add(pair->first, pair->second);
-        }
-        return sortedParameters.asQueryString().substr(1);
-    }
-
-    const std::string ParameterList::asAuthorizationHeader() const
-    {
-        std::string authorizationHeader = "OAuth ";
-        for(std::vector<StringPair>::const_iterator pair = parameters.begin();
-                pair != parameters.end(); ++pair) {
-            authorizationHeader += pair->first + "=\""
-                    + pair->second + '"' + HEADER_SEPARATOR;
-        }
-        authorizationHeader = authorizationHeader.substr(0,
-                authorizationHeader.find_last_of(HEADER_SEPARATOR));
-        return authorizationHeader;
-    }
-
-    StringPair ParameterList::getUrlEncodedPair(const std::string &name,
-            const std::string &value) const
-    {
-        std::string encodedName = Utility::urlEncode(name);
-        std::string encodedValue = Utility::urlEncode(value);
-        return std::make_pair(encodedName, encodedValue);
+        return parameters;
     }
 }

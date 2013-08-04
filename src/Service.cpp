@@ -4,10 +4,11 @@
 #include <string>
 #include <cstdlib>
 
-#include "utility/Url.h"
 #include "HttpRequest.h"
 #include "Token.h"
 #include "Signature.h"
+#include "utility/Url.h"
+#include "utility/Extractor.h"
 
 namespace OAuth
 {
@@ -61,13 +62,13 @@ namespace OAuth
         allParameters.add(oauthParameters);
         allParameters.add(request.getQueryParameters());
         allParameters.add(request.getBodyParameters());
-        baseString += Utility::urlEncode(allParameters.asBaseString());
+        baseString += Utility::extractBaseString(allParameters);
 
         Signature signature = Signature::create(configuration.getSignatureMethod());
         const std::string signatureString = signature(baseString,
                 configuration.getConsumerSecret(), token.getSecret());
         oauthParameters.add(OAUTH_SIGNATURE, signatureString);
-        request.addHeader("Authorization", oauthParameters.asAuthorizationHeader());
+        request.addHeader("Authorization", Utility::extractAuthorizationHeader(oauthParameters));
     }
 
     ParameterList Service::generateOAuthParameters()

@@ -2,6 +2,7 @@
 #include <Service.h>
 #include <HttpRequest.h>
 #include <utility/Url.h>
+#include <utility/Extractor.h>
 
 namespace OAuthTesting
 {
@@ -36,7 +37,7 @@ namespace OAuthTesting
         OAuth::HttpRequest request(OAuth::GET, "http://term.ie/oauth/example/request_token.php");
         std::string baseString = request.getRequestTypeAsString() + '&'
                 + request.getBaseStringUri() + '&';
-        baseString += OAuth::Utility::urlEncode(oauthParameters.asBaseString());
+        baseString += OAuth::Utility::extractBaseString(oauthParameters);
 
         OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
         std::string signatureString = signature(baseString, "secret");
@@ -58,7 +59,7 @@ namespace OAuthTesting
         OAuth::HttpRequest request(OAuth::GET, "http://term.ie/oauth/example/access_token.php");
         std::string baseString = request.getRequestTypeAsString() + '&'
                 + request.getBaseStringUri() + '&';
-        baseString += OAuth::Utility::urlEncode(oauthParameters.asBaseString());
+        baseString += OAuth::Utility::extractBaseString(oauthParameters);
 
         OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
         std::string signatureString = signature(baseString, "secret", "requestsecret");

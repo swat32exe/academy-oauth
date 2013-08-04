@@ -19,7 +19,6 @@ namespace OAuth
         static const char QUERY_SEPARATOR;
         static const char PARAMETER_SEPARATOR;
         static const char PAIR_SEPARATOR;
-        static const std::string HEADER_SEPARATOR;
 
     public:
         ParameterList();
@@ -55,19 +54,10 @@ namespace OAuth
         const std::string asQueryString() const;
 
         /**
-         * Constructs OAuth Base string
-         * @returns OAuth Base string
+         * Get parameters as a vector of string pairs
+         * @returns Vector with parameters
          */
-        const std::string asBaseString() const;
-
-        /**
-         * Return parameters in std::map
-         */
-        const std::string asAuthorizationHeader() const;
-
-    private:
-        StringPair getUrlEncodedPair(const std::string &name,
-                const std::string &value) const;
+        const parameters_t &getParameters() const;
 
     private:
         parameters_t parameters;
