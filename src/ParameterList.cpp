@@ -2,7 +2,7 @@
 #include <set>
 
 #include "ParameterList.h"
-#include "Utility.h"
+#include "utility/Url.h"
 
 namespace OAuth
 {

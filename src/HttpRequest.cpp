@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 #include "HttpRequest.h"
-#include "Utility.h"
+#include "utility/Url.h"
 
 namespace OAuth
 {

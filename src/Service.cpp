@@ -4,10 +4,9 @@
 #include <string>
 #include <cstdlib>
 
-#include <Utility.h>
-#include <HttpRequest.h>
-#include <Token.h>
-
+#include "utility/Url.h"
+#include "HttpRequest.h"
+#include "Token.h"
 #include "Signature.h"
 
 namespace OAuth

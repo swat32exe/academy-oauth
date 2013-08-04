@@ -1,7 +1,7 @@
 #include <Signature.h>
 #include <Service.h>
 #include <HttpRequest.h>
-#include <Utility.h>
+#include <utility/Url.h>
 
 namespace OAuthTesting
 {
