@@ -66,34 +66,14 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // Define 8- and 32-bit variables
-
-#ifndef UINT_32
-
-#ifdef _MSC_VER
-
-#define UINT_8  unsigned __int8
-#define UINT_32 unsigned __int32
-
-#else
-
-#define UINT_8 unsigned char
-
-#if (ULONG_MAX == 0xFFFFFFFF)
-#define UINT_32 unsigned long
-#else
-#define UINT_32 unsigned int
-#endif
-
-#endif
-#endif
-
+#include <cstdint>
 /////////////////////////////////////////////////////////////////////////////
 // Declare SHA1 workspace
 
 typedef union
 {
-	UINT_8  c[64];
-	UINT_32 l[16];
+	uint8_t  c[64];
+	uint32_t l[16];
 } SHA1_WORKSPACE_BLOCK;
 
 class CSHA1
@@ -112,17 +92,17 @@ public:
 	CSHA1();
 	~CSHA1();
 
-	UINT_32 m_state[5];
-	UINT_32 m_count[2];
-	UINT_32 __reserved1[1];
-	UINT_8  m_buffer[64];
-	UINT_8  m_digest[20];
-	UINT_32 __reserved2[3];
+	uint32_t m_state[5];
+	uint32_t m_count[2];
+	uint32_t __reserved1[1];
+	uint8_t  m_buffer[64];
+	uint8_t  m_digest[20];
+	uint32_t __reserved2[3];
 
 	void Reset();
 
 	// Update the hash value
-	void Update(UINT_8 *data, UINT_32 len);
+	void Update(uint8_t *data, uint32_t len);
 #ifdef SHA1_UTILITY_FUNCTIONS
 	bool HashFile(char *szFileName);
 #endif
@@ -134,14 +114,14 @@ public:
 #ifdef SHA1_UTILITY_FUNCTIONS
 	void ReportHash(char *szReport, unsigned char uReportType = REPORT_HEX);
 #endif
-	void GetHash(UINT_8 *puDest);
+	void GetHash(uint8_t *puDest);
 
 private:
 	// Private SHA-1 transformation
-	void Transform(UINT_32 *state, UINT_8 *buffer);
+	void Transform(uint32_t *state, uint8_t *buffer);
 
 	// Member variables
-	UINT_8 m_workspace[64];
+	uint8_t m_workspace[64];
 	SHA1_WORKSPACE_BLOCK *m_block; // SHA1 pointer to the byte array above
 };
 
