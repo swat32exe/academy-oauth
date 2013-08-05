@@ -20,10 +20,10 @@ void CHMAC_SHA1::HMAC_SHA1(BYTE *text, int text_len, BYTE *key, int key_len, BYT
 	if (key_len > SHA1_BLOCK_SIZE)
 	{
 		CSHA1::Reset();
-		CSHA1::Update((UINT_8 *)key, key_len);
+		CSHA1::Update((uint8_t *)key, key_len);
 		CSHA1::Final();
 
-		CSHA1::GetHash((UINT_8 *)SHA1_Key);
+		CSHA1::GetHash((uint8_t *)SHA1_Key);
 	}
 	else
 		memcpy(SHA1_Key, key, key_len);
@@ -40,10 +40,10 @@ void CHMAC_SHA1::HMAC_SHA1(BYTE *text, int text_len, BYTE *key, int key_len, BYT
 
 	/* STEP 4 */
 	CSHA1::Reset();
-	CSHA1::Update((UINT_8 *)AppendBuf1, sizeof(m_ipad) + text_len);
+	CSHA1::Update((uint8_t *)AppendBuf1, sizeof(m_ipad) + text_len);
 	CSHA1::Final();
 
-	CSHA1::GetHash((UINT_8 *)szReport);
+	CSHA1::GetHash((uint8_t *)szReport);
 
 	/* STEP 5 */
 	for (size_t j=0; j<sizeof(m_opad); j++)
@@ -57,8 +57,8 @@ void CHMAC_SHA1::HMAC_SHA1(BYTE *text, int text_len, BYTE *key, int key_len, BYT
 
 	/*STEP 7 */
 	CSHA1::Reset();
-	CSHA1::Update((UINT_8 *)AppendBuf2, sizeof(m_opad) + SHA1_DIGEST_LENGTH);
+	CSHA1::Update((uint8_t *)AppendBuf2, sizeof(m_opad) + SHA1_DIGEST_LENGTH);
 	CSHA1::Final();
 
-	CSHA1::GetHash((UINT_8 *)digest);
+	CSHA1::GetHash((uint8_t *)digest);
 }
