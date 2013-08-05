@@ -32,6 +32,11 @@ namespace OAuth
     {
     }
 
+    const std::string &Token::getToken() const
+    {
+        return token;
+    }
+
     const std::string &Token::getSecret() const
     {
         return secret;
