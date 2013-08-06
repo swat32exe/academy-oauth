@@ -31,7 +31,7 @@ namespace OAuth
     std::future<Token> Service::getRequestToken()
     {
         HttpRequest request(HttpRequestType::POST, configuration.getTokenRequestUrl());
-        this->signRequest(request, Token(""));
+        this->signRequest(request, Token("", ""));
 
         return std::async([=] () {
             std::string response = sendRequest(request);
@@ -67,19 +67,19 @@ namespace OAuth
         Signature signature = Signature::create(configuration.getSignatureMethod());
         const std::string signatureString = signature(baseString,
                 configuration.getConsumerSecret(), token.getSecret());
-        oauthParameters.add(OAUTH_SIGNATURE, signatureString);
+        oauthParameters.addRaw(OAUTH_SIGNATURE, signatureString);
         request.addHeader("Authorization", Utility::extractAuthorizationHeader(oauthParameters));
     }
 
     ParameterList Service::generateOAuthParameters()
     {
         ParameterList oauthParameters;
-        oauthParameters.add(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
-        oauthParameters.add(OAUTH_SIGNATURE_METHOD, configuration.getSignatureMethodAsString());
-        oauthParameters.add(OAUTH_CALLBACK, configuration.getCallbackUrl());
-        oauthParameters.add(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));
-        oauthParameters.add(OAUTH_NONCE, this->generateNonce());
-        oauthParameters.add(OAUTH_VERSION, OAUTH_DEFAULT_VERSION);
+        oauthParameters.addRaw(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
+        oauthParameters.addRaw(OAUTH_SIGNATURE_METHOD, configuration.getSignatureMethodAsString());
+        oauthParameters.addRaw(OAUTH_CALLBACK, configuration.getCallbackUrl());
+        oauthParameters.addRaw(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));
+        oauthParameters.addRaw(OAUTH_NONCE, this->generateNonce());
+        oauthParameters.addRaw(OAUTH_VERSION, OAUTH_DEFAULT_VERSION);
         return oauthParameters;
     }
 }

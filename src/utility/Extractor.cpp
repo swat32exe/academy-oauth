@@ -27,13 +27,13 @@ namespace OAuth
         {
             const std::string HEADER_SEPARATOR = ",\r\n";
             const parameters_t &parameters = list.getParameters();
-            std::string authorizationHeader = "OAuth ";
+            std::string authorizationHeader = "OAuth";
             for(auto pair : parameters) {
-                authorizationHeader += pair.first + "=\""
-                        + pair.second + '"' + HEADER_SEPARATOR;
+                authorizationHeader += " " + urlEncode(pair.first) + "=\""
+                        + urlEncode(pair.second) + '"' + HEADER_SEPARATOR;
             }
             authorizationHeader = authorizationHeader.substr(0,
-                    authorizationHeader.find_last_of(HEADER_SEPARATOR));
+                    authorizationHeader.find_last_of(","));
             return authorizationHeader;
         }
 

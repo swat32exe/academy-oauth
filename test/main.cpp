@@ -10,6 +10,7 @@
 #include "SignatureTests.h"
 #include "ExtractorTests.h"
 #include "TokenTests.h"
+#include "ServiceTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {

@@ -27,6 +27,11 @@ namespace OAuth
         parameters.push_back(std::make_pair(decodedName, decodedValue));
     }
 
+    void ParameterList::addRaw(const std::string &name, const std::string &value)
+    {
+        parameters.push_back(std::make_pair(name, value));
+    }
+
     void ParameterList::add(const ParameterList &other)
     {
         this->addQueryString(other.asQueryString());
