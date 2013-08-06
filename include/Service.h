@@ -55,6 +55,12 @@ namespace OAuth
         std::future<Token> getRequestToken();
 
         void signRequest(HttpRequest &request, const Token &token);
+        /**
+         *  Generates url to which user should be redirected
+         *  @param token temporary credentials
+         *  @returns url to which user should be redirected
+         */
+        std::string getAuthorizeUrl(const Token &token) const;
 
     private:
         ParameterList generateOAuthParameters();
