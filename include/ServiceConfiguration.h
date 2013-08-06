@@ -84,7 +84,7 @@ namespace OAuth
         /**
          * Returns url to which a user will be redirected
          */
-        const std::string &getCallbackUrl();
+        const std::string &getCallbackUrl() const;
         /**
          * Returns method used to sign request
          */

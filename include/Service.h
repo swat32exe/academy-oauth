@@ -36,7 +36,7 @@ namespace OAuth
          * Generates random string
          * @returns random string
          */
-        std::string generateNonce();
+        std::string generateNonce() const;
 
     public:
 
@@ -63,7 +63,7 @@ namespace OAuth
         std::string getAuthorizeUrl(const Token &token) const;
 
     private:
-        ParameterList generateOAuthParameters();
+        ParameterList generateOAuthParameters() const;
     };
 }
 #endif

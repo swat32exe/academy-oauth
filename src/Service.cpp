@@ -50,7 +50,7 @@ namespace OAuth
         return authorizeUrl;
     }
 
-    std::string Service::generateNonce()
+    std::string Service::generateNonce() const
     {
         std::string nonce = Utility::toString(std::time(NULL));
 
@@ -82,7 +82,7 @@ namespace OAuth
         request.addHeader("Authorization", Utility::extractAuthorizationHeader(oauthParameters));
     }
 
-    ParameterList Service::generateOAuthParameters()
+    ParameterList Service::generateOAuthParameters() const
     {
         ParameterList oauthParameters;
         oauthParameters.addRaw(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
