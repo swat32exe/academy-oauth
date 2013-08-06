@@ -37,6 +37,8 @@ namespace OAuth
          * @returns random string
          */
         std::string generateNonce() const;
+        void signRequest(HttpRequest &request, const Token &token,
+                         const ParameterList &additionalOAuthParameters) const;
 
     public:
 
@@ -53,7 +55,11 @@ namespace OAuth
          *  @returns std::future object, that will return token or throw exception
          */
         std::future<Token> getRequestToken();
-
+        /*
+         *  Sign HttpRequest using token
+         *  @param request request to sign
+         *  @param token token, used to sign request
+         */
         void signRequest(HttpRequest &request, const Token &token);
         /**
          *  Generates url to which user should be redirected

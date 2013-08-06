@@ -30,8 +30,10 @@ namespace OAuth
 
     std::future<Token> Service::getRequestToken()
     {
+        ParameterList additionalParameters;
+        additionalParameters.addRaw(OAUTH_CALLBACK, configuration.getCallbackUrl());
         HttpRequest request(HttpRequestType::POST, configuration.getTokenRequestUrl());
-        this->signRequest(request, Token("", ""));
+        this->signRequest(request, Token("", ""), additionalParameters);
 
         return std::async([=] () {
             std::string response = sendRequest(request);
@@ -63,9 +65,11 @@ namespace OAuth
         return nonce;
     }
 
-    void Service::signRequest(HttpRequest &request, const Token &token)
+    void Service::signRequest(HttpRequest &request, const Token &token,
+                              const ParameterList &additionalOAuthParameters) const
     {
         ParameterList oauthParameters = this->generateOAuthParameters();
+        oauthParameters.add(additionalOAuthParameters);
         std::string baseString = request.getRequestTypeAsString() + '&'
                 + request.getBaseStringUri() + '&';
 
@@ -82,12 +86,18 @@ namespace OAuth
         request.addHeader("Authorization", Utility::extractAuthorizationHeader(oauthParameters));
     }
 
+    void Service::signRequest(HttpRequest &request, const Token &token)
+    {
+        ParameterList additionalParameters;
+        additionalParameters.addRaw(OAUTH_TOKEN, token.getToken());
+        signRequest(request, token, additionalParameters);
+    }
+
     ParameterList Service::generateOAuthParameters() const
     {
         ParameterList oauthParameters;
         oauthParameters.addRaw(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
         oauthParameters.addRaw(OAUTH_SIGNATURE_METHOD, configuration.getSignatureMethodAsString());
-        oauthParameters.addRaw(OAUTH_CALLBACK, configuration.getCallbackUrl());
         oauthParameters.addRaw(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));
         oauthParameters.addRaw(OAUTH_NONCE, this->generateNonce());
         oauthParameters.addRaw(OAUTH_VERSION, OAUTH_DEFAULT_VERSION);
