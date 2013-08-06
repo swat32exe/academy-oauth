@@ -20,6 +20,7 @@ namespace OAuth
     const std::string Service::OAUTH_NONCE = "oauth_nonce";
     const std::string Service::OAUTH_VERSION = "oauth_version";
     const std::string Service::OAUTH_TOKEN = "oauth_token";
+    const std::string Service::OAUTH_VERIFIER = "oauth_verifier";
     const std::string Service::OAUTH_DEFAULT_VERSION = "1.0";
 
     Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
@@ -50,6 +51,20 @@ namespace OAuth
             authorizeUrl += "&";
         authorizeUrl += "oauth_token=" + Utility::urlEncode(token.getToken());
         return authorizeUrl;
+    }
+
+    std::future<Token> Service::exchangeToken(const Token &token, const std::string &verifier) const
+    {
+        ParameterList additionalParameters;
+        additionalParameters.addRaw(OAUTH_TOKEN, token.getToken());
+        additionalParameters.addRaw(OAUTH_VERIFIER, verifier);
+        HttpRequest request(HttpRequestType::POST, configuration.getTokenExchangeUrl());
+        this->signRequest(request, token, additionalParameters);
+
+        return std::async([=] () {
+            std::string response = sendRequest(request);
+            return Token(response);
+        });
     }
 
     std::string Service::generateNonce() const
