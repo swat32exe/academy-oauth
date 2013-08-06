@@ -15,10 +15,10 @@ namespace OAuth
         bool secretInitialized = false;
         for(const StringPair &pair : parameters) {
             if (pair.first == "oauth_token") {
-                token = Utility::urlDecode(pair.second);
+                token = pair.second;
                 tokenInitialized = true;
             } else if (pair.first == "oauth_token_secret") {
-                secret = Utility::urlDecode(pair.second);
+                secret = pair.second;
                 secretInitialized = true;
             }
         }
