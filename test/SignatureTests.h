@@ -14,13 +14,13 @@ namespace OAuthTesting
     {
         OAuth::Signature signature = OAuth::Signature::create(OAuth::PLAINTEXT);
         std::string signatureString = signature("", "client");
-        ASSERT_STREQ("client?", signatureString.c_str());
+        ASSERT_STREQ("client&", signatureString.c_str());
 
         signatureString = signature("", "client", "token");
-        ASSERT_STREQ("client?token", signatureString.c_str());
+        ASSERT_STREQ("client&token", signatureString.c_str());
 
         signatureString = signature("POST&host&parameters", "client", "token");
-        ASSERT_STREQ("client?token", signatureString.c_str());
+        ASSERT_STREQ("client&token", signatureString.c_str());
     }
 
     TEST(SignatureTests, testHmacSha1Temporary)
@@ -41,7 +41,7 @@ namespace OAuthTesting
 
         OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
         std::string signatureString = signature(baseString, "secret");
-        ASSERT_STREQ("ks36RJj7xqsKaRKSQXXofEJ4FYI%3D", signatureString.c_str());
+        ASSERT_STREQ("ks36RJj7xqsKaRKSQXXofEJ4FYI=", signatureString.c_str());
     }
 
     TEST(SignatureTests, testHmacSha1Access)
@@ -63,7 +63,7 @@ namespace OAuthTesting
 
         OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
         std::string signatureString = signature(baseString, "secret", "requestsecret");
-        ASSERT_STREQ("YLz49ccRr9wbHKkguNEog5E2aec%3D", signatureString.c_str());
+        ASSERT_STREQ("YLz49ccRr9wbHKkguNEog5E2aec=", signatureString.c_str());
     }
 
     TEST(SignatureTests, testCustomSignature)

@@ -54,7 +54,7 @@ namespace OAuth
                 byteKey, key.length(), digest);
 
         std::string stringDigest = base64_encode(digest, DIGEST_SIZE);
-        return Utility::urlEncode(stringDigest);
+        return stringDigest;
     }
 
     const std::string rsaSha1Signature(const std::string &baseString,
@@ -67,6 +67,6 @@ namespace OAuth
     const std::string plainTextSignature(const std::string&,
             const std::string &clientSecret, const std::string &tokenSecret)
     {
-        return clientSecret + '?' + tokenSecret;
+        return clientSecret + '&' + tokenSecret;
     }
 }
