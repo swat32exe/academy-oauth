@@ -39,6 +39,17 @@ namespace OAuth
         });
     }
 
+    std::string Service::getAuthorizeUrl(const Token &token) const
+    {
+        std::string authorizeUrl = configuration.getAuthorizeUrl();
+        if(authorizeUrl.find("?") == std::string::npos)
+            authorizeUrl += "?";
+        else
+            authorizeUrl += "&";
+        authorizeUrl += "oauth_token=" + Utility::urlEncode(token.getToken());
+        return authorizeUrl;
+    }
+
     std::string Service::generateNonce()
     {
         std::string nonce = Utility::toString(std::time(NULL));
