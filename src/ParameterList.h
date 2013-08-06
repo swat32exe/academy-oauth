@@ -29,11 +29,17 @@ namespace OAuth
         ParameterList(const std::string& queryString);
 
         /**
-         *  Adds parameter to list
+         *  Adds percent-encoded parameter to list
          *  @param name Name part of "name=value" pair
          *  @param value Value part of "name=value" pair
          */
         void add(const std::string &name, const std::string &value);
+        /**
+         *  Adds not encoded parameter to list
+         *  @param name Name part of "name=value" pair
+         *  @param value Value part of "name=value" pair
+         */
+        void addRaw(const std::string &name, const std::string &value);
 
         /**
          * Add all parameters from another ParameterList
