@@ -3,7 +3,7 @@
 #include <exception>
 
 #include "ParameterList.h"
-#include "utility\url.h"
+#include "utility/url.h"
 
 namespace OAuth
 {
