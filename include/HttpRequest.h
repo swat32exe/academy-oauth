@@ -14,15 +14,15 @@ namespace OAuth
     typedef std::map<std::string, std::string> header_t;
     enum HttpRequestType {GET, POST};
 
+    extern const std::string FORM_URLENCODED;
+    extern const std::string HEADER_CONTENT_TYPE;
+
     /**
      *  Class for working with HTTP requests.
      */
     class HttpRequest
     {
     public:
-        static const std::string FORM_URLENCODED;
-        static const std::string HEADER_CONTENT_TYPE;
-
         HttpRequest(HttpRequestType httpRequestType, const std::string &url);
 
         /**

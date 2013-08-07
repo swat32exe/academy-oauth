@@ -50,8 +50,8 @@ namespace OAuth
         ParameterList extractBodyParameters(const HttpRequest &request)
         {
             const header_t &headers = request.getHeaders();
-            const auto contentType = headers.find(HttpRequest::HEADER_CONTENT_TYPE);
-            if (contentType != headers.end() && contentType->second == HttpRequest::FORM_URLENCODED)
+            const auto contentType = headers.find(HEADER_CONTENT_TYPE);
+            if (contentType != headers.end() && contentType->second == FORM_URLENCODED)
                 return ParameterList(request.getBody());
             return ParameterList();
         }

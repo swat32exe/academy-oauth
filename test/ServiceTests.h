@@ -123,7 +123,7 @@ namespace OAuth
         OAuth::Service service(configuration, sendRequest);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
-        request.addHeader(HttpRequest::HEADER_CONTENT_TYPE, "text/plain");
+        request.addHeader(HEADER_CONTENT_TYPE, "text/plain");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.setBody("Some not urlencoded body");
         service.signRequest(request, Token("accesskey", "accesssecret"));
