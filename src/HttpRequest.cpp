@@ -13,7 +13,6 @@ namespace OAuth
     {
         requestType = httpRequestType;
         this->setUrl(url);
-        headers[HEADER_CONTENT_TYPE] = FORM_URLENCODED;
     }
 
     std::string HttpRequest::getRequestTypeAsString() const
