@@ -13,7 +13,7 @@ namespace OAuth
     {
         HttpRequest request(POST, "http://httpbin.org/post");
         request.addHeader("Some-Wierd-Header", "some_data");
-        request.addBodyParameter("testParameter","value");
+        request.setBody("testParameter=value");
         std::string response = sendRequest(request);
 
         std::regex hasTestHeader(".*\"Some-Wierd-Header\": \"some_data\".*");

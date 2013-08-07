@@ -35,9 +35,5 @@ namespace OAuthTesting
 
         OAuth::ParameterList queryList = request.getQueryParameters();
         ASSERT_STREQ("?b5=%3D%253D&a3=a&c%40=&a2=r%20b", queryList.asQueryString().c_str());
-
-        request.addBodyParameter("a2", "q1");
-        request.addBodyParameter("b5", "%3D%253D");
-        ASSERT_STREQ("a2=q1&b5=%3D%253D", request.getBody().c_str());
     }
 }

@@ -7,6 +7,8 @@
 
 namespace OAuth
 {
+    class HttpRequest;
+
     namespace Utility
     {
         /**
@@ -30,6 +32,13 @@ namespace OAuth
          * @returns OAuth Authorization header
          */
         std::string extractAuthorizationHeader(const OAuth::ParameterList &list);
+
+        /**
+         *  Extract body parameters from HttpRequest
+         *  @param request Request to extract from
+         *  @returns Extracted parameters
+         */
+        ParameterList extractBodyParameters(const HttpRequest &request);
     }
 }
 #endif

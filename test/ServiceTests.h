@@ -105,8 +105,7 @@ namespace OAuth
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader("Some-Wierd-Header", "some_data");
-        request.addBodyParameter("testParameter","value");
-        request.addBodyParameter("anotherParameter","anotherValue");
+        request.setBody("testParameter=value&anotherParameter=anotherValue");
         service.signRequest(request, Token("accesskey", "accesssecret"));
         std::string response = sendRequest(request);
         ASSERT_EQ("testParameter=value&anotherParameter=anotherValue", response);
