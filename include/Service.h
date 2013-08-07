@@ -26,6 +26,7 @@ namespace OAuth
         static const std::string OAUTH_NONCE;
         static const std::string OAUTH_VERSION;
         static const std::string OAUTH_TOKEN;
+        static const std::string OAUTH_VERIFIER;
         static const std::string OAUTH_DEFAULT_VERSION;
 
     private:
@@ -36,7 +37,9 @@ namespace OAuth
          * Generates random string
          * @returns random string
          */
-        std::string generateNonce();
+        std::string generateNonce() const;
+        void signRequest(HttpRequest &request, const Token &token,
+                         const ParameterList &additionalOAuthParameters) const;
 
     public:
 
@@ -53,7 +56,11 @@ namespace OAuth
          *  @returns std::future object, that will return token or throw exception
          */
         std::future<Token> getRequestToken();
-
+        /*
+         *  Sign HttpRequest using token
+         *  @param request request to sign
+         *  @param token token, used to sign request
+         */
         void signRequest(HttpRequest &request, const Token &token);
         /**
          *  Generates url to which user should be redirected
@@ -61,9 +68,15 @@ namespace OAuth
          *  @returns url to which user should be redirected
          */
         std::string getAuthorizeUrl(const Token &token) const;
+        /**
+         *  Exchanges temporary credentials for token
+         *  @param token temporary credentials
+         *  @param verifier verifier, that was got, when user was redirected to callback url
+         */
+        std::future<Token> exchangeToken(const Token &token, const std::string &verifier) const;
 
     private:
-        ParameterList generateOAuthParameters();
+        ParameterList generateOAuthParameters() const;
     };
 }
 #endif

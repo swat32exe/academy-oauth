@@ -38,7 +38,7 @@ namespace OAuth
         return signatureMethod;
     }
 
-    const std::string &ServiceConfiguration::getCallbackUrl()
+    const std::string &ServiceConfiguration::getCallbackUrl() const
     {
         return callbackUrl;
     }
