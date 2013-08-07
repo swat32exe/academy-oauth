@@ -91,7 +91,7 @@ namespace OAuth
         ParameterList allParameters;
         allParameters.add(oauthParameters);
         allParameters.add(request.getQueryParameters());
-        allParameters.add(request.getBodyParameters());
+        allParameters.add(Utility::extractBodyParameters(request));
         baseString += Utility::extractBaseString(allParameters);
 
         Signature signature = Signature::create(configuration.getSignatureMethod());

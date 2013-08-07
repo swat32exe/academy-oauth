@@ -3,6 +3,8 @@
 
 #include <set>
 
+#include <HttpRequest.h>
+
 namespace OAuth
 {
     namespace Utility
@@ -43,6 +45,15 @@ namespace OAuth
             std::string encodedName = urlEncode(name);
             std::string encodedValue = urlEncode(value);
             return std::make_pair(encodedName, encodedValue);
+        }
+
+        ParameterList extractBodyParameters(const HttpRequest &request)
+        {
+            const header_t &headers = request.getHeaders();
+            const auto contentType = headers.find(HEADER_CONTENT_TYPE);
+            if (contentType != headers.end() && contentType->second == FORM_URLENCODED)
+                return ParameterList(request.getBody());
+            return ParameterList();
         }
     }
 }

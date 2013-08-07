@@ -14,6 +14,9 @@ namespace OAuth
     typedef std::map<std::string, std::string> header_t;
     enum HttpRequestType {GET, POST};
 
+    extern const std::string FORM_URLENCODED;
+    extern const std::string HEADER_CONTENT_TYPE;
+
     /**
      *  Class for working with HTTP requests.
      */
@@ -63,24 +66,16 @@ namespace OAuth
         const header_t &getHeaders() const;
 
         /**
-         * Add a body parameter to request (for POST requests)
-         * @param name Name of a parameter
-         * @param value Value of a parameter
-         */
-        void addBodyParameter(const std::string &name, const std::string &value);
-
-        /**
-         * Get all body parameters from request
-         * @returns ParameterList with all body parameters
-         */
-        const ParameterList &getBodyParameters() const;
-
-        /**
          * Get body content of request
-         * @returns Body content ("name=value" pairs concatenated to
-         * a single string using standard separator)
+         * @returns Body content
          */
-        const std::string getBody() const;
+        const std::string &getBody() const;
+
+        /**
+         * Set body content of request
+         * @param body New value of request body
+         */
+        void setBody(const std::string &body);
 
         /**
          * Add a query string parameter
@@ -99,7 +94,7 @@ namespace OAuth
         HttpRequestType requestType;
         std::string url;
         header_t headers;
-        ParameterList bodyParameters;
+        std::string body;
         ParameterList queryParameters;
     };
 

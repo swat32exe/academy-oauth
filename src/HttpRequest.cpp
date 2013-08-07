@@ -6,6 +6,9 @@
 
 namespace OAuth
 {
+    const std::string FORM_URLENCODED = "application/x-www-form-urlencoded";
+    const std::string HEADER_CONTENT_TYPE = "Content-Type";
+
     HttpRequest::HttpRequest(HttpRequestType httpRequestType, const std::string &url)
     {
         requestType = httpRequestType;
@@ -62,19 +65,14 @@ namespace OAuth
         return headers;
     }
 
-    void HttpRequest::addBodyParameter(const std::string &name, const std::string &value)
+    void HttpRequest::setBody(const std::string &body)
     {
-        bodyParameters.add(name, value);
+        this->body = body;
     }
 
-    const ParameterList &HttpRequest::getBodyParameters() const
+    const std::string &HttpRequest::getBody() const
     {
-        return bodyParameters;
-    }
-
-    const std::string HttpRequest::getBody() const
-    {
-        return bodyParameters.asQueryString().substr(1);
+        return body;
     }
 
     void HttpRequest::addQueryParameter(const std::string &name, const std::string &value)
