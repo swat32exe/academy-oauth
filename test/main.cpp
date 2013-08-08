@@ -8,6 +8,7 @@
 #include "ParameterListTests.h"
 #include "SendRequestTests.h"
 #include "SignatureTests.h"
+#include "RsaSignatureTests.h"
 #include "ExtractorTests.h"
 #include "TokenTests.h"
 #include "ServiceTests.h"
