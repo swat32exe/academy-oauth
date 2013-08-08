@@ -2,14 +2,13 @@
 #include "crypto/base64.h"
 
 #include "Signature.h"
+#include "utility/RsaSignature.h"
 #include "ParameterList.h"
 #include "utility/Url.h"
 
 namespace OAuth
 {
     const std::string hmacSha1Signature(const std::string &baseString,
-            const std::string &clientSecret, const std::string &tokenSecret);
-    const std::string rsaSha1Signature(const std::string &baseString,
             const std::string &clientSecret, const std::string &tokenSecret);
     const std::string plainTextSignature(const std::string &baseString,
             const std::string &clientSecret, const std::string &tokenSecret);
@@ -24,7 +23,7 @@ namespace OAuth
     {
         switch (method) {
         case RSA_SHA1:
-            return Signature("RSA-SHA1", rsaSha1Signature);
+            return Signature("RSA-SHA1", Utility::rsaSha1Signature);
         case PLAINTEXT:
             return Signature("PLAINTEXT", plainTextSignature);
         case HMAC_SHA1:
@@ -55,13 +54,6 @@ namespace OAuth
 
         std::string stringDigest = base64_encode(digest, DIGEST_SIZE);
         return stringDigest;
-    }
-
-    const std::string rsaSha1Signature(const std::string &baseString,
-            const std::string&, const std::string&)
-    {
-        // TODO: add encryption
-        return baseString;
     }
 
     const std::string plainTextSignature(const std::string&,
