@@ -19,10 +19,13 @@ namespace OAuth
 {
     namespace Utility
     {
+        typedef unsigned char BYTE;
+
+        void freeResources(EVP_PKEY_CTX *ctx, BYTE *signature = NULL);
+
         const std::string rsaSha1Signature(const std::string &baseString,
             const std::string &rsaKeyPath, const std::string &)
         {
-            typedef unsigned char BYTE;
             const size_t DIGEST_SIZE = 20;
             BYTE messageDigest[DIGEST_SIZE];
             sha1::calc(baseString.c_str(), baseString.length(), messageDigest);
@@ -38,30 +41,42 @@ namespace OAuth
             EVP_PKEY_CTX *ctx;
             ctx = EVP_PKEY_CTX_new(signingKey, NULL);
             if (!ctx) {
-                throw std::runtime_error("Error occured1");
+                throw std::runtime_error("Error while creating ctx");
             }
             if (EVP_PKEY_sign_init(ctx) <= 0) {
-                throw std::runtime_error("Error occured2");
+                freeResources(ctx);
+                throw std::runtime_error("Error while ctx initialization");
             }
             if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0) {
-                throw std::runtime_error("Error occured3");
+                freeResources(ctx);
+                throw std::runtime_error("Error while setting PKCS1 padding");
             }
             if (EVP_PKEY_CTX_set_signature_md(ctx, EVP_sha1()) <= 0) {
-                throw std::runtime_error("Error occured4");
+                freeResources(ctx);
+                throw std::runtime_error("Error while setting sha1");
             }
 
             size_t signatureSize = EVP_PKEY_size(signingKey);
             BYTE *rawSignature = new BYTE[signatureSize];
-            if (EVP_PKEY_sign(ctx, NULL, &signatureSize, messageDigest, DIGEST_SIZE) <= 0) {
-                throw std::runtime_error("Error occured5");
-            }
             if (EVP_PKEY_sign(ctx, rawSignature, &signatureSize, messageDigest,
                     DIGEST_SIZE) <= 0) {
-                throw std::runtime_error("Error occured6");
+                freeResources(ctx, rawSignature);
+                throw std::runtime_error("Error while signing base string");
             }
 
             std::string signature = base64_encode(rawSignature, signatureSize);
+            freeResources(ctx, rawSignature);
             return signature;
+        }
+
+        void freeResources(EVP_PKEY_CTX *ctx, BYTE *signature)
+        {
+            if(ctx) {
+                EVP_PKEY_CTX_free(ctx);
+            }
+            if(signature) {
+                delete[] signature;
+            }
         }
     }
 }
