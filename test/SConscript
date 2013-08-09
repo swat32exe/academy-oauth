@@ -11,7 +11,7 @@ testSources = ['gmock-gtest-all.cc'] +\
 testEnvironment = environment.Clone(CCFLAGS = ['-std=c++0x', '-g', '-O0'], LIBS = [LIB_TARGET])
 
 if testEnvironment['PLATFORM'] == 'posix':
-    testEnvironment.Append(LIBS = 'curl')
+    testEnvironment.Append(LIBS = ['curl', 'crypto'])
 else:
     testEnvironment.Append(LIBS = ['curldll', 'wsock32', 'eay32'])
     

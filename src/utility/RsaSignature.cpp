@@ -9,9 +9,11 @@
 #include "crypto/rsa/sha1.h"
 #include "crypto/base64.h"
 
+#ifdef __WIN32__
 extern "C" {
-#include <openssl/applink.c>
+    #include <openssl/applink.c>
 }
+#endif
 
 namespace OAuth
 {
