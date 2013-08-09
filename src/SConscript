@@ -11,7 +11,7 @@ Import('opensslLibPath')
 
 def sslLibrary():
     if environment['PLATFORM'] == 'win32':
-        return "%seay32%s" % (environment['LIBPREFIX'], environment['SHLIBSUFFIX'])
+        return "%seay32%s" % (environment['LIBPREFIX'], environment['LIBSUFFIX'])
     else:
         return "%scrypto%s" % (environment['LIBPREFIX'], environment['SHLIBSUFFIX'])
         
