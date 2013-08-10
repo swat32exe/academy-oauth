@@ -28,9 +28,9 @@ def commonBuild():
 
 if buildWithRsa:
     libSources.extend([f for f in Glob('crypto/rsa/*.cpp')
-    if os.path.join('crypto', 'rsa', 'RsaSignature.cpp') not in f.path])
+    if os.path.join('crypto', 'rsa', 'RsaSignatureWrapper.cpp') not in f.path])
     libSources.extend(environment.Object(os.path.join('crypto', 'rsa',
-    'RsaSignature.cpp'), CCFLAGS='-fpermissive'))
+    'RsaSignatureWrapper.cpp'), CCFLAGS='-fpermissive'))
 else:
     print 'Building library without RSA-SHA1 signature method'
 

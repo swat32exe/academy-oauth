@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <fstream>
+
 #include <Service.h>
 #include <ServiceConfiguration.h>
 
@@ -10,6 +12,14 @@ namespace OAuth
 {
     class ServiceTests: public testing::Test
     {
+    public:
+        ServiceTests()
+        {
+            std::ifstream rsaKeyFile("test/rsaKey.pem");
+            rsaKey = std::string((std::istreambuf_iterator<char>(rsaKeyFile)),
+                    std::istreambuf_iterator<char>());
+        }
+        std::string rsaKey;
     };
 
     TEST_F(ServiceTests, request_temporary_credentials_hmac_sha1)
@@ -137,7 +147,7 @@ namespace OAuth
     {
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "" ,"http://term.ie/oauth/example/access_token.php" ,"key",
-                "test/rsaKey.pem", "oob", OAuth::RSA_SHA1);
+                this->rsaKey, "oob", OAuth::RSA_SHA1);
         OAuth::Service service(configuration, sendRequest);
         Token requestToken = service.getRequestToken().get();
         ASSERT_EQ("requestkey", requestToken.getToken());
@@ -148,7 +158,7 @@ namespace OAuth
     {
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "" ,"http://term.ie/oauth/example/access_token.php" ,"key",
-                "test/rsaKey.pem", "oob", OAuth::RSA_SHA1);
+                this->rsaKey, "oob", OAuth::RSA_SHA1);
         OAuth::Service service(configuration, sendRequest);
         Token accessToken = service.exchangeToken(Token("requestkey", "requestsecret"),
                 "verifier").get();
@@ -160,7 +170,7 @@ namespace OAuth
     {
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "", "http://term.ie/oauth/example/access_token.php", "key",
-                "test/rsaKey.pem", "oob", OAuth::RSA_SHA1);
+                this->rsaKey, "oob", OAuth::RSA_SHA1);
         OAuth::Service service(configuration, sendRequest);
 
         HttpRequest request(GET, "http://term.ie/oauth/example/echo_api.php");
@@ -176,7 +186,7 @@ namespace OAuth
     {
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "" ,"http://term.ie/oauth/example/access_token.php", "key",
-                "test/rsaKey.pem" ,"http://example.com/callback", OAuth::RSA_SHA1);
+                this->rsaKey ,"http://example.com/callback", OAuth::RSA_SHA1);
         OAuth::Service service(configuration, sendRequest);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
@@ -192,7 +202,7 @@ namespace OAuth
     {
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "", "http://term.ie/oauth/example/access_token.php", "key",
-                "test/rsaKey.pem", "http://example.com/callback", OAuth::RSA_SHA1);
+                this->rsaKey, "http://example.com/callback", OAuth::RSA_SHA1);
         OAuth::Service service(configuration, sendRequest);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
