@@ -5,10 +5,7 @@
 
 namespace OAuth
 {
-    namespace Utility
-    {
     const std::string rsaSha1Signature(const std::string &baseString,
             const std::string &rsaKeyPath, const std::string &);
-    }
 }
 #endif

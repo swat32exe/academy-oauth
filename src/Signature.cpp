@@ -2,7 +2,7 @@
 #include "crypto/base64.h"
 
 #include "Signature.h"
-#include "utility/RsaSignature.h"
+#include "crypto/rsa/RsaSignature.h"
 #include "ParameterList.h"
 #include "utility/Url.h"
 
@@ -23,7 +23,7 @@ namespace OAuth
     {
         switch (method) {
         case RSA_SHA1:
-            return Signature("RSA-SHA1", Utility::rsaSha1Signature);
+            return Signature("RSA-SHA1", rsaSha1Signature);
         case PLAINTEXT:
             return Signature("PLAINTEXT", plainTextSignature);
         case HMAC_SHA1:
