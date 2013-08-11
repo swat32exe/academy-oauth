@@ -5,6 +5,11 @@ libSources = Glob('*.cpp')
 libSources.extend(Glob('crypto/*.cpp'))
 libSources.extend(Glob('utility/*.cpp'))
 
+Import('configuration')
+Import('environment')
+Import('buildWithRsa')
+Import('opensslLibPath')
+        
 def compileDebug():
     environment.Append( CCFLAGS = [ '-g', '-O0'] )
     commonBuild()
@@ -15,15 +20,19 @@ def compileRelease():
 
 def compileTest():
     commonBuild()
-    
 
 def commonBuild():
     oauthLib = environment.StaticLibrary(LIB_TARGET, libSources)
     installDirPath = '#' + os.path.join(OUTPUT_DIR, configuration)
     environment.Install(installDirPath, oauthLib)
 
-Import('configuration')
-Import('environment')
+if buildWithRsa:
+    libSources.extend([f for f in Glob('crypto/rsa/*.cpp')
+    if os.path.join('crypto', 'rsa', 'RsaSignatureWrapper.cpp') not in f.path])
+    libSources.extend(environment.Object(os.path.join('crypto', 'rsa',
+    'RsaSignatureWrapper.cpp'), CCFLAGS='-fpermissive'))
+else:
+    print 'Building library without RSA-SHA1 signature method'
 
 if configuration == DEBUG_CONFIG:
     compileDebug()
