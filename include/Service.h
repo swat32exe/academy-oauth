@@ -52,7 +52,8 @@ namespace OAuth
         Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest);
 
         /**
-         *  Creates service with specified configuration. NetworkWokrer will use cURL.
+         *  Creates service with specified configuration.
+         *  Uses cURL as default for work with network.
          *  @param configuration initial service configuration
          */
         Service(const ServiceConfiguration &configuration);
