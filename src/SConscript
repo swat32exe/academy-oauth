@@ -1,7 +1,7 @@
 import os.path
 from SConfig import *
 
-libSources = Glob('*.cpp')
+libSources = [source for source in Glob('*.cpp') if not source.path.endswith('DefaultSendRequest.cpp')]
 libSources.extend(Glob('crypto/*.cpp'))
 libSources.extend(Glob('utility/*.cpp'))
 
@@ -9,19 +9,26 @@ Import('configuration')
 Import('environment')
 Import('buildWithRsa')
 Import('opensslLibPath')
-        
+
+additionalCCFLAGS = []
+
 def compileDebug():
-    environment.Append( CCFLAGS = [ '-g', '-O0'] )
+    additionalCCFLAGS.extend(['-g', '-O0']) 
     commonBuild()
 
 def compileRelease():
-    environment.Append( CCFLAGS = ['-O2'] )
+    additionalCCFLAGS.extend(['-O2'])
     commonBuild()
 
 def compileTest():
     commonBuild()
 
 def commonBuild():
+    environment.Append(CCFLAGS = additionalCCFLAGS,
+        CPPPATH = ['cURLpp/include/'], CPPDEFINES = ['CURLPP_STATICLIB'])
+    libSources.extend(
+        [environment.Object(source , CCFLAGS = ['-std=c++0x'] + additionalCCFLAGS)
+        for source in Glob('cURLpp/src/*/*.c*') + Glob('cURLpp/src/*/*/*.c*') + ['DefaultSendRequest.cpp']])
     oauthLib = environment.StaticLibrary(LIB_TARGET, libSources)
     installDirPath = '#' + os.path.join(OUTPUT_DIR, configuration)
     environment.Install(installDirPath, oauthLib)

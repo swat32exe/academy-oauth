@@ -5,7 +5,7 @@ import shutil
 from StringIO import StringIO
 import os.path
 
-EXTRACT_DIR = 'test/cURLpp/';
+EXTRACT_DIR = 'src/cURLpp/';
 
 if not os.path.exists(EXTRACT_DIR):
     os.makedirs(EXTRACT_DIR)
