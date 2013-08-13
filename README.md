@@ -1,8 +1,33 @@
 academy-oauth
 =============
-##Installation
-To build the library you need to install python 2.x.x, scons, and gcc 4.8.0+.
-Then, run 'scons' command in project directory to build release version of the
+##Preparation steps
+To build the library you need to install python 2.x.x, scons, gcc 4.8.0+ and cURL.
+
+Run LoadcURLpp.py which is located in project root directory. It will download 
+cURLpp files.
+
+You can use
+```
+--curl-libpath=<path>
+```
+and
+```
+--curl-includepath=<path>
+```
+options to specify cURL libraries and headers locations, if required
+
+If configuration you want to build requires openssl and it is not located in default directory, you can use 
+```
+--openssl-libpath=<path>
+```
+and
+```
+--openssl-includepath=<path>
+```
+options to specify libraries and headers locations.
+
+##Building library
+Run 'scons' command in project directory to build release version of the
 library. If you need to build debug version, explicitly specify it with:
 ```
 scons config=Debug
@@ -14,33 +39,11 @@ it with RSA-SHA1 you need to install openssl library. Then, you must pass
 ```
 scons config=Debug --with-rsa
 ```
-If openssl is not located in default directory, you can use 
-```
---openssl-libpath=<path>
-```
-and
-```
---openssl-includepath=<path>
-```
-options to specify libraries and headers locations.
 
 ##Running tests
-Install libcurl. After this it should be possible to simply include header into 
-any project and use it. Install openssl.
-
-Run LoadcURLpp.py which is located in project root directory. It will download 
-cURLpp files.
+Install openssl.
 
 Now you can build and run tests with
 ```
 scons config=Test
 ```
-If openssl is not located in default directory, you can use 
-```
---openssl-libpath=<path>
-```
-and
-```
---openssl-includepath=<path>
-```
-options to specify libraries and headers locations.
