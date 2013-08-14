@@ -52,6 +52,13 @@ namespace OAuth
         Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest);
 
         /**
+         *  Creates service with specified configuration.
+         *  Uses cURL as default for work with network.
+         *  @param configuration initial service configuration
+         */
+        Service(const ServiceConfiguration &configuration);
+
+        /**
          *  Request temporary credentials asynchronously
          *  @returns std::future object, that will return token or throw exception
          */

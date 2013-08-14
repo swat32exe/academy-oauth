@@ -28,9 +28,17 @@ AddOption('--openssl-includepath', action = 'store', dest = 'opensslIncludePath'
 default = defaultSslIncludePath, nargs = 1, type = 'string', 
 help = 'Path to OpenSSL include directory')
 
+AddOption('--curl-libpath', action = 'store', dest = 'curlLibPath', default = '.',
+nargs = 1, type = 'string', help = 'Path to directory with curl library')
+
+AddOption('--curl-includepath', action = 'store', dest = 'curlIncludePath', 
+default = '.', nargs = 1, type = 'string', help = 'Path to curl include directory')
+
 buildWithRsa = GetOption('buildWithRsa')
 opensslLibPath = GetOption('opensslLibPath')
 opensslIncludePath = GetOption('opensslIncludePath')
+curlLibPath = GetOption('curlLibPath')
+curlIncludePath = GetOption('curlIncludePath')
 configuration = ARGUMENTS.get('config', RELEASE_CONFIG)
 
 if configuration == TEST_CONFIG:
@@ -47,13 +55,21 @@ else:
     print 'Warning: OpenSSL include directory not found. \
     If it is not under your PATH, specify it with --openssl-includepath'
 
+if os.path.isdir(curlIncludePath):
+    environment.Append(CPPPATH = curlIncludePath)
+else:
+    print 'Warning: cURL include path you set does not exist.'
+
+if not os.path.isdir(curlLibPath):
+    print 'Warning: cURL library path you set does not exist.'
+
 variantDirPath = os.path.join(BUILD_DIR, configuration)
 if configuration == TEST_CONFIG:
     SConscript('src/SConscript', variant_dir = os.path.join(BUILD_DIR, DEBUG_CONFIG), duplicate = 0,
     exports = {'configuration' : DEBUG_CONFIG, 'environment' : environment, 'buildWithRsa': True,
     'opensslLibPath' : opensslLibPath})
     SConscript('test/SConscript', variant_dir = variantDirPath, duplicate = 0,
-    exports = {'environment' : environment, 'opensslLibPath' : opensslLibPath})
+    exports = {'environment' : environment, 'opensslLibPath' : opensslLibPath, 'curlLibPath' : curlLibPath,})
 else:
     SConscript('src/SConscript', variant_dir = variantDirPath, duplicate = 0,
     exports = {'configuration' : configuration, 'environment' : environment,

@@ -2,11 +2,10 @@ import os.path
 from SConfig import *
 Import('environment')
 Import('opensslLibPath')
+Import('curlLibPath')
 
 testSources = ['gmock-gtest-all.cc'] +\
-    Glob('*.cpp') +\
-    Glob('cURLpp/src/*/*.c*') + \
-    Glob('cURLpp/src/*/*/*.c*')
+    Glob('*.cpp')
 
 testEnvironment = environment.Clone(CCFLAGS = ['-std=c++0x', '-g', '-O0'], LIBS = [LIB_TARGET])
 
@@ -15,11 +14,10 @@ if testEnvironment['PLATFORM'] == 'posix':
 else:
     testEnvironment.Append(LIBS = ['curldll', 'wsock32', 'eay32'])
     
-libPath = ['#' + os.path.join(BUILD_DIR, DEBUG_CONFIG), opensslLibPath]
+libPath = ['#' + os.path.join(BUILD_DIR, DEBUG_CONFIG), opensslLibPath, curlLibPath]
 
 testEnvironment.Append(LIBS = ['pthread'], LIBPATH = libPath, 
-    CPPPATH = ['cURLpp/include/', '#src', '#include', '.'],
-    CPPDEFINES = ['CURLPP_STATICLIB'])
+    CPPPATH = ['#src', '#include', '.'])
 
 test = testEnvironment.Program(target = TEST_TARGET, source = testSources)
 testInstallPath = '#' + os.path.join(OUTPUT_DIR, TEST_CONFIG)

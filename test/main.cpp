@@ -6,7 +6,7 @@
 #include "NormalizeUrl.h"
 #include "HostResourceFromUrl.h"
 #include "ParameterListTests.h"
-#include "SendRequestTests.h"
+#include "DefaultSendRequestTests.h"
 #include "SignatureTests.h"
 #include "RsaSignatureTests.h"
 #include "ExtractorTests.h"

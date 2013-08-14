@@ -4,8 +4,7 @@
 
 #include <Service.h>
 #include <ServiceConfiguration.h>
-
-#include "SendRequest.h"
+#include <DefaultSendRequest.h>
 
 
 namespace OAuth
@@ -31,7 +30,7 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,OAuth::SignatureMethod::HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration, defaultSendRequest);
         std::future<Token> futureToken = service.getRequestToken();
         Token token = futureToken.get();
         ASSERT_EQ("requestkey", token.getToken());
@@ -48,7 +47,7 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,OAuth::SignatureMethod::HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
         ASSERT_EQ("http://example.com/auth?oauth_token=tokenkey", service.getAuthorizeUrl(token));
     }
 
@@ -62,7 +61,7 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,OAuth::SignatureMethod::HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
         ASSERT_EQ("http://example.com/auth?some=parameter&oauth_token=tokenkey", service.getAuthorizeUrl(token));
     }
 
@@ -75,7 +74,7 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
         std::future<Token> futureToken = service.exchangeToken(Token("requestkey", "requestsecret"), "verifier");
         Token token = futureToken.get();
         ASSERT_EQ("accesskey", token.getToken());
@@ -91,14 +90,14 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
 
         HttpRequest request(GET, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.addQueryParameter("testParameter","value");
         request.addQueryParameter("anotherParameter","anotherValue");
         service.signRequest(request, Token("accesskey", "accesssecret"));
-        std::string response = sendRequest(request);
+        std::string response = defaultSendRequest(request);
         ASSERT_EQ("testParameter=value&anotherParameter=anotherValue", response);
     }
 
@@ -111,14 +110,14 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.addHeader(HEADER_CONTENT_TYPE, FORM_URLENCODED);
         request.setBody("testParameter=value&anotherParameter=anotherValue");
         service.signRequest(request, Token("accesskey", "accesssecret"));
-        std::string response = sendRequest(request);
+        std::string response = defaultSendRequest(request);
         ASSERT_EQ("testParameter=value&anotherParameter=anotherValue", response);
     }
 
@@ -131,14 +130,14 @@ namespace OAuth
             ,"secret"
             ,"http://example.com/callback"
             ,HMAC_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader(HEADER_CONTENT_TYPE, "text/plain");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.setBody("Some not urlencoded body");
         service.signRequest(request, Token("accesskey", "accesssecret"));
-        std::string response = sendRequest(request);
+        std::string response = defaultSendRequest(request);
         // Term.ie won't echo arbitrary body, it'l return empty body. However, it'l check the signature.
         ASSERT_EQ("", response);
     }
@@ -148,7 +147,7 @@ namespace OAuth
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "" ,"http://term.ie/oauth/example/access_token.php" ,"key",
                 this->rsaKey, "oob", OAuth::RSA_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
         Token requestToken = service.getRequestToken().get();
         ASSERT_EQ("requestkey", requestToken.getToken());
         ASSERT_EQ("requestsecret", requestToken.getSecret());
@@ -159,7 +158,7 @@ namespace OAuth
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "" ,"http://term.ie/oauth/example/access_token.php" ,"key",
                 this->rsaKey, "oob", OAuth::RSA_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
         Token accessToken = service.exchangeToken(Token("requestkey", "requestsecret"),
                 "verifier").get();
         ASSERT_EQ("accesskey", accessToken.getToken());
@@ -171,14 +170,14 @@ namespace OAuth
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "", "http://term.ie/oauth/example/access_token.php", "key",
                 this->rsaKey, "oob", OAuth::RSA_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
 
         HttpRequest request(GET, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.addQueryParameter("testParameter","value");
         request.addQueryParameter("anotherParameter","anotherValue");
         service.signRequest(request, Token("accesskey", "accesssecret"));
-        std::string response = sendRequest(request);
+        std::string response = defaultSendRequest(request);
         ASSERT_EQ("testParameter=value&anotherParameter=anotherValue", response);
     }
 
@@ -187,14 +186,14 @@ namespace OAuth
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "" ,"http://term.ie/oauth/example/access_token.php", "key",
                 this->rsaKey ,"http://example.com/callback", OAuth::RSA_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.addHeader(HEADER_CONTENT_TYPE, FORM_URLENCODED);
         request.setBody("testParameter=value&anotherParameter=anotherValue");
         service.signRequest(request, Token("accesskey", "accesssecret"));
-        std::string response = sendRequest(request);
+        std::string response = defaultSendRequest(request);
         ASSERT_EQ("testParameter=value&anotherParameter=anotherValue", response);
     }
 
@@ -203,14 +202,14 @@ namespace OAuth
         OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
                 "", "http://term.ie/oauth/example/access_token.php", "key",
                 this->rsaKey, "http://example.com/callback", OAuth::RSA_SHA1);
-        OAuth::Service service(configuration, sendRequest);
+        OAuth::Service service(configuration);
 
         HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
         request.addHeader(HEADER_CONTENT_TYPE, "text/plain");
         request.addHeader("Some-Wierd-Header", "some_data");
         request.setBody("Some not urlencoded body");
         service.signRequest(request, Token("accesskey", "accesssecret"));
-        std::string response = sendRequest(request);
+        std::string response = defaultSendRequest(request);
         ASSERT_EQ("", response);
     }
 }

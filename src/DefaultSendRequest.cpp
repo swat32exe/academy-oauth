@@ -1,9 +1,10 @@
-#include "SendRequest.h"
+#include "DefaultSendRequest.h"
 
 #include <list>
 #include <cassert>
 #include <sstream>
 #include <string>
+
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
@@ -19,7 +20,7 @@ std::list<std::string> makeHeadersList(const OAuth::header_t &headersMap)
     return headers;
 }
 
-std::string sendRequest(const OAuth::HttpRequest &httpRequest) {
+std::string defaultSendRequest(const OAuth::HttpRequest &httpRequest) {
     std::ostringstream response;
     curlpp::Cleanup cleaner;
     curlpp::Easy request;
@@ -44,4 +45,4 @@ std::string sendRequest(const OAuth::HttpRequest &httpRequest) {
 
     request.perform();
     return response.str();
-};
+}

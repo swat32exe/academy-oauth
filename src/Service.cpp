@@ -9,6 +9,7 @@
 #include "Signature.h"
 #include "utility/Url.h"
 #include "utility/Extractor.h"
+#include "DefaultSendRequest.h"
 
 namespace OAuth
 {
@@ -26,6 +27,12 @@ namespace OAuth
     Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
         configuration(configuration)
         ,sendRequest(sendRequest)
+    {
+    }
+
+    Service::Service(const ServiceConfiguration &configuration) :
+        configuration(configuration)
+        ,sendRequest(defaultSendRequest)
     {
     }
 
