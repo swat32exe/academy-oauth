@@ -5,6 +5,7 @@ libSources = [source for source in Glob('*.cpp') if not source.path.endswith('De
 libSources.extend(Glob('oauth1/*.cpp'))
 libSources.extend(Glob('crypto/*.cpp'))
 libSources.extend(Glob('utility/*.cpp'))
+libSources.extend(Glob('oauth2/*cpp'))
 
 Import('configuration')
 Import('environment')
