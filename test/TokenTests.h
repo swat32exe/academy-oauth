@@ -1,4 +1,4 @@
-#include <Token.h>
+#include <oauth/Token.h>
 
 #include <gtest/gtest.h>
 

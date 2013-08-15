@@ -1,8 +1,8 @@
-#include <Token.h>
+#include <oauth/Token.h>
 
 #include <exception>
 
-#include "ParameterList.h"
+#include "oauth/ParameterList.h"
 #include "utility/Url.h"
 
 namespace OAuth

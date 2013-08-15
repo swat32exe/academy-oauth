@@ -10,7 +10,7 @@
 #include <curlpp/Options.hpp>
 #include <curlpp/Exception.hpp>
 
-#include <HttpRequest.h>
+#include <oauth/HttpRequest.h>
 
 std::list<std::string> makeHeadersList(const OAuth::header_t &headersMap)
 {
