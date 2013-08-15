@@ -2,9 +2,9 @@
 
 #include <fstream>
 
-#include <Service.h>
-#include <ServiceConfiguration.h>
-#include <DefaultSendRequest.h>
+#include <oauth/Service.h>
+#include <oauth/ServiceConfiguration.h>
+#include <oauth/DefaultSendRequest.h>
 
 
 namespace OAuth

@@ -51,14 +51,11 @@ namespace OAuth
          * @param callbackUrl user will be redirected to this url after authorizing access
          * @param signatureMethod method used to sign request
          */
-        ServiceConfiguration(const std::string &tokenRequestUrl
-            ,const std::string &authorizeUrl
-            ,const std::string &tokenExchangeUrl
-            ,const std::string &consumerKey
-            ,const std::string &consumerSecret
-            ,const std::string &callbackUrl = OUT_OF_BAND
-            ,SignatureMethod signatureMethod = HMAC_SHA1
-            );
+        ServiceConfiguration(const std::string &tokenRequestUrl,
+                const std::string &authorizeUrl,
+                const std::string &tokenExchangeUrl, const std::string &consumerKey,
+                const std::string &consumerSecret, const std::string &callbackUrl =
+                        OUT_OF_BAND, SignatureMethod signatureMethod = HMAC_SHA1);
 
         /**
          *  Returns URL used to request temporary token.

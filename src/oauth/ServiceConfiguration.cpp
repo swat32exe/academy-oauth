@@ -1,4 +1,4 @@
-#include <ServiceConfiguration.h>
+#include <oauth/ServiceConfiguration.h>
 
 #include <cassert>
 

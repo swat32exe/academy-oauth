@@ -1,7 +1,8 @@
+#include <oauth/ParameterList.h>
+
 #include <sstream>
 #include <set>
 
-#include "ParameterList.h"
 #include "utility/Url.h"
 #include "utility/Extractor.h"
 

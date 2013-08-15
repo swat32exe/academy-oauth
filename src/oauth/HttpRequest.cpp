@@ -1,4 +1,4 @@
-#include <HttpRequest.h>
+#include <oauth/HttpRequest.h>
 
 #include <cassert>
 #include <stdexcept>

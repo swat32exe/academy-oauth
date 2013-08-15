@@ -1,9 +1,10 @@
+#include <oauth/Signature.h>
+
 #include "crypto/HMAC_SHA1.h"
 #include "crypto/base64.h"
 
-#include "Signature.h"
 #include "crypto/rsa/RsaSignature.h"
-#include "ParameterList.h"
+#include "oauth/ParameterList.h"
 #include "utility/Url.h"
 
 namespace OAuth

@@ -1,6 +1,6 @@
-#include <Signature.h>
-#include <Service.h>
-#include <HttpRequest.h>
+#include <oauth/Signature.h>
+#include <oauth/Service.h>
+#include <oauth/HttpRequest.h>
 #include <utility/Url.h>
 #include <utility/Extractor.h>
 

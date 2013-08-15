@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <regex>
 
-#include <DefaultSendRequest.h>
+#include <oauth/DefaultSendRequest.h>
 
 namespace OAuth
 {

@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include <HttpRequest.h>
+#include <oauth/HttpRequest.h>
 
 namespace OAuth
 {

@@ -1,12 +1,12 @@
-#include <Service.h>
+#include <oauth/Service.h>
 
 #include <ctime>
 #include <string>
 #include <cstdlib>
 
-#include "HttpRequest.h"
-#include "Token.h"
-#include "Signature.h"
+#include "oauth/HttpRequest.h"
+#include "oauth/Token.h"
+#include "oauth/Signature.h"
 #include "utility/Url.h"
 #include "utility/Extractor.h"
 #include "DefaultSendRequest.h"
