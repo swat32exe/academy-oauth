@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 
-namespace OAuth
+namespace OAuth1
 {
     enum SignatureMethod {HMAC_SHA1, RSA_SHA1, PLAINTEXT};
     typedef std::function<std::string(const std::string&, const std::string&,

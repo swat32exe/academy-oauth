@@ -1,4 +1,4 @@
-#include <oauth/ParameterList.h>
+#include <ParameterList.h>
 
 namespace OAuthTesting
 {

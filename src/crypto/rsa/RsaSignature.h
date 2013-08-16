@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace OAuth
+namespace OAuth1
 {
     const std::string rsaSha1Signature(const std::string &baseString,
             const std::string &rsaKey, const std::string &);

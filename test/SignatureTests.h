@@ -1,6 +1,6 @@
-#include <oauth/Signature.h>
-#include <oauth/Service.h>
-#include <oauth/HttpRequest.h>
+#include <oauth1/Signature.h>
+#include <oauth1/Service.h>
+#include <HttpRequest.h>
 #include <utility/Url.h>
 #include <utility/Extractor.h>
 
@@ -12,7 +12,7 @@ namespace OAuthTesting
 
     TEST(SignatureTests, testPlainText)
     {
-        OAuth::Signature signature = OAuth::Signature::create(OAuth::PLAINTEXT);
+        OAuth1::Signature signature = OAuth1::Signature::create(OAuth1::PLAINTEXT);
         std::string signatureString = signature("", "client");
         ASSERT_STREQ("client&", signatureString.c_str());
 
@@ -27,7 +27,7 @@ namespace OAuthTesting
     {
         // test signature on temporary credentials request
         OAuth::ParameterList oauthParameters;
-        using OAuth::Service;
+        using OAuth1::Service;
         oauthParameters.add(Service::OAUTH_VERSION, "1.0");
         oauthParameters.add(Service::OAUTH_NONCE, "b8a53456a4eccb8a61626ee17050ce30");
         oauthParameters.add(Service::OAUTH_TIMESTAMP, "1375453769");
@@ -39,7 +39,7 @@ namespace OAuthTesting
                 + request.getBaseStringUri() + '&';
         baseString += OAuth::Utility::extractBaseString(oauthParameters);
 
-        OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
+        OAuth1::Signature signature = OAuth1::Signature::create(OAuth1::HMAC_SHA1);
         std::string signatureString = signature(baseString, "secret");
         ASSERT_STREQ("ks36RJj7xqsKaRKSQXXofEJ4FYI=", signatureString.c_str());
     }
@@ -48,7 +48,7 @@ namespace OAuthTesting
     {
         // test signature on access token request
         OAuth::ParameterList oauthParameters;
-        using OAuth::Service;
+        using OAuth1::Service;
         oauthParameters.add(Service::OAUTH_VERSION, "1.0");
         oauthParameters.add(Service::OAUTH_NONCE, "40f27d79d7f762ddd126be8f81b33298");
         oauthParameters.add(Service::OAUTH_TIMESTAMP, "1375453769");
@@ -61,14 +61,14 @@ namespace OAuthTesting
                 + request.getBaseStringUri() + '&';
         baseString += OAuth::Utility::extractBaseString(oauthParameters);
 
-        OAuth::Signature signature = OAuth::Signature::create(OAuth::HMAC_SHA1);
+        OAuth1::Signature signature = OAuth1::Signature::create(OAuth1::HMAC_SHA1);
         std::string signatureString = signature(baseString, "secret", "requestsecret");
         ASSERT_STREQ("YLz49ccRr9wbHKkguNEog5E2aec=", signatureString.c_str());
     }
 
     TEST(SignatureTests, testCustomSignature)
     {
-        OAuth::Signature signature("Custom",
+        OAuth1::Signature signature("Custom",
             [] (const std::string &baseString,
                 const std::string &clientSecret, const std::string &tokenSecret)
                 -> std::string

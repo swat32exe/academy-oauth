@@ -1,17 +1,17 @@
-#include <oauth/Service.h>
+#include <oauth1/Service.h>
 
 #include <ctime>
 #include <string>
 #include <cstdlib>
 
-#include "oauth/HttpRequest.h"
-#include "oauth/Token.h"
-#include "oauth/Signature.h"
+#include "HttpRequest.h"
+#include "oauth1/Token.h"
+#include "oauth1/Signature.h"
 #include "utility/Url.h"
 #include "utility/Extractor.h"
 #include "DefaultSendRequest.h"
 
-namespace OAuth
+namespace OAuth1
 {
     const std::string Service::OAUTH_CONSUMER_KEY = "oauth_consumer_key";
     const std::string Service::OAUTH_SIGNATURE_METHOD = "oauth_signature_method";
@@ -38,9 +38,10 @@ namespace OAuth
 
     std::future<Token> Service::getRequestToken()
     {
-        ParameterList additionalParameters;
+        OAuth::ParameterList additionalParameters;
         additionalParameters.addRaw(OAUTH_CALLBACK, configuration.getCallbackUrl());
-        HttpRequest request(HttpRequestType::POST, configuration.getTokenRequestUrl());
+        OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
+                configuration.getTokenRequestUrl());
         this->signRequest(request, Token("", ""), additionalParameters);
 
         return std::async([=] () {
@@ -56,16 +57,17 @@ namespace OAuth
             authorizeUrl += "?";
         else
             authorizeUrl += "&";
-        authorizeUrl += "oauth_token=" + Utility::urlEncode(token.getToken());
+        authorizeUrl += "oauth_token=" + OAuth::Utility::urlEncode(token.getToken());
         return authorizeUrl;
     }
 
     std::future<Token> Service::exchangeToken(const Token &token, const std::string &verifier) const
     {
-        ParameterList additionalParameters;
+        OAuth::ParameterList additionalParameters;
         additionalParameters.addRaw(OAUTH_TOKEN, token.getToken());
         additionalParameters.addRaw(OAUTH_VERIFIER, verifier);
-        HttpRequest request(HttpRequestType::POST, configuration.getTokenExchangeUrl());
+        OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
+                configuration.getTokenExchangeUrl());
         this->signRequest(request, token, additionalParameters);
 
         return std::async([=] () {
@@ -76,51 +78,52 @@ namespace OAuth
 
     std::string Service::generateNonce() const
     {
-        std::string nonce = Utility::toString(std::time(NULL));
+        std::string nonce = OAuth::Utility::toString(std::time(NULL));
 
         clock_t clockTime = clock();
         if (clockTime > 0)
-            nonce += Utility::toString(clockTime);
+            nonce += OAuth::Utility::toString(clockTime);
 
-        nonce += Utility::toString(rand());
+        nonce += OAuth::Utility::toString(rand());
 
         return nonce;
     }
 
-    void Service::signRequest(HttpRequest &request, const Token &token,
-                              const ParameterList &additionalOAuthParameters) const
+    void Service::signRequest(OAuth::HttpRequest &request, const Token &token,
+                              const OAuth::ParameterList &additionalOAuthParameters) const
     {
-        ParameterList oauthParameters = this->generateOAuthParameters();
+        OAuth::ParameterList oauthParameters = this->generateOAuthParameters();
         oauthParameters.add(additionalOAuthParameters);
         std::string baseString = request.getRequestTypeAsString() + '&'
                 + request.getBaseStringUri() + '&';
 
-        ParameterList allParameters;
+        OAuth::ParameterList allParameters;
         allParameters.add(oauthParameters);
         allParameters.add(request.getQueryParameters());
-        allParameters.add(Utility::extractBodyParameters(request));
-        baseString += Utility::extractBaseString(allParameters);
+        allParameters.add(OAuth::Utility::extractBodyParameters(request));
+        baseString += OAuth::Utility::extractBaseString(allParameters);
 
         Signature signature = Signature::create(configuration.getSignatureMethod());
         const std::string signatureString = signature(baseString,
                 configuration.getConsumerSecret(), token.getSecret());
         oauthParameters.addRaw(OAUTH_SIGNATURE, signatureString);
-        request.addHeader("Authorization", Utility::extractAuthorizationHeader(oauthParameters));
+        request.addHeader("Authorization",
+                OAuth::Utility::extractAuthorizationHeader(oauthParameters));
     }
 
-    void Service::signRequest(HttpRequest &request, const Token &token)
+    void Service::signRequest(OAuth::HttpRequest &request, const Token &token)
     {
-        ParameterList additionalParameters;
+        OAuth::ParameterList additionalParameters;
         additionalParameters.addRaw(OAUTH_TOKEN, token.getToken());
         signRequest(request, token, additionalParameters);
     }
 
-    ParameterList Service::generateOAuthParameters() const
+    OAuth::ParameterList Service::generateOAuthParameters() const
     {
-        ParameterList oauthParameters;
+        OAuth::ParameterList oauthParameters;
         oauthParameters.addRaw(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
         oauthParameters.addRaw(OAUTH_SIGNATURE_METHOD, configuration.getSignatureMethodAsString());
-        oauthParameters.addRaw(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));
+        oauthParameters.addRaw(OAUTH_TIMESTAMP, OAuth::Utility::toString(std::time(NULL)));
         oauthParameters.addRaw(OAUTH_NONCE, this->generateNonce());
         oauthParameters.addRaw(OAUTH_VERSION, OAUTH_DEFAULT_VERSION);
         return oauthParameters;
