@@ -8,12 +8,15 @@
 #include "ServiceConfiguration.h"
 #include "ParameterList.h"
 
-namespace OAuth
-{
+namespace OAuth {
     class HttpRequest;
+}
+
+namespace OAuth1
+{
     class Token;
 
-    typedef std::function<std::string(const HttpRequest&)> sendRequest_t;
+    typedef std::function<std::string(const OAuth::HttpRequest&)> sendRequest_t;
 
     class Service
     {
@@ -38,8 +41,8 @@ namespace OAuth
          * @returns random string
          */
         std::string generateNonce() const;
-        void signRequest(HttpRequest &request, const Token &token,
-                         const ParameterList &additionalOAuthParameters) const;
+        void signRequest(OAuth::HttpRequest &request, const Token &token,
+                         const OAuth::ParameterList &additionalOAuthParameters) const;
 
     public:
 
@@ -70,7 +73,7 @@ namespace OAuth
          *  @param request request to sign
          *  @param token token, used to sign request
          */
-        void signRequest(HttpRequest &request, const Token &token);
+        void signRequest(OAuth::HttpRequest &request, const Token &token);
         /**
          *  Generates url to which user should be redirected
          *  @param token temporary credentials
@@ -85,7 +88,7 @@ namespace OAuth
         std::future<Token> exchangeToken(const Token &token, const std::string &verifier) const;
 
     private:
-        ParameterList generateOAuthParameters() const;
+        OAuth::ParameterList generateOAuthParameters() const;
     };
 }
 #endif

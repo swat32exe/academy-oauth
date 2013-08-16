@@ -1,7 +1,8 @@
 import os.path
 from SConfig import *
 
-libSources = [source for source in Glob('oauth/*.cpp') if not source.path.endswith('DefaultSendRequest.cpp')]
+libSources = [source for source in Glob('*.cpp') if not source.path.endswith('DefaultSendRequest.cpp')]
+libSources.extend(Glob('oauth1/*.cpp'))
 libSources.extend(Glob('crypto/*.cpp'))
 libSources.extend(Glob('utility/*.cpp'))
 

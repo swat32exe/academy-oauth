@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "oauth/ParameterList.h"
+#include "ParameterList.h"
 
 namespace OAuth
 {

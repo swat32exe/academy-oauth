@@ -1,4 +1,4 @@
-#include <oauth/Signature.h>
+#include <oauth1/Signature.h>
 
 #include "crypto/HMAC_SHA1.h"
 #include "crypto/base64.h"
@@ -10,7 +10,7 @@
 #include "oauth/ParameterList.h"
 #include "utility/Url.h"
 
-namespace OAuth
+namespace OAuth1
 {
     const std::string hmacSha1Signature(const std::string &baseString,
             const std::string &clientSecret, const std::string &tokenSecret);

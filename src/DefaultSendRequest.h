@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <oauth/HttpRequest.h>
+#include <HttpRequest.h>
 
 std::string defaultSendRequest(const OAuth::HttpRequest &httpRequest);
 

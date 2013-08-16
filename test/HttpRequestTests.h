@@ -1,7 +1,7 @@
 #include <string>
 
-#include <oauth/HttpRequest.h>
-#include <oauth/ParameterList.h>
+#include <HttpRequest.h>
+#include <ParameterList.h>
 
 namespace OAuthTesting
 {

@@ -1,5 +1,5 @@
 #include <utility/Extractor.h>
-#include <oauth/ParameterList.h>
+#include <ParameterList.h>
 
 #include <string>
 
