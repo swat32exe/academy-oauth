@@ -12,6 +12,7 @@
 #include "ExtractorTests.h"
 #include "TokenTests.h"
 #include "ServiceTests.h"
+#include "SingleLevelJSONTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {
