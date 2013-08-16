@@ -6,7 +6,7 @@
 
 namespace Utility
 {
-    typedef std::map<std::string, std::string> singleLevelJSON_t;
+    typedef std::map<std::string, std::string> string_pair_t;
 
     /**
      *  Parse single level JSON to map<string,string>
@@ -14,7 +14,7 @@ namespace Utility
      *  @returns map<string,string>, representing object.
      *  e.g. {"name":"value"} will produce map where map["name"] == "value";
      */
-    singleLevelJSON_t parseSingleLevelJSON(std::string data);
+    string_pair_t parseSingleLevelJSON(std::string data);
 }
 
 #endif

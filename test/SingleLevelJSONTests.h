@@ -41,7 +41,7 @@ namespace OAuthTesting
 
     TEST(SingleLevelJSONTests, parse_1)
     {
-        Utility::singleLevelJSON_t parsed = Utility::parseSingleLevelJSON(
+        Utility::string_pair_t parsed = Utility::parseSingleLevelJSON(
         "{\r\n"
         "   \"access_token\":\"2YotnFZFEjr1zCsicMWpAA\",\r\n"
         "   \"token_type\":\"example\",\r\n"

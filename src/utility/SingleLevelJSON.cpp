@@ -14,7 +14,7 @@ namespace Utility
         while (openingBracePosition < static_cast<int>(data.length()) &&
                 isspace(data[openingBracePosition]))
             ++openingBracePosition;
-        if(openingBracePosition == static_cast<int>(data.length()))
+        if (openingBracePosition == static_cast<int>(data.length()))
             return data;
         while (isspace(data[closingBracePosition]))
             --closingBracePosition;
@@ -66,7 +66,7 @@ namespace Utility
             dataStream.ignore(1);
     }
 
-    bool isValidUnquotedCaharacter(char character)
+    bool isValidUnquotedCharacter(char character)
     {
         std::string allowed = "0123456789eE+-.";
         return allowed.find(character) != std::string::npos;
@@ -76,11 +76,11 @@ namespace Utility
         char character;
         std::ostringstream value;
 
-        while (dataStream>>character && isValidUnquotedCaharacter(character))
+        while (dataStream>>character && isValidUnquotedCharacter(character))
             value<<character;
         dataStream.unget();
 
-        if(value.str() == "" || dataStream.eof())
+        if (value.str() == "" || dataStream.eof())
             throw std::invalid_argument("JSON parsing failed");
         return value.str();
     }
@@ -97,7 +97,7 @@ namespace Utility
                 value<<character;
         }
 
-        if(dataStream.eof())
+        if (dataStream.eof())
             throw std::invalid_argument("JSON parsing failed");
         return value.str();
     }
@@ -108,9 +108,9 @@ namespace Utility
         return readUnquoted(dataStream);
     }
 
-    singleLevelJSON_t parseSingleLevelJSON(std::string data)
+    string_pair_t parseSingleLevelJSON(std::string data)
     {
-        singleLevelJSON_t parsedData;
+        string_pair_t parsedData;
 
         data = trimBracesIfExist(data) + ",";
         std::istringstream dataStream(data);
@@ -118,13 +118,13 @@ namespace Utility
         skipWhitespaces(dataStream);
         while (!dataStream.eof()) {
             std::string name = readPairElement(dataStream);
-            if (name == "")
+            if (name.empty())
                 throw std::invalid_argument("JSON parsing failed");
 
             skipWhitespaces(dataStream);
             char character;
             dataStream>>character;
-            if(character!=':')
+            if (character!=':')
                 throw std::invalid_argument("JSON parsing failed");
 
             skipWhitespaces(dataStream);
@@ -132,7 +132,7 @@ namespace Utility
 
             skipWhitespaces(dataStream);
             dataStream>>character;
-            if(character!=',')
+            if (character!=',')
                 throw std::invalid_argument("JSON parsing failed");
 
             skipWhitespaces(dataStream);
