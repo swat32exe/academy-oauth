@@ -48,7 +48,7 @@ namespace OAuthTesting
         "   \"expires_in\":3600,"
         "   \"refresh_token\":\"tGzv3JOkF0XG5Qx2TlKWIA\",\r\n"
         "   \"example_parameter\":\"example_value\",\r\n"
-        "   \"escape_test\":\"\\\"\\\\\\/\\b\\f\\n\\r\\t\\u0041\"\r\n"
+        "   \"escape_test\":\"\\\"\\\\\\/\\b\\f\\n\\r\\t\"\r\n"
         "}\r\n");
 
         ASSERT_EQ("2YotnFZFEjr1zCsicMWpAA", parsed["access_token"]);
@@ -56,6 +56,6 @@ namespace OAuthTesting
         ASSERT_EQ("3600", parsed["expires_in"]);
         ASSERT_EQ("tGzv3JOkF0XG5Qx2TlKWIA", parsed["refresh_token"]);
         ASSERT_EQ("example_value", parsed["example_parameter"]);
-        ASSERT_EQ("\"\\/\b\f\n\r\tA", parsed["escape_test"]);
+        ASSERT_EQ("\"\\/\b\f\n\r\t", parsed["escape_test"]);
     }
 }
