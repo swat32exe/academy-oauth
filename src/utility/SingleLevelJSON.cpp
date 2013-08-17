@@ -51,9 +51,11 @@ namespace Utility
         case 'u':
             char buffer[5];
             dataStream.read(buffer, 4);
+            buffer[4] = 0;
             std::istringstream encodedCharacter(buffer);
             int decodedCharacter;
             encodedCharacter >> std::hex >> decodedCharacter;
+            // It will fit only if it was English character, but in most cases it will be English.
             return static_cast<char>(decodedCharacter);
         }
 
