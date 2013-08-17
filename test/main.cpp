@@ -15,6 +15,8 @@
 #include "oauth1/TokenTests.h"
 #include "oauth1/ServiceTests.h"
 
+#include "oauth2/ServiceTests.h"
+
 GTEST_API_ int main(int argc, char **argv)
 {
     testing::InitGoogleMock(&argc, argv);
