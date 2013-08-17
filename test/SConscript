@@ -4,8 +4,9 @@ Import('environment')
 Import('opensslLibPath')
 Import('curlLibPath')
 
-testSources = ['gmock-gtest-all.cc'] +\
-    Glob('*.cpp')
+testSources = ['gmock-gtest-all.cc']
+testSources.extend(Glob('*.cpp'))
+testSources.extend(Glob('oauth1/*.cpp'))
 
 testEnvironment = environment.Clone(CCFLAGS = ['-std=c++0x', '-g', '-O0'], LIBS = [LIB_TARGET])
 

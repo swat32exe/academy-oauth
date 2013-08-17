@@ -9,7 +9,7 @@ struct evp_pkey_st;
 struct evp_pkey_ctx_st;
 struct bio_st;
 
-namespace OAuth
+namespace OAuth1
 {
     typedef unsigned char BYTE;
 

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace OAuth
+namespace OAuth1
 {
     /**
      *  Represents token credentials

@@ -1,10 +1,10 @@
-#include <ServiceConfiguration.h>
+#include <oauth1/ServiceConfiguration.h>
 
 #include <cassert>
 
 #include <utility/Url.h>
 
-namespace OAuth
+namespace OAuth1
 {
     const std::string ServiceConfiguration::OUT_OF_BAND = "oob";
 
@@ -66,9 +66,9 @@ namespace OAuth
             ,const std::string &consumerSecret
             ,const std::string &callbackUrl
             ,SignatureMethod signatureMethod) :
-        tokenRequestUrl(Utility::normalizeUrl(tokenRequestUrl))
-        ,authorizeUrl(Utility::normalizeUrl(authorizeUrl))
-        ,tokenExchangeUrl(Utility::normalizeUrl(tokenExchangeUrl))
+        tokenRequestUrl(OAuth::Utility::normalizeUrl(tokenRequestUrl))
+        ,authorizeUrl(OAuth::Utility::normalizeUrl(authorizeUrl))
+        ,tokenExchangeUrl(OAuth::Utility::normalizeUrl(tokenExchangeUrl))
         ,consumerKey(consumerKey)
         ,consumerSecret(consumerSecret)
         ,callbackUrl(callbackUrl)

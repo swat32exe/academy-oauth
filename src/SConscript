@@ -2,6 +2,7 @@ import os.path
 from SConfig import *
 
 libSources = [source for source in Glob('*.cpp') if not source.path.endswith('DefaultSendRequest.cpp')]
+libSources.extend(Glob('oauth1/*.cpp'))
 libSources.extend(Glob('crypto/*.cpp'))
 libSources.extend(Glob('utility/*.cpp'))
 
@@ -28,7 +29,8 @@ def commonBuild():
         CPPPATH = ['cURLpp/include/'], CPPDEFINES = ['CURLPP_STATICLIB'])
     libSources.extend(
         [environment.Object(source , CCFLAGS = ['-std=c++0x'] + additionalCCFLAGS)
-        for source in Glob('cURLpp/src/*/*.c*') + Glob('cURLpp/src/*/*/*.c*') + ['DefaultSendRequest.cpp']])
+        for source in Glob('cURLpp/src/*/*.c*') 
+        + Glob('cURLpp/src/*/*/*.c*') + ['DefaultSendRequest.cpp']])
     oauthLib = environment.StaticLibrary(LIB_TARGET, libSources)
     installDirPath = '#' + os.path.join(OUTPUT_DIR, configuration)
     environment.Install(installDirPath, oauthLib)

@@ -1,4 +1,4 @@
-#include "Signature.h"
+#include "oauth1/Signature.h"
 
 #include <string>
 
@@ -14,7 +14,7 @@ namespace OAuthTesting
                 "&oauth_consumer_key%3Dkey%26oauth_nonce%3Da813435c088711445c44adc2aebcc7d2"
                 "%26oauth_signature_method%3DRSA-SHA1"
                 "%26oauth_timestamp%3D1375967156%26oauth_version%3D1.0";
-        OAuth::Signature signature = OAuth::Signature::create(OAuth::RSA_SHA1);
+        OAuth1::Signature signature = OAuth1::Signature::create(OAuth1::RSA_SHA1);
         std::string rsaKey = "-----BEGIN PRIVATE KEY-----\r\n"
                 "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALRiMLAh9iimur8V\r\n"
                 "A7qVvdqxevEuUkW4K+2KdMXmnQbG9Aa7k7eBjK1S+0LYmVjPKlJGNXHDGuy5Fw/d\r\n"
