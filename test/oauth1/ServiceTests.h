@@ -14,7 +14,7 @@ namespace OAuthTesting
     public:
         ServiceTests()
         {
-            std::ifstream rsaKeyFile("test/rsaKey.pem");
+            std::ifstream rsaKeyFile("test/oauth1/rsaKey.pem");
             rsaKey = std::string((std::istreambuf_iterator<char>(rsaKeyFile)),
                     std::istreambuf_iterator<char>());
         }
