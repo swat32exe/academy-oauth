@@ -49,12 +49,7 @@ namespace Utility
         case 't':
             return '\t';
         case 'u':
-            char buffer[5];
-            dataStream.read(buffer, 4);
-            std::istringstream encodedCharacter(buffer);
-            int decodedCharacter;
-            encodedCharacter >> std::hex >> decodedCharacter;
-            return static_cast<char>(decodedCharacter);
+            throw std::invalid_argument("JSON parsing failed, \\uXXXX format is not supported");
         }
 
         throw std::invalid_argument("JSON parsing failed, unknown escaped character");
