@@ -1,7 +1,6 @@
 #include <oauth2/ServiceConfiguration.h>
 
 #include <cassert>
-#include <stdexcept>
 
 namespace OAuth2
 {
@@ -32,9 +31,7 @@ namespace OAuth2
         case CLIENT_CREDENTIALS_GRANT:
             return "client_credentials";
         default:
-            const char *errorMessage = "This grant type doesn't have an associated string";
-            assert(false && errorMessage);
-            throw std::runtime_error(errorMessage);
+            assert(false && "This grant type doesn't have an associated string");
         }
     }
 
@@ -46,9 +43,7 @@ namespace OAuth2
         case IMPLICIT_GRANT:
             return "token";
         default:
-            const char *errorMessage = "This grant type doesn't have a response type";
-            assert(false && errorMessage);
-            throw std::runtime_error(errorMessage);
+            assert(false && "This grant type doesn't have a response type");
         }
     }
 
