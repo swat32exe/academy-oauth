@@ -16,6 +16,7 @@
 #include "oauth1/ServiceTests.h"
 
 #include "oauth2/ServiceTests.h"
+#include "oauth2/ServiceBuilderTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {
