@@ -72,6 +72,11 @@ namespace OAuth2
         ServiceConfiguration configuration;
         send_request_t sendRequest;
 
+        std::future<Token> getAccessTokenAuthCodeGrant(const std::string &url) const;
+        std::future<Token> getAccessTokenImplicitGrant(const std::string &url) const;
+        std::future<Token> getAccessTokenOwnerCredentialsGrant() const;
+        std::future<Token> getAccessTokenClientCredentialsGrant() const;
+
         std::string makeRedirectUrlParameters(const std::string &state, const std::string &responseType) const;
     };
 }
