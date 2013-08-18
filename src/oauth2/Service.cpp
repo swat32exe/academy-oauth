@@ -24,12 +24,6 @@ namespace OAuth2
     {
     }
 
-    Service::Service(const ServiceConfiguration &configuration) :
-        configuration(configuration)
-        ,sendRequest(defaultSendRequest)
-    {
-    }
-
     std::string Service::getAuthorizeUrl(const std::string &state) const
     {
         std::string authorizeUrl = configuration.getAuthEndpoint();

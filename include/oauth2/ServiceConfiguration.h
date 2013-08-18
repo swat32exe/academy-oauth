@@ -42,6 +42,7 @@ namespace OAuth2
         const std::string &getPassword() const;
 
     private:
+        friend class ServiceBuilder;
         /**
          * @param grantType OAuth 2.0 Authorization method
          * @param authCodeEndpoint URL to obtain an authorization code
