@@ -13,9 +13,6 @@ namespace OAuth2
      */
     class ServiceConfiguration
     {
-        //TODO: Remove when ServiceBuilder will be ready.
-        friend class ServiceTests2;
-
     public:
         GrantType getGrantType() const;
 
