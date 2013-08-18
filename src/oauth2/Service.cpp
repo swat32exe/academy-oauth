@@ -34,7 +34,7 @@ namespace OAuth2
     {
         std::string authorizeUrl = configuration.getAuthEndpoint();
 
-        if(authorizeUrl.find("?") == std::string::npos)
+        if (authorizeUrl.find("?") == std::string::npos)
             authorizeUrl += "?";
         else
             authorizeUrl += "&";
@@ -58,9 +58,9 @@ namespace OAuth2
             RESPONSE_TYPE + "=" + OAuth::Utility::urlEncode(responseType)
             + "&" + CLIENT_ID + "=" + OAuth::Utility::urlEncode(configuration.getClientId())
             + "&" + REDIRECT_URI + "=" + OAuth::Utility::urlEncode(configuration.getRedirectUri());
-        if(!configuration.getScope().empty())
+        if (!configuration.getScope().empty())
             parameters += "&" + SCOPE + "=" + OAuth::Utility::urlEncode(configuration.getScope());
-        if(!state.empty())
+        if (!state.empty())
             parameters += "&" + STATE + "=" + OAuth::Utility::urlEncode(state);
         return parameters;
     }
