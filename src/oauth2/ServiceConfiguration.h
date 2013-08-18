@@ -14,23 +14,6 @@ namespace OAuth2
     class ServiceConfiguration
     {
     public:
-        /**
-         * @param grantType OAuth 2.0 Authorization method
-         * @param authCodeEndpoint URL to obtain an authorization code
-         * @param tokenEndpoint URL to obtain an access token
-         * @param clientId ID of the client
-         * @param redirectUri URL to redirect the user after access was granted
-         * @param scope Scope of the access request
-         * @param username Resource owner username,
-         * used for Resource Owner Password Credentials Grant
-         * @param password Resource owner Password,
-         * used for Resource Owner Password Credentials Grant
-         */
-        ServiceConfiguration(GrantType grantType, const std::string &authCodeEndpoint,
-                const std::string &tokenEndpoint, const std::string &clientId,
-                const std::string &redirectUri, const std::string &scope,
-                const std::string &username, const std::string &password);
-
         GrantType getGrantType() const;
 
         /**
@@ -54,6 +37,24 @@ namespace OAuth2
 
         const std::string &getUsername() const;
         const std::string &getPassword() const;
+
+    private:
+        /**
+         * @param grantType OAuth 2.0 Authorization method
+         * @param authCodeEndpoint URL to obtain an authorization code
+         * @param tokenEndpoint URL to obtain an access token
+         * @param clientId ID of the client
+         * @param redirectUri URL to redirect the user after access was granted
+         * @param scope Scope of the access request
+         * @param username Resource owner username,
+         * used for Resource Owner Password Credentials Grant
+         * @param password Resource owner Password,
+         * used for Resource Owner Password Credentials Grant
+         */
+        ServiceConfiguration(GrantType grantType, const std::string &authCodeEndpoint,
+                const std::string &tokenEndpoint, const std::string &clientId,
+                const std::string &redirectUri, const std::string &scope,
+                const std::string &username, const std::string &password);
 
     private:
         GrantType grantType;
