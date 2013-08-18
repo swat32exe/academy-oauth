@@ -2,7 +2,10 @@
 
 #include <string>
 #include <stdexcept>
+#include <functional>
+#include <future>
 
+#include <oauth2/Token.h>
 #include <utility/Url.h>
 #include <DefaultSendRequest.h>
 
@@ -59,5 +62,53 @@ namespace OAuth2
         if(!state.empty())
             parameters += "&" + STATE + "=" + OAuth::Utility::urlEncode(state);
         return parameters;
+    }
+
+    std::future<Token> Service::getAccessToken(const std::string &url) const
+    {
+        switch (configuration.getGrantType()) {
+        case AUTH_CODE_GRANT:
+            return getAccessTokenAuthCodeGrant(url);
+        case IMPLICIT_GRANT:
+            return getAccessTokenImplicitGrant(url);
+        case OWNER_CREDENTIALS_GRANT:
+            return getAccessTokenOwnerCredentialsGrant();
+        case CLIENT_CREDENTIALS_GRANT:
+            return getAccessTokenClientCredentialsGrant();
+        default:
+            throw std::logic_error("getAccessToken does not support specified grant type");
+        }
+    }
+
+    std::future<Token> Service::getAccessTokenAuthCodeGrant(const std::string &url) const
+    {
+        //TODO: Implement
+        return std::async([=] () {
+            return Token(url);
+        });
+    }
+
+    std::future<Token> Service::getAccessTokenImplicitGrant(const std::string &url) const
+    {
+        //TODO: Implement
+        return std::async([=] () {
+            return Token(url);
+        });
+    }
+
+    std::future<Token> Service::getAccessTokenOwnerCredentialsGrant() const
+    {
+        //TODO: Implement
+        return std::async([=] () {
+            return Token("");
+        });
+    }
+
+    std::future<Token> Service::getAccessTokenClientCredentialsGrant() const
+    {
+        //TODO: Implement
+        return std::async([=] () {
+            return Token("");
+        });
     }
 }
