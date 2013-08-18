@@ -8,6 +8,7 @@
 #include <oauth2/Token.h>
 #include <utility/Url.h>
 #include <DefaultSendRequest.h>
+#include <ParameterList.h>
 
 namespace OAuth2
 {
@@ -110,5 +111,13 @@ namespace OAuth2
         return std::async([=] () {
             return Token("");
         });
+    }
+
+    void Service::signRequest(OAuth::HttpRequest &request, const Token &token) const
+    {
+        if (token.getTokenType() == Token::BEARER_TOKEN)
+            request.addHeader("Authorization", "Bearer " + token.getAccessToken());
+        else
+            throw std::logic_error("Unsupported token type " + token.getTokenType());
     }
 }
