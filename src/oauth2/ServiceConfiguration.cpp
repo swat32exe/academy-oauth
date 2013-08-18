@@ -1,6 +1,7 @@
 #include <oauth2/ServiceConfiguration.h>
 
 #include <cassert>
+#include <stdexcept>
 
 namespace OAuth2
 {
@@ -32,6 +33,7 @@ namespace OAuth2
             return "client_credentials";
         default:
             assert(false && "This grant type doesn't have an associated string");
+            throw std::logic_error("This grant type doesn't have an associated string");
         }
     }
 
@@ -44,6 +46,7 @@ namespace OAuth2
             return "token";
         default:
             assert(false && "This grant type doesn't have a response type");
+            throw std::logic_error("This grant type doesn't have a response type");
         }
     }
 
