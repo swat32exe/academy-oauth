@@ -76,4 +76,12 @@ namespace OAuth
     {
         return parameters;
     }
+
+    parameters_map_t ParameterList::getParametersAsMap() const
+    {
+        parameters_map_t map;
+        for (auto parameter : parameters)
+            map [parameter.first] = parameter.second;
+        return map;
+    }
 }
