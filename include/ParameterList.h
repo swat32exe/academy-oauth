@@ -10,6 +10,8 @@ namespace OAuth
     typedef std::pair<std::string, std::string> StringPair;
     typedef std::vector<StringPair> parameters_t;
 
+    typedef std::map<std::string, std::string> parameters_map_t;
+
     /**
      *  Class for working with POST/GET parameters
      */
@@ -64,6 +66,12 @@ namespace OAuth
          * @returns Vector with parameters
          */
         const parameters_t &getParameters() const;
+
+        /**
+         * Get parameters as a map<string, string>
+         * @returns Map with parameters
+         */
+        parameters_map_t getParametersAsMap() const;
 
     private:
         parameters_t parameters;
