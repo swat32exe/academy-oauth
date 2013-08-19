@@ -72,6 +72,14 @@ namespace OAuth
             return url.substr(hostPosition.second);
         }
 
+        std::string queryParametersFromUrl(const std::string &url)
+        {
+            size_t position = url.find('?');
+            if (position == std::string::npos)
+                throw std::invalid_argument("Url doesn't contain query parameters");
+            return url.substr(position + 1);
+        }
+
         std::string normalizeUrl(std::string url)
         {
             std::regex hasProtocol(".*://.*");
