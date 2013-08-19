@@ -9,6 +9,7 @@
 #include <oauth2/Token.h>
 #include <oauth2/TokenException.h>
 #include <utility/Url.h>
+#include <utility/SingleLevelJson.h>
 #include <DefaultSendRequest.h>
 #include <ParameterList.h>
 
@@ -79,33 +80,70 @@ namespace OAuth2
 
     std::future<Token> Service::getAccessTokenAuthCodeGrant(const std::string &url) const
     {
-        //TODO: Implement
-        return std::async([=] () {
-            return Token(url);
-        });
+        const std::string parametersString = OAuth::Utility::queryParametersFromUrl(url);
+        const OAuth::ParameterList parametersList(parametersString);
+        OAuth::parameters_map_t parameters = parametersList.getParametersAsMap();
+
+        if (parameters.find("error") != parameters.end()) {
+            throw makeTokenError(parameters);
+        } else {
+            const std::string code = parameters.find("code")->second;
+
+            OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
+                configuration.getTokenEndpoint());
+            request.addHeader(OAuth::HEADER_CONTENT_TYPE, OAuth::FORM_URLENCODED);
+            OAuth::ParameterList body;
+            body.addRaw("grant_type", "authorization_code");
+            body.addRaw("code", code);
+            if (!configuration.getRedirectUri().empty())
+                body.addRaw("redirect_uri", configuration.getRedirectUri());
+            if (!configuration.getClientId().empty())
+                body.addRaw("client_id", configuration.getClientId());
+            request.setBody(body.asQueryString().substr(1));
+
+            return std::async([=] () {
+                return parseTokenResponse(Utility::parseSingleLevelJSON(sendRequest(request)));
+            });
+        }
     }
 
     std::future<Token> Service::getAccessTokenImplicitGrant(const std::string &url) const
     {
-        //TODO: Implement
+        const std::string parametersString = OAuth::Utility::queryParametersFromUrl(url);
+        const OAuth::ParameterList parameters(parametersString);
+
         return std::async([=] () {
-            return Token(url);
+            return parseTokenResponse(parameters.getParametersAsMap());
         });
     }
 
     std::future<Token> Service::getAccessTokenOwnerCredentialsGrant() const
     {
-        //TODO: Implement
+        OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
+            configuration.getTokenEndpoint());
+        request.addHeader(OAuth::HEADER_CONTENT_TYPE, OAuth::FORM_URLENCODED);
+        OAuth::ParameterList body;
+        body.addRaw("grant_type", "password");
+        body.addRaw("username", configuration.getUsername());
+        body.addRaw("password", configuration.getPassword());
+        request.setBody(body.asQueryString().substr(1));
+
         return std::async([=] () {
-            return Token("");
+            return parseTokenResponse(Utility::parseSingleLevelJSON(sendRequest(request)));
         });
     }
 
     std::future<Token> Service::getAccessTokenClientCredentialsGrant() const
     {
-        //TODO: Implement
+        OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
+            configuration.getTokenEndpoint());
+        request.addHeader(OAuth::HEADER_CONTENT_TYPE, OAuth::FORM_URLENCODED);
+        OAuth::ParameterList body;
+        body.addRaw("grant_type", "client_credentials");
+        request.setBody(body.asQueryString().substr(1));
+
         return std::async([=] () {
-            return Token("");
+            return parseTokenResponse(Utility::parseSingleLevelJSON(sendRequest(request)));
         });
     }
 
