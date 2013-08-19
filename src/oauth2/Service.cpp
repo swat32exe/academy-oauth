@@ -4,8 +4,10 @@
 #include <stdexcept>
 #include <functional>
 #include <future>
+#include <stdlib.h>
 
 #include <oauth2/Token.h>
+#include <oauth2/TokenException.h>
 #include <utility/Url.h>
 #include <DefaultSendRequest.h>
 #include <ParameterList.h>
@@ -113,5 +115,49 @@ namespace OAuth2
             request.addHeader("Authorization", "Bearer " + token.getAccessToken());
         else
             throw std::logic_error("Unsupported token type " + token.getTokenType());
+    }
+
+    Token Service::parseTokenResponse(const OAuth::parameters_map_t &parameters) const
+    {
+        if (parameters.find("error") != parameters.end()) {
+            throw makeTokenError(parameters);
+        } else {
+            auto accessTokenIterator = parameters.find("access_token");
+            auto tokenTypeIterator = parameters.find("token_type");
+            auto expiresInIterator = parameters.find("expires_in");
+            auto refreshTokenIterator = parameters.find("refresh_token");
+
+            if (accessTokenIterator == parameters.end() || tokenTypeIterator == parameters.end())
+                throw std::invalid_argument("Token parsing failed. Required parameter not set");
+            std::string accessToken = accessTokenIterator->second;
+            std::string tokenType = tokenTypeIterator->second;
+
+            int expiresIn = Token::EXPIRES_UNDEFINED;
+            if (expiresInIterator != parameters.end())
+                expiresIn = atoi(expiresInIterator->second.c_str());
+
+            std::string refreshToken = Token::REFRESH_UNDEFINED;
+            if (refreshTokenIterator != parameters.end())
+                refreshToken = refreshTokenIterator->second;
+
+            return Token(accessToken, expiresIn, refreshToken, tokenType);
+        }
+    }
+
+    TokenException Service::makeTokenError(const OAuth::parameters_map_t &parameters) const
+    {
+        std::string error = parameters.find("error")->second;
+
+        std::string description;
+        auto descriptionIterator = parameters.find("error_description");
+        if (descriptionIterator != parameters.end())
+            description = descriptionIterator->second;
+
+        std::string uri;
+        auto uriIterator = parameters.find("error_uri");
+        if (uriIterator != parameters.end())
+            uri= uriIterator->second;
+
+        return TokenException(error, description, uri);
     }
 }
