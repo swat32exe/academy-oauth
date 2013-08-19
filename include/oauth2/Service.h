@@ -6,6 +6,8 @@
 #include <future>
 
 #include "ServiceConfiguration.h"
+#include "ParameterList.h"
+#include "TokenException.h"
 
 namespace OAuth
 {
@@ -72,6 +74,9 @@ namespace OAuth2
         std::future<Token> getAccessTokenClientCredentialsGrant() const;
 
         std::string makeRedirectUrlParameters(const std::string &state, const std::string &responseType) const;
+
+        TokenException makeTokenError(const OAuth::parameters_map_t &parameters) const;
+        Token parseTokenResponse(const OAuth::parameters_map_t &parameters) const;
     };
 }
 
