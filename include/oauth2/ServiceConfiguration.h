@@ -13,9 +13,6 @@ namespace OAuth2
      */
     class ServiceConfiguration
     {
-        //TODO: Remove when ServiceBuilder will be ready.
-        friend class ServiceTests2;
-
     public:
         GrantType getGrantType() const;
 
@@ -42,6 +39,7 @@ namespace OAuth2
         const std::string &getPassword() const;
 
     private:
+        friend class ServiceBuilder;
         /**
          * @param grantType OAuth 2.0 Authorization method
          * @param authCodeEndpoint URL to obtain an authorization code

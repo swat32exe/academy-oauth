@@ -28,21 +28,6 @@ namespace OAuth2
 
     public:
         /**
-         *  Create Service with specified configuration.
-         *  @param configuration Configuration, that will be used.
-         *  @param sendRequest used to make requests over network.
-         *  Must send provided request and return response. May throw exceptions.
-         */
-        Service(const ServiceConfiguration &configuration, const send_request_t &sendRequest);
-
-        /**
-         *  Create Service with specified configuration.
-         *  Uses cURL as default for work with network.
-         *  @param configuration Configuration, that will be used.
-         */
-        Service(const ServiceConfiguration &configuration);
-
-        /**
          *  Get url, to which user should be redirected.
          *  @param state State string, that will be added to url.
          *  If state is empty, it will not be added.
@@ -69,6 +54,15 @@ namespace OAuth2
         std::future<Token> refreshAccessToken(const Token &expiredToken) const;
 
     private:
+        friend class ServiceBuilder;
+        /**
+         *  Create Service with specified configuration.
+         *  @param configuration Configuration, that will be used.
+         *  @param sendRequest used to make requests over network.
+         *  Must send provided request and return response. May throw exceptions.
+         */
+        Service(const ServiceConfiguration &configuration, const send_request_t &sendRequest);
+
         ServiceConfiguration configuration;
         send_request_t sendRequest;
 
