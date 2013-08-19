@@ -18,7 +18,7 @@ namespace OAuth2
 
         /**
          * Set OAuth 2.0 authorization grant type
-         * @param granType Type of a grant
+         * @param grantType Type of a grant
          * @returns this ServiceBuilder object to use for further configuration
          */
         ServiceBuilder &setGrantType(GrantType grantType);
@@ -28,7 +28,7 @@ namespace OAuth2
          * @param authEndpoint URL to obtain an authorization code
          * @returns this ServiceBuilder object to use for further configuration
          */
-        ServiceBuilder &setAuthEndpoint(const std::string &authEnpoint);
+        ServiceBuilder &setAuthEndpoint(const std::string &authEndpoint);
 
         /**
          * Set access token URL

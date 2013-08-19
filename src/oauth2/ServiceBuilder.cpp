@@ -18,9 +18,9 @@ namespace OAuth2
         return *this;
     }
 
-    ServiceBuilder &ServiceBuilder::setAuthEndpoint(const std::string &authEnpoint)
+    ServiceBuilder &ServiceBuilder::setAuthEndpoint(const std::string &authEndpoint)
     {
-        this->authEndpoint = authEnpoint;
+        this->authEndpoint = authEndpoint;
         return *this;
     }
 
