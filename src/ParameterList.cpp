@@ -2,6 +2,8 @@
 
 #include <sstream>
 #include <set>
+#include <algorithm>
+#include <stdexcept>
 
 #include "utility/Url.h"
 #include "utility/Extractor.h"
@@ -77,11 +79,23 @@ namespace OAuth
         return parameters;
     }
 
-    parameters_map_t ParameterList::getParametersAsMap() const
+    const std::string &ParameterList::getFirst(const std::string &name) const
     {
-        parameters_map_t map;
-        for (auto parameter : parameters)
-            map [parameter.first] = parameter.second;
-        return map;
+        const auto iterator =
+                std::find_if(parameters.begin(), parameters.end(), [name] (const StringPair &pair) {
+                    return pair.first == name;
+                }
+            );
+        if (iterator == parameters.end())
+            throw std::invalid_argument("ParameterList does not contain element with name \""+ name +"\"");
+        return  iterator -> second;
+    }
+
+    bool ParameterList::contain(const std::string &name) const
+    {
+        return std::find_if(parameters.begin(), parameters.end(), [name] (const StringPair &pair) {
+                    return pair.first == name;
+                }
+            ) != parameters.end();
     }
 }

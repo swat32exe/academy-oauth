@@ -75,8 +75,8 @@ namespace OAuth2
 
         std::string makeRedirectUrlParameters(const std::string &state, const std::string &responseType) const;
 
-        TokenException makeTokenError(const OAuth::parameters_map_t &parameters) const;
-        Token parseTokenResponse(const OAuth::parameters_map_t &parameters) const;
+        TokenException makeTokenError(const OAuth::ParameterList &parameters) const;
+        Token parseTokenResponse(const OAuth::ParameterList &parameters) const;
     };
 }
 

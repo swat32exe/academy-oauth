@@ -10,8 +10,6 @@ namespace OAuth
     typedef std::pair<std::string, std::string> StringPair;
     typedef std::vector<StringPair> parameters_t;
 
-    typedef std::map<std::string, std::string> parameters_map_t;
-
     /**
      *  Class for working with POST/GET parameters
      */
@@ -68,10 +66,19 @@ namespace OAuth
         const parameters_t &getParameters() const;
 
         /**
-         * Get parameters as a map<string, string>
-         * @returns Map with parameters
+         *  Get value of parameter with specified name.
+         *  @param name Parameter name.
+         *  @throws std::invalid_argument if parameter does not exist.
+         *  @returns Parameter value.
          */
-        parameters_map_t getParametersAsMap() const;
+        const std::string &getFirst(const std::string &name) const;
+
+        /**
+         *  Check, if list contains parameter with specified name.
+         *  @param name Parameter name.
+         *  @return True if parameter exists, false otherwise.
+         */
+        bool contain(const std::string &name) const;
 
     private:
         parameters_t parameters;
