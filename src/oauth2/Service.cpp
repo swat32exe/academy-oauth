@@ -20,6 +20,20 @@ namespace OAuth2
     const std::string Service::REDIRECT_URI = "redirect_uri";
     const std::string Service::SCOPE = "scope";
     const std::string Service::STATE = "state";
+    const std::string Service::ACCESS_TOKEN= "access_token";
+    const std::string Service::TOKEN_TYPE= "token_type";
+    const std::string Service::EXPIRES_IN= "expires_in";
+    const std::string Service::REFRESH_TOKEN= "refresh_token";
+    const std::string Service::GRANT_TYPE = "grant_type";
+    const std::string Service::AUTHORIZATION_CODE = "authorization_code";
+    const std::string Service::CODE = "code";
+    const std::string Service::PASSWORD = "password";
+    const std::string Service::USERNAME = "username";
+    const std::string Service::CLIENT_CREDENTIALS = "client_credentials";
+
+    const std::string Service::ERROR = "error";
+    const std::string Service::ERROR_DESCRIPTION = "error_description";
+    const std::string Service::ERROR_URI = "error_uri";
 
     Service::Service(const ServiceConfiguration &configuration, const send_request_t &sendRequest) :
         configuration(configuration)
@@ -31,10 +45,10 @@ namespace OAuth2
     {
         std::string authorizeUrl = configuration.getAuthEndpoint();
 
-        if (authorizeUrl.find("?") == std::string::npos)
-            authorizeUrl += "?";
+        if (authorizeUrl.find(OAuth::ParameterList::QUERY_SEPARATOR) == std::string::npos)
+            authorizeUrl += OAuth::ParameterList::QUERY_SEPARATOR;
         else
-            authorizeUrl += "&";
+            authorizeUrl += OAuth::ParameterList::PARAMETER_SEPARATOR;
 
         switch (configuration.getGrantType()) {
         case AUTH_CODE_GRANT:
@@ -85,17 +99,17 @@ namespace OAuth2
         const std::string parametersString = OAuth::Utility::extractQueryParameters(url);
         const OAuth::ParameterList parameters(parametersString);
 
-        if (parameters.contain("error")) {
+        if (parameters.contain(ERROR)) {
             throw makeTokenError(parameters);
         } else {
-            const std::string code = parameters.getFirst("code");
+            const std::string code = parameters.getFirst(CODE);
 
             OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
                 configuration.getTokenEndpoint());
             request.addHeader(OAuth::HEADER_CONTENT_TYPE, OAuth::FORM_URLENCODED);
             OAuth::ParameterList body;
-            body.addRaw("grant_type", "authorization_code");
-            body.addRaw("code", code);
+            body.addRaw(GRANT_TYPE, AUTHORIZATION_CODE);
+            body.addRaw(CODE, code);
             if (!configuration.getRedirectUri().empty())
                 body.addRaw("redirect_uri", configuration.getRedirectUri());
             if (!configuration.getClientId().empty())
@@ -124,9 +138,9 @@ namespace OAuth2
             configuration.getTokenEndpoint());
         request.addHeader(OAuth::HEADER_CONTENT_TYPE, OAuth::FORM_URLENCODED);
         OAuth::ParameterList body;
-        body.addRaw("grant_type", "password");
-        body.addRaw("username", configuration.getUsername());
-        body.addRaw("password", configuration.getPassword());
+        body.addRaw(GRANT_TYPE, PASSWORD);
+        body.addRaw(USERNAME, configuration.getUsername());
+        body.addRaw(PASSWORD, configuration.getPassword());
         request.setBody(body.asQueryString().substr(1));
 
         return std::async([=] () {
@@ -140,7 +154,7 @@ namespace OAuth2
             configuration.getTokenEndpoint());
         request.addHeader(OAuth::HEADER_CONTENT_TYPE, OAuth::FORM_URLENCODED);
         OAuth::ParameterList body;
-        body.addRaw("grant_type", "client_credentials");
+        body.addRaw(GRANT_TYPE, CLIENT_CREDENTIALS);
         request.setBody(body.asQueryString().substr(1));
 
         return std::async([=] () {
@@ -151,19 +165,14 @@ namespace OAuth2
     void Service::signRequest(OAuth::HttpRequest &request, const Token &token) const
     {
         if (token.getTokenType() == Token::BEARER_TOKEN)
-            request.addHeader("Authorization", "Bearer " + token.getAccessToken());
+            request.addHeader(OAuth::HEADER_AUTHORIZATION, "Bearer " + token.getAccessToken());
         else
             throw std::logic_error("Unsupported token type " + token.getTokenType());
     }
 
     Token Service::parseTokenResponse(const OAuth::ParameterList &parameters) const
     {
-        const std::string ACCESS_TOKEN= "access_token";
-        const std::string TOKEN_TYPE= "token_type";
-        const std::string EXPIRES_IN= "expires_in";
-        const std::string REFRESH_TOKEN= "refresh_token";
-
-        if (parameters.contain("error")) {
+        if (parameters.contain(ERROR)) {
             throw makeTokenError(parameters);
         } else {
             if (!parameters.contain(ACCESS_TOKEN) || !parameters.contain(TOKEN_TYPE))
@@ -187,15 +196,15 @@ namespace OAuth2
 
     TokenException Service::makeTokenError(const OAuth::ParameterList &parameters) const
     {
-        std::string error = parameters.getFirst("error");
+        std::string error = parameters.getFirst(ERROR);
 
         std::string description;
-        if (parameters.contain("error_description"))
-            description = parameters.getFirst("error_description");
+        if (parameters.contain(ERROR_DESCRIPTION))
+            description = parameters.getFirst(ERROR_DESCRIPTION);
 
         std::string uri;
-        if (parameters.contain("error_uri"))
-            uri= parameters.getFirst("error_uri");
+        if (parameters.contain(ERROR_URI))
+            uri= parameters.getFirst(ERROR_URI);
 
         return TokenException(error, description, uri);
     }
