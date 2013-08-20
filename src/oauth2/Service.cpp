@@ -81,13 +81,12 @@ namespace OAuth2
     std::future<Token> Service::getAccessTokenAuthCodeGrant(const std::string &url) const
     {
         const std::string parametersString = OAuth::Utility::extractQueryParameters(url);
-        const OAuth::ParameterList parametersList(parametersString);
-        OAuth::parameters_map_t parameters = parametersList.getParametersAsMap();
+        const OAuth::ParameterList parameters(parametersString);
 
-        if (parameters.find("error") != parameters.end()) {
+        if (parameters.contain("error")) {
             throw makeTokenError(parameters);
         } else {
-            const std::string code = parameters.find("code")->second;
+            const std::string code = parameters.getFirst("code");
 
             OAuth::HttpRequest request(OAuth::HttpRequestType::POST,
                 configuration.getTokenEndpoint());
@@ -113,7 +112,7 @@ namespace OAuth2
         const OAuth::ParameterList parameters(parametersString);
 
         return std::async([=] () {
-            return parseTokenResponse(parameters.getParametersAsMap());
+            return parseTokenResponse(parameters);
         });
     }
 
@@ -155,48 +154,46 @@ namespace OAuth2
             throw std::logic_error("Unsupported token type " + token.getTokenType());
     }
 
-    Token Service::parseTokenResponse(const OAuth::parameters_map_t &parameters) const
+    Token Service::parseTokenResponse(const OAuth::ParameterList &parameters) const
     {
-        if (parameters.find("error") != parameters.end()) {
+        const std::string ACCESS_TOKEN= "access_token";
+        const std::string TOKEN_TYPE= "token_type";
+        const std::string EXPIRES_IN= "expires_in";
+        const std::string REFRESH_TOKEN= "refresh_token";
+
+        if (parameters.contain("error")) {
             throw makeTokenError(parameters);
         } else {
-            auto accessTokenIterator = parameters.find("access_token");
-            auto tokenTypeIterator = parameters.find("token_type");
-            auto expiresInIterator = parameters.find("expires_in");
-            auto refreshTokenIterator = parameters.find("refresh_token");
-
-            if (accessTokenIterator == parameters.end() || tokenTypeIterator == parameters.end())
+            if (!parameters.contain(ACCESS_TOKEN) || !parameters.contain(TOKEN_TYPE))
                 throw std::invalid_argument("Token parsing failed. Required parameter not set");
-            std::string accessToken = accessTokenIterator->second;
-            std::string tokenType = tokenTypeIterator->second;
+            std::string accessToken = parameters.getFirst(ACCESS_TOKEN);
+            std::string tokenType = parameters.getFirst(TOKEN_TYPE);
 
             int expiresIn = Token::EXPIRES_UNDEFINED;
-            if (expiresInIterator != parameters.end()) {
-                std::istringstream expiresInStream(expiresInIterator->second);
+            if (parameters.contain(EXPIRES_IN)) {
+                std::istringstream expiresInStream(parameters.getFirst(EXPIRES_IN));
                 expiresInStream>>expiresIn;
             }
 
             std::string refreshToken = Token::REFRESH_UNDEFINED;
-            if (refreshTokenIterator != parameters.end())
-                refreshToken = refreshTokenIterator->second;
+            if (parameters.contain(REFRESH_TOKEN))
+                refreshToken = parameters.getFirst(REFRESH_TOKEN);
 
             return Token(accessToken, expiresIn, refreshToken, tokenType);
         }
     }
 
-    TokenException Service::makeTokenError(const OAuth::parameters_map_t &parameters) const
+    TokenException Service::makeTokenError(const OAuth::ParameterList &parameters) const
     {
-        std::string error = parameters.find("error")->second;
+        std::string error = parameters.getFirst("error");
 
         std::string description;
-        auto descriptionIterator = parameters.find("error_description");
-        if (descriptionIterator != parameters.end())
-            description = descriptionIterator->second;
+        if (parameters.contain("error_description"))
+            description = parameters.getFirst("error_description");
 
         std::string uri;
-        auto uriIterator = parameters.find("error_uri");
-        if (uriIterator != parameters.end())
-            uri= uriIterator->second;
+        if (parameters.contain("error_uri"))
+            uri= parameters.getFirst("error_uri");
 
         return TokenException(error, description, uri);
     }
