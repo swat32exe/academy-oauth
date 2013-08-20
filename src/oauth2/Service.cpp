@@ -51,15 +51,17 @@ namespace OAuth2
     std::string Service::makeRedirectUrlParameters(const std::string &state,
             const std::string &responseType) const
     {
-        std::string parameters =
-            RESPONSE_TYPE + "=" + OAuth::Utility::urlEncode(responseType)
-            + "&" + CLIENT_ID + "=" + OAuth::Utility::urlEncode(configuration.getClientId())
-            + "&" + REDIRECT_URI + "=" + OAuth::Utility::urlEncode(configuration.getRedirectUri());
+        OAuth::ParameterList parameters;
+        parameters.add(RESPONSE_TYPE, responseType);
+        parameters.add(CLIENT_ID, configuration.getClientId());
+        if (!configuration.getRedirectUri().empty())
+            parameters.add(REDIRECT_URI, configuration.getRedirectUri());
         if (!configuration.getScope().empty())
-            parameters += "&" + SCOPE + "=" + OAuth::Utility::urlEncode(configuration.getScope());
+            parameters.add(SCOPE, configuration.getScope());
         if (!state.empty())
-            parameters += "&" + STATE + "=" + OAuth::Utility::urlEncode(state);
-        return parameters;
+            parameters.add(STATE, state);
+
+        return parameters.asQueryString().substr(1);
     }
 
     std::future<Token> Service::getAccessToken(const std::string &url) const
