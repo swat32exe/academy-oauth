@@ -38,7 +38,7 @@ namespace OAuth
          * @param url Url with parameters, e.g. http://www.example.com/test?q1=f.
          * @returns Parameters, e.g. q1=f
          */
-        std::string queryParametersFromUrl(const std::string &url);
+        std::string extractQueryParameters(const std::string &url);
         /**
          * Normalizes url
          * e.g http://www.example.com, www.example.com/, www.example.com
