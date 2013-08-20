@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <functional>
 #include <future>
-#include <stdlib.h>
+#include <sstream>
 
 #include <oauth2/Token.h>
 #include <oauth2/TokenException.h>
@@ -80,7 +80,7 @@ namespace OAuth2
 
     std::future<Token> Service::getAccessTokenAuthCodeGrant(const std::string &url) const
     {
-        const std::string parametersString = OAuth::Utility::queryParametersFromUrl(url);
+        const std::string parametersString = OAuth::Utility::extractQueryParameters(url);
         const OAuth::ParameterList parametersList(parametersString);
         OAuth::parameters_map_t parameters = parametersList.getParametersAsMap();
 
@@ -109,7 +109,7 @@ namespace OAuth2
 
     std::future<Token> Service::getAccessTokenImplicitGrant(const std::string &url) const
     {
-        const std::string parametersString = OAuth::Utility::queryParametersFromUrl(url);
+        const std::string parametersString = OAuth::Utility::extractQueryParameters(url);
         const OAuth::ParameterList parameters(parametersString);
 
         return std::async([=] () {
@@ -171,8 +171,10 @@ namespace OAuth2
             std::string tokenType = tokenTypeIterator->second;
 
             int expiresIn = Token::EXPIRES_UNDEFINED;
-            if (expiresInIterator != parameters.end())
-                expiresIn = atoi(expiresInIterator->second.c_str());
+            if (expiresInIterator != parameters.end()) {
+                std::istringstream expiresInStream(expiresInIterator->second);
+                expiresInStream>>expiresIn;
+            }
 
             std::string refreshToken = Token::REFRESH_UNDEFINED;
             if (refreshTokenIterator != parameters.end())
