@@ -3,26 +3,6 @@ academy-oauth
 ##Preparation steps
 To build the library you need to install python 2.x.x, scons, gcc 4.8.0+.
 
-If configuration you want to build requires cURL, you can use
-```
---curl-libpath=<path>
-```
-and
-```
---curl-includepath=<path>
-```
-options to specify cURL libraries and headers locations, if required
-
-If configuration you want to build requires openssl and it is not located in default directory, you can use 
-```
---openssl-libpath=<path>
-```
-and
-```
---openssl-includepath=<path>
-```
-options to specify libraries and headers locations.
-
 ##Building library
 Run 'scons' command in project directory to build release version of the
 library. If you need to build debug version, explicitly specify it with:
@@ -36,6 +16,14 @@ it with RSA-SHA1 you need to install openssl library. Then, you must pass
 ```
 scons config=Debug --with-rsa
 ```
+If you want to configure build process with specific include and lib paths for openssl, you can use:
+```
+--openssl-libpath=<path>
+```
+and
+```
+--openssl-includepath=<path>
+```
 
 By default, the library does not include function to send requests over network.
 User will need to provide one. If you want to enable default cURL-based function,
@@ -46,6 +34,15 @@ cURLpp files.
 2. Use --with-curl flag, e.g.
 ```
 scons config=Debug --with-curl
+```
+
+If you want to configure build process with specific include and lib paths for cURL, you can use:
+```
+--curl-libpath=<path>
+```
+and
+```
+--curl-includepath=<path>
 ```
 
 
