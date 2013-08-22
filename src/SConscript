@@ -8,6 +8,7 @@ libSources.extend(Glob('utility/*.cpp'))
 Import('configuration')
 Import('environment')
 Import('buildWithRsa')
+Import('buildWithCurl')
 Import('opensslLibPath')
 
 additionalCCFLAGS = []
@@ -24,16 +25,18 @@ def compileTest():
     commonBuild()
 
 def commonBuild():
-    environment.Append(CCFLAGS = additionalCCFLAGS,
-        CPPPATH = ['cURLpp/include/'], CPPDEFINES = ['CURLPP_STATICLIB'])
-    libSources.extend(
-        [environment.Object(source , CCFLAGS = ['-std=c++0x'] + additionalCCFLAGS)
-        for source in Glob('cURLpp/src/*/*.c*') + Glob('cURLpp/src/*/*/*.c*') + ['DefaultSendRequest.cpp']])
+    environment.Append(CCFLAGS = additionalCCFLAGS)
+    if buildWithCurl :
+        environment.Append(CPPPATH = ['cURLpp/include/'], CPPDEFINES = ['CURLPP_STATICLIB', 'USE_CURL'])
+        libSources.extend(
+            [environment.Object(source , CCFLAGS = ['-std=c++0x'] + additionalCCFLAGS)
+            for source in Glob('cURLpp/src/*/*.c*') + Glob('cURLpp/src/*/*/*.c*') + ['DefaultSendRequest.cpp']])
     oauthLib = environment.StaticLibrary(LIB_TARGET, libSources)
     installDirPath = '#' + os.path.join(OUTPUT_DIR, configuration)
     environment.Install(installDirPath, oauthLib)
 
 if buildWithRsa:
+    environment.Append(CPPDEFINES = ['USE_OPENSSL'])
     libSources.extend([f for f in Glob('crypto/rsa/*.cpp')
     if os.path.join('crypto', 'rsa', 'RsaSignatureWrapper.cpp') not in f.path])
     libSources.extend(environment.Object(os.path.join('crypto', 'rsa',

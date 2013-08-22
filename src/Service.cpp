@@ -9,7 +9,9 @@
 #include "Signature.h"
 #include "utility/Url.h"
 #include "utility/Extractor.h"
+#ifdef USE_CURL
 #include "DefaultSendRequest.h"
+#endif
 
 namespace OAuth
 {
@@ -30,11 +32,13 @@ namespace OAuth
     {
     }
 
+#ifdef USE_CURL
     Service::Service(const ServiceConfiguration &configuration) :
         configuration(configuration)
         ,sendRequest(defaultSendRequest)
     {
     }
+#endif
 
     std::future<Token> Service::getRequestToken()
     {

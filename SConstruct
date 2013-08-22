@@ -20,6 +20,9 @@ else:
 AddOption('--with-rsa', action = 'store_true', dest = 'buildWithRsa', default = False,
 help = 'Build the library with RSA-SHA1 signature and OpenSSL')
 
+AddOption('--with-curl', action = 'store_true', dest = 'buildWithCurl', default = False,
+help = 'Build the library with default cURL-based function for making requests')
+
 AddOption('--openssl-libpath', action = 'store', dest = 'opensslLibPath', default = defaultSslLibPath,
 nargs = 1, type = 'string', help = 'Path to directory with OpenSSL crypto library \
 (libeay32.dll on Windows or libcrypto.so on Linux)')
@@ -35,6 +38,7 @@ AddOption('--curl-includepath', action = 'store', dest = 'curlIncludePath',
 default = '.', nargs = 1, type = 'string', help = 'Path to curl include directory')
 
 buildWithRsa = GetOption('buildWithRsa')
+buildWithCurl = GetOption('buildWithCurl')
 opensslLibPath = GetOption('opensslLibPath')
 opensslIncludePath = GetOption('opensslIncludePath')
 curlLibPath = GetOption('curlLibPath')
@@ -66,11 +70,11 @@ if not os.path.isdir(curlLibPath):
 variantDirPath = os.path.join(BUILD_DIR, configuration)
 if configuration == TEST_CONFIG:
     SConscript('src/SConscript', variant_dir = os.path.join(BUILD_DIR, DEBUG_CONFIG), duplicate = 0,
-    exports = {'configuration' : DEBUG_CONFIG, 'environment' : environment, 'buildWithRsa': True,
-    'opensslLibPath' : opensslLibPath})
+    exports = {'configuration' : DEBUG_CONFIG, 'environment' : environment, 'buildWithRsa' : True, 
+    'buildWithCurl' : True, 'opensslLibPath' : opensslLibPath})
     SConscript('test/SConscript', variant_dir = variantDirPath, duplicate = 0,
-    exports = {'environment' : environment, 'opensslLibPath' : opensslLibPath, 'curlLibPath' : curlLibPath,})
+    exports = {'environment' : environment, 'opensslLibPath' : opensslLibPath, 'curlLibPath' : curlLibPath})
 else:
     SConscript('src/SConscript', variant_dir = variantDirPath, duplicate = 0,
     exports = {'configuration' : configuration, 'environment' : environment,
-    'buildWithRsa': buildWithRsa, 'opensslLibPath' : opensslLibPath})
+    'buildWithRsa': buildWithRsa, 'buildWithCurl' : buildWithCurl, 'opensslLibPath' : opensslLibPath})

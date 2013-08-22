@@ -1,8 +1,12 @@
+#include <stdexcept>
+
 #include "crypto/HMAC_SHA1.h"
 #include "crypto/base64.h"
 
 #include "Signature.h"
+#ifdef USE_OPENSSL
 #include "crypto/rsa/RsaSignature.h"
+#endif
 #include "ParameterList.h"
 #include "utility/Url.h"
 
@@ -22,13 +26,16 @@ namespace OAuth
     Signature Signature::create(SignatureMethod method)
     {
         switch (method) {
+#if USE_OPENSSL
         case RSA_SHA1:
             return Signature("RSA-SHA1", rsaSha1Signature);
+#endif
         case PLAINTEXT:
             return Signature("PLAINTEXT", plainTextSignature);
         case HMAC_SHA1:
-        default:
             return Signature("HMAC-SHA1", hmacSha1Signature);
+        default:
+            throw std::logic_error("Unsupported signature method.");
         }
     }
 
