@@ -1,12 +1,9 @@
 academy-oauth
 =============
 ##Preparation steps
-To build the library you need to install python 2.x.x, scons, gcc 4.8.0+ and cURL.
+To build the library you need to install python 2.x.x, scons, gcc 4.8.0+.
 
-Run LoadcURLpp.py which is located in project root directory. It will download 
-cURLpp files.
-
-You can use
+If configuration you want to build requires cURL, you can use
 ```
 --curl-libpath=<path>
 ```
@@ -40,8 +37,22 @@ it with RSA-SHA1 you need to install openssl library. Then, you must pass
 scons config=Debug --with-rsa
 ```
 
+By default, the library does not include function to send requests over network.
+User will need to provide one. If you want to enable default cURL-based function,
+do the following:
+
+1. Run LoadcURLpp.py which is located in project root directory. It will download 
+cURLpp files.
+2. Use --with-curl flag, e.g.
+```
+scons config=Debug --with-curl
+```
+
+
 ##Running tests
 Install openssl.
+Run LoadcURLpp.py which is located in project root directory. It will download 
+cURLpp files.
 
 Now you can build and run tests with
 ```
