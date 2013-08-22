@@ -56,7 +56,9 @@ namespace OAuth
          *  Uses cURL as default for work with network.
          *  @param configuration initial service configuration
          */
+#ifdef USE_CURL
         Service(const ServiceConfiguration &configuration);
+#endif
 
         /**
          *  Request temporary credentials asynchronously
