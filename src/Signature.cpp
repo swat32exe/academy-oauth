@@ -35,7 +35,7 @@ namespace OAuth
         case HMAC_SHA1:
             return Signature("HMAC-SHA1", hmacSha1Signature);
         default:
-            throw std::logic_error("Unsupported signature. Maybe library is compiled without RSA support");
+            throw std::logic_error("Unsupported signature method.");
         }
     }
 
