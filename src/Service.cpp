@@ -3,13 +3,16 @@
 #include <ctime>
 #include <string>
 #include <cstdlib>
+#include <stdexcept>
 
 #include "HttpRequest.h"
 #include "Token.h"
 #include "Signature.h"
 #include "utility/Url.h"
 #include "utility/Extractor.h"
+#ifdef USE_CURL
 #include "DefaultSendRequest.h"
+#endif
 
 namespace OAuth
 {
@@ -32,9 +35,15 @@ namespace OAuth
 
     Service::Service(const ServiceConfiguration &configuration) :
         configuration(configuration)
+#ifdef USE_CURL
         ,sendRequest(defaultSendRequest)
     {
     }
+#else
+    {
+        throw std::logic_error("To use default sendRequest function you need to add --with-curl flag");
+    }
+#endif
 
     std::future<Token> Service::getRequestToken()
     {
