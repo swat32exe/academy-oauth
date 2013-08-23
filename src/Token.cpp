@@ -7,6 +7,10 @@
 
 namespace OAuth
 {
+    Token::Token()
+    {
+    }
+
     Token::Token(const std::string &data)
     {
         ParameterList parameterList(data);
