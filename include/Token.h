@@ -16,6 +16,10 @@ namespace OAuth
 
     public:
         /**
+         *  Creates token with empty token and secret
+         */
+        Token();
+        /**
          * Attempts to extract token data from string
          * @param data string to extract token from
          * @throws invalid_argument
