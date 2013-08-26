@@ -27,7 +27,7 @@ namespace OAuth
 
         std::string extractAuthorizationHeader(const ParameterList &list)
         {
-            const std::string HEADER_SEPARATOR = ",\r\n";
+            const std::string HEADER_SEPARATOR = ",";
             const parameters_t &parameters = list.getParameters();
             std::string authorizationHeader = "OAuth";
             for(auto pair : parameters) {
