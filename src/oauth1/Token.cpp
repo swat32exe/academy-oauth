@@ -1,11 +1,11 @@
-#include <Token.h>
+#include <oauth1/Token.h>
 
 #include <exception>
 
 #include "ParameterList.h"
 #include "utility/Url.h"
 
-namespace OAuth
+namespace OAuth1
 {
     Token::Token()
     {
@@ -13,11 +13,11 @@ namespace OAuth
 
     Token::Token(const std::string &data)
     {
-        ParameterList parameterList(data);
-        const parameters_t &parameters = parameterList.getParameters();
+        OAuth::ParameterList parameterList(data);
+        const OAuth::parameters_t &parameters = parameterList.getParameters();
         bool tokenInitialized = false;
         bool secretInitialized = false;
-        for(const StringPair &pair : parameters) {
+        for(const OAuth::StringPair &pair : parameters) {
             if (pair.first == "oauth_token") {
                 token = pair.second;
                 tokenInitialized = true;

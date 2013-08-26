@@ -7,11 +7,16 @@
 #include "HostResourceFromUrl.h"
 #include "ParameterListTests.h"
 #include "DefaultSendRequestTests.h"
-#include "SignatureTests.h"
-#include "RsaSignatureTests.h"
-#include "ExtractorTests.h"
-#include "TokenTests.h"
-#include "ServiceTests.h"
+#include "SingleLevelJsonTests.h"
+
+#include "oauth1/SignatureTests.h"
+#include "oauth1/RsaSignatureTests.h"
+#include "oauth1/ExtractorTests.h"
+#include "oauth1/TokenTests.h"
+#include "oauth1/ServiceTests.h"
+
+#include "oauth2/ServiceTests.h"
+#include "oauth2/ServiceBuilderTests.h"
 
 GTEST_API_ int main(int argc, char **argv)
 {

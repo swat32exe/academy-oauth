@@ -5,7 +5,7 @@
 
 #include "Signature.h"
 
-namespace OAuth
+namespace OAuth1
 {
     /**
      *  Contains data, required for initial service configuration

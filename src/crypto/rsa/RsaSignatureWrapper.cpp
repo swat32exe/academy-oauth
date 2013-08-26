@@ -13,7 +13,7 @@ extern "C" {
 #include "crypto/rsa/sha1.h"
 #include "crypto/base64.h"
 
-namespace OAuth
+namespace OAuth1
 {
     RsaSignatureWrapper::RsaSignatureWrapper(const std::string &rsaKey)
     {

@@ -33,6 +33,15 @@ namespace OAuth
          * @returns resource, e.g. /test
          */
         std::string resourceFromUrl(const std::string &url);
+
+        /**
+         * Extracts parameters from url after a separator
+         * @param url Url with query string or fragment
+         * @param separator Parameters separator
+         * @returns Parameters, e.g. q1=f
+         */
+        std::string extractParameters(const std::string &url, const char separator);
+
         /**
          * Normalizes url
          * e.g http://www.example.com, www.example.com/, www.example.com
