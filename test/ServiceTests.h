@@ -212,4 +212,20 @@ namespace OAuth
         std::string response = defaultSendRequest(request);
         ASSERT_EQ("", response);
     }
+
+    TEST_F(ServiceTests, signRequestRsaSha1ArbitraryBodyRealm)
+    {
+        OAuth::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
+                "", "http://term.ie/oauth/example/access_token.php", "key",
+                this->rsaKey, "http://example.com/callback", OAuth::RSA_SHA1, "Example");
+        OAuth::Service service(configuration);
+
+        HttpRequest request(POST, "http://term.ie/oauth/example/echo_api.php");
+        request.addHeader(HEADER_CONTENT_TYPE, "text/plain");
+        request.addHeader("Some-Wierd-Header", "some_data");
+        request.setBody("Some not urlencoded body");
+        service.signRequest(request, Token("accesskey", "accesssecret"));
+        std::string response = defaultSendRequest(request);
+        ASSERT_EQ("", response);
+    }
 }
