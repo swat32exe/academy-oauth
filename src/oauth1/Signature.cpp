@@ -7,7 +7,7 @@
 #ifdef USE_OPENSSL
 #include "crypto/rsa/RsaSignature.h"
 #endif
-#include "oauth/ParameterList.h"
+#include "ParameterList.h"
 #include "utility/Url.h"
 
 namespace OAuth1
