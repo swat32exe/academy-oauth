@@ -12,7 +12,7 @@ namespace OAuth
     class ParameterList;
 
     typedef std::map<std::string, std::string> header_t;
-    enum HttpRequestType {GET, POST};
+    enum HttpRequestType {GET, POST, PUT};
 
     extern const std::string FORM_URLENCODED;
     extern const std::string HEADER_CONTENT_TYPE;

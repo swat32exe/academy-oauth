@@ -39,6 +39,11 @@ std::string defaultSendRequest(const OAuth::HttpRequest &httpRequest) {
         request.setOpt(new curlpp::options::PostFields(httpRequest.getBody()));
         request.setOpt(new curlpp::options::PostFieldSize(httpRequest.getBody().length()));
         break;
+    case OAuth::PUT:
+        request.setOpt(new curlpp::options::CustomRequest("PUT"));
+        request.setOpt(new curlpp::options::PostFields(httpRequest.getBody()));
+        request.setOpt(new curlpp::options::PostFieldSize(httpRequest.getBody().length()));
+        break;
     default:
         assert("Invalid request type" && false);
     }

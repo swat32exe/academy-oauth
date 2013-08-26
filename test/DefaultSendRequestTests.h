@@ -35,4 +35,18 @@ namespace OAuth
         ASSERT_TRUE(std::regex_match(response, hasTestHeader));
         ASSERT_TRUE(std::regex_match(response, correctParameter));
     }
+
+    TEST_F(DefaultSendRequestTests, sendPutRequest)
+    {
+        HttpRequest request(PUT, "http://httpbin.org/put");
+        request.addHeader("Some-Wierd-Header", "some_data");
+        request.setBody("testParameter=value");
+        std::string response = defaultSendRequest(request);
+
+        std::regex hasTestHeader(".*\"Some-Wierd-Header\": \"some_data\".*");
+        std::regex correctData(".*\"testParameter\": \"value\".*");
+
+        ASSERT_TRUE(std::regex_match(response, hasTestHeader));
+        ASSERT_TRUE(std::regex_match(response, correctData));
+    }
 }
