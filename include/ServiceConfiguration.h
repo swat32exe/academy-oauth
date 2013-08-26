@@ -36,6 +36,10 @@ namespace OAuth
          * Method used to sign request
          */
         std::string callbackUrl;
+        /**
+         * Protection realm
+         */
+        std::string realm;
         SignatureMethod signatureMethod;
 
     public:
@@ -50,6 +54,7 @@ namespace OAuth
          * @param consumerSecret OAuth consumer secret
          * @param callbackUrl user will be redirected to this url after authorizing access
          * @param signatureMethod method used to sign request
+         * @param realm protection realm
          */
         ServiceConfiguration(const std::string &tokenRequestUrl
             ,const std::string &authorizeUrl
@@ -58,6 +63,7 @@ namespace OAuth
             ,const std::string &consumerSecret
             ,const std::string &callbackUrl = OUT_OF_BAND
             ,SignatureMethod signatureMethod = HMAC_SHA1
+            ,const std::string &realm = ""
             );
 
         /**
@@ -85,6 +91,10 @@ namespace OAuth
          * Returns url to which a user will be redirected
          */
         const std::string &getCallbackUrl() const;
+        /**
+         * Returns protection realm
+         */
+        const std::string &getRealm() const;
         /**
          * Returns method used to sign request
          */

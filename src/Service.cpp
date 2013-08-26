@@ -25,6 +25,7 @@ namespace OAuth
     const std::string Service::OAUTH_TOKEN = "oauth_token";
     const std::string Service::OAUTH_VERIFIER = "oauth_verifier";
     const std::string Service::OAUTH_DEFAULT_VERSION = "1.0";
+    const std::string Service::OAUTH_REALM = "realm";
 
     Service::Service(const ServiceConfiguration &configuration, const sendRequest_t &sendRequest) :
         configuration(configuration)
@@ -122,6 +123,8 @@ namespace OAuth
     ParameterList Service::generateOAuthParameters() const
     {
         ParameterList oauthParameters;
+        if (!configuration.getRealm().empty())
+            oauthParameters.addRaw(OAUTH_REALM, configuration.getRealm());
         oauthParameters.addRaw(OAUTH_CONSUMER_KEY, configuration.getConsumerKey());
         oauthParameters.addRaw(OAUTH_SIGNATURE_METHOD, configuration.getSignatureMethodAsString());
         oauthParameters.addRaw(OAUTH_TIMESTAMP, Utility::toString(std::time(NULL)));

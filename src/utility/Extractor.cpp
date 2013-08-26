@@ -4,6 +4,7 @@
 #include <set>
 
 #include <HttpRequest.h>
+#include <Service.h>
 
 namespace OAuth
 {
@@ -14,7 +15,8 @@ namespace OAuth
             const parameters_t &parameters = list.getParameters();
             std::set<StringPair> parametersSet;
             for (auto pair : parameters) {
-                parametersSet.insert(urlEncodedPair(pair.first, pair.second));
+                if (pair.first != Service::OAUTH_REALM)
+                    parametersSet.insert(urlEncodedPair(pair.first, pair.second));
             }
 
             ParameterList sortedParameters;
