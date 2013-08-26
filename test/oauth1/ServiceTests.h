@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <regex>
 
 #include <oauth1/Service.h>
 #include <oauth1/ServiceConfiguration.h>
@@ -210,6 +211,27 @@ namespace OAuthTesting
         request.addHeader("Some-Wierd-Header", "some_data");
         request.setBody("Some not urlencoded body");
         service.signRequest(request, OAuth1::Token("accesskey", "accesssecret"));
+        std::string response = defaultSendRequest(request);
+        ASSERT_EQ("", response);
+    }
+
+    TEST_F(ServiceTests, signRequestRsaSha1ArbitraryBodyRealm)
+    {
+        OAuth1::ServiceConfiguration configuration("http://term.ie/oauth/example/request_token.php",
+                "", "http://term.ie/oauth/example/access_token.php", "key",
+                this->rsaKey, "http://example.com/callback", OAuth1::RSA_SHA1, "TestRealm");
+        OAuth1::Service service(configuration);
+
+        OAuth::HttpRequest request(OAuth::POST, "http://term.ie/oauth/example/echo_api.php");
+        request.addHeader(OAuth::HEADER_CONTENT_TYPE, "text/plain");
+        request.addHeader("Some-Wierd-Header", "some_data");
+        request.setBody("Some not urlencoded body");
+        service.signRequest(request, OAuth1::Token("accesskey", "accesssecret"));
+
+        std::regex correctRealm(".*realm=\"TestRealm\".*");
+        std::string authorizationHeader = request.getHeaders().find("Authorization")->second;
+        ASSERT_TRUE(std::regex_match(authorizationHeader, correctRealm));
+
         std::string response = defaultSendRequest(request);
         ASSERT_EQ("", response);
     }
