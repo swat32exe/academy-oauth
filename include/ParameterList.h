@@ -80,6 +80,12 @@ namespace OAuth
          */
         bool contain(const std::string &name) const;
 
+        /**
+         *  Remove parameter with specified name if exists.
+         *  @param name parameter name
+         */
+        void remove(const std::string &name);
+
     private:
         parameters_t parameters;
     };

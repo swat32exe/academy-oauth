@@ -43,6 +43,11 @@ namespace OAuth1
         return callbackUrl;
     }
 
+    const std::string &ServiceConfiguration::getRealm() const
+    {
+        return realm;
+    }
+
     const std::string ServiceConfiguration::getSignatureMethodAsString() const
     {
         switch (signatureMethod) {
@@ -65,13 +70,15 @@ namespace OAuth1
             ,const std::string &consumerKey
             ,const std::string &consumerSecret
             ,const std::string &callbackUrl
-            ,SignatureMethod signatureMethod) :
+            ,SignatureMethod signatureMethod
+            ,const std::string &realm) :
         tokenRequestUrl(OAuth::Utility::normalizeUrl(tokenRequestUrl))
         ,authorizeUrl(OAuth::Utility::normalizeUrl(authorizeUrl))
         ,tokenExchangeUrl(OAuth::Utility::normalizeUrl(tokenExchangeUrl))
         ,consumerKey(consumerKey)
         ,consumerSecret(consumerSecret)
         ,callbackUrl(callbackUrl)
+        ,realm(realm)
         ,signatureMethod(signatureMethod)
     {
     }

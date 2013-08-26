@@ -31,6 +31,7 @@ namespace OAuth1
         static const std::string OAUTH_TOKEN;
         static const std::string OAUTH_VERIFIER;
         static const std::string OAUTH_DEFAULT_VERSION;
+        static const std::string OAUTH_REALM;
 
     private:
         ServiceConfiguration configuration;

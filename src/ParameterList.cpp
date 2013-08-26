@@ -98,4 +98,12 @@ namespace OAuth
                 }
             ) != parameters.end();
     }
+
+    void ParameterList::remove(const std::string &name)
+    {
+        parameters.erase(std::remove_if(parameters.begin(), parameters.end(), [&] (const StringPair &pair) {
+                    return pair.first == name;
+                }
+            ), parameters.end());
+    }
 }
